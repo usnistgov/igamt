@@ -88,7 +88,6 @@ public class CompositeProfileController {
     Message core = messageService.findById(compositeProfileStructure.getCoreProfileId());
     core.addCompositeProfileStructure(compositeProfileStructure.getId());
     messageService.save(core);
-
     compositeProfileStructureService.save(compositeProfileStructure);
     iGDocumentService.save(ig);
     return compositeProfileStructure;

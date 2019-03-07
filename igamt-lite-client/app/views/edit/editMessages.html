@@ -94,7 +94,7 @@
                                             <label class="input-left igamt-label">Message Event</label>
 
                                             <md-input-container class="md-block igamt-input-block" flex-gt-sm>
-                                                <input  type="text"  name="messageType" ng-change="setDirty()" ng-model="message.event"  required>
+                                                <input  type="text"  name="messageType" ng-change="setDirty()" ng-model="message.event"  ng-disabled="message.messageType !== 'ACK'">
                                                 <div ng-messages="editForm.event.$error">
                                                     <div ng-message="required">Message Event is required.</div>
                                                 </div>
@@ -103,7 +103,7 @@
                                             <label class="input-left igamt-label">Message Structure ID</label>
 
                                             <md-input-container class="md-block igamt-input-block" flex-gt-sm>
-                                                <input  type="text"  name="structID" ng-change="setDirty()" ng-model="message.structID"  required>
+                                                <input  type="text"  name="structID" ng-change="setDirty()" ng-model="message.structID"  disabled required>
                                                 <div ng-messages="editForm.structID.$error">
                                                     <div ng-message="required">Message Event is required.</div>
                                                 </div>
@@ -140,8 +140,7 @@
                                                 <input type="text" disabled
                                                        name="hl7Section"
                                                        id="hl7Section"
-                                                       ng-model="message.hl7Section"
-                                                >
+                                                       ng-model="message.hl7Section">
                                             </md-input-container>
 
                                         </md-content>
@@ -196,7 +195,7 @@
                                                             Component
                                                         </div>
                                                         <div flex class="pull-right">
-                                                                <md-button ng-click="addSegmentModal(message)" class="btn btn-raised btn-sm btn-default pull-right ">
+                                                                <md-button ng-click="addSegmentModal(message)" class="btn btn-raised btn-sm btn-default pull-right" ng-show="viewSettings.tableReadonly">
                                                                     <i class="fa fa-plus fa-fw"></i> ADD
                                                                 </md-button>
                                                                 <md-button ng-if="message.scope!=='HL7STANDARD'" title="Verify Message" type="button" ng-click="validateMessage()" class="btn btn-raised btn-sm btn-info pull-right"><i class="fa fa-check fa-fw"></i> Verify</md-button>
