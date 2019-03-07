@@ -195,7 +195,7 @@
                                                             Component
                                                         </div>
                                                         <div flex class="pull-right">
-                                                                <md-button ng-click="addSegmentModal(message)" class="btn btn-raised btn-sm btn-default pull-right ">
+                                                                <md-button ng-click="addSegmentModal(message)" class="btn btn-raised btn-sm btn-default pull-right" ng-show="viewSettings.tableReadonly">
                                                                     <i class="fa fa-plus fa-fw"></i> ADD
                                                                 </md-button>
                                                                 <md-button ng-if="message.scope!=='HL7STANDARD'" title="Verify Message" type="button" ng-click="validateMessage()" class="btn btn-raised btn-sm btn-info pull-right"><i class="fa fa-check fa-fw"></i> Verify</md-button>

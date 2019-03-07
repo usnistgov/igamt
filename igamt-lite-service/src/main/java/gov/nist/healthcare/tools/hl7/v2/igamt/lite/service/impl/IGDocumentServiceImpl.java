@@ -318,29 +318,24 @@ public void makePreloaded(String id) {
 	Profile p= ig.getProfile();
 	
 	for(Message child:p.getMessages().getChildren()){
-		if(child.getScope().equals(SCOPE.USER)){
 			child.setScope(SCOPE.PRELOADED);
 			child.setStatus(STATUS.PUBLISHED);
 			messageService.save(child);	
-		}
+		
 	}
 	
 	for (CompositeProfileStructure child : p.getCompositeProfiles().getChildren()){
-		if(child.getScope().equals(SCOPE.USER)){
 			child.setScope(SCOPE.PRELOADED);
 			child.setStatus(STATUS.PUBLISHED);
 			compositeProfileStructureService.save(child);
-		}
 	}
 	ProfileComponentLibrary lib=profileComponentLibraryService.findProfileComponentLibById(p.getProfileComponentLibrary().getId());
 	for(ProfileComponentLink l:lib.getChildren()){
 		ProfileComponent child =	profileComponentService.findById(l.getId());
 
-		if(child != null && child.getScope().equals(SCOPE.USER)){
 			child.setScope(SCOPE.PRELOADED);
 			child.setStatus(STATUS.PUBLISHED);
 			profileComponentService.save(child);	
-		}
 	
 		
 	}
