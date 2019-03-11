@@ -87,7 +87,8 @@ public class SerializableDateTimeDatatype extends SerializableDatatype {
                     }
                 }
             }
-            element.getFirstChildElement("Datatype").appendChild(dtmElement);
+            Element firstChild= element.getFirstChildElement("Datatype");
+            firstChild.appendChild(dtmElement);
             return element;
         } catch (Exception e){
             throw new DateTimeDatatypeSerializationException(e,datatype.getLabel()!=null?datatype.getLabel():"");

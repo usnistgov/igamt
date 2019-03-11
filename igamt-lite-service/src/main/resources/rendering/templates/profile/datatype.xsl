@@ -235,7 +235,7 @@
             <xsl:element name="br"/>
             <xsl:element name="span">
                 <xsl:element name="b">
-                    <xsl:text>Usage note: </xsl:text>
+                    <xsl:text>Usage Note: </xsl:text>
                 </xsl:element>
                 <xsl:value-of disable-output-escaping="yes"
                               select="Text[@Type='UsageNote']"/>

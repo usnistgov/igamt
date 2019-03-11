@@ -116,12 +116,9 @@ public class SerializableDatatype extends SerializableSection {
                    .addAttribute(new Attribute("primitive","false"));
                 }
      
-              if ( !componentDatatypeMap.isEmpty()) {
-                    for (Component component: componentDatatypeMap.keySet()) {
-                    	
-                        
+              if (!componentDatatypeMap.isEmpty()) {
+                    for (Component component: componentDatatypeMap.keySet()) {                     
                         if(componentDatatypeMap.containsKey(component)){
-                        	
                         try {
                             Element componentElement = new Element("Component");
                             componentElement
@@ -212,28 +209,21 @@ public class SerializableDatatype extends SerializableSection {
                         }
                      }
                     }
-//                    if (datatype.getComponents().size() == 0) {
-//                        Element componentElement = new Element("Component");
-//                        componentElement.addAttribute(new Attribute("Name", datatype.getName()));
-//                        componentElement.addAttribute(new Attribute("Position", "1"));
-//                        datatypeElement.appendChild(componentElement);
-//                    }
-
-                    if ((datatype != null && (!this.defPreText.isEmpty()) || !this.defPostText
-                        .isEmpty())) {
-                        if (this.defPreText != null && !this.defPreText.isEmpty()) {
-                            datatypeElement
-                                .appendChild(this.createTextElement("DefPreText", this.defPreText));
-                        }
-                        if (this.defPostText != null && !this.defPostText.isEmpty()) {
-                            datatypeElement.appendChild(this.createTextElement("DefPostText", this.defPostText));
-                        }
-                    }
-                    if (this.usageNote != null && !this.usageNote.trim().isEmpty()) {
-                        datatypeElement
-                            .appendChild(this.createTextElement("UsageNote", this.usageNote));
-                    }
                 }
+              if ((datatype != null && (!this.defPreText.isEmpty()) || !this.defPostText
+                      .isEmpty())) {
+                      if (this.defPreText != null && !this.defPreText.isEmpty()) {
+                          datatypeElement
+                              .appendChild(this.createTextElement("DefPreText", this.defPreText));
+                      }
+                      if (this.defPostText != null && !this.defPostText.isEmpty()) {
+                          datatypeElement.appendChild(this.createTextElement("DefPostText", this.defPostText));
+                      }
+                  }
+                  if (this.usageNote != null && !this.usageNote.trim().isEmpty()) {
+                      datatypeElement
+                          .appendChild(this.createTextElement("UsageNote", this.usageNote));
+                  }
             } catch (Exception e){
                 throw new DatatypeSerializationException(e,datatype.getLabel());
             }

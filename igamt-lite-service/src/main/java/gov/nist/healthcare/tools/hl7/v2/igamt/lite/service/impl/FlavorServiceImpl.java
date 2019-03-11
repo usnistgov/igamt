@@ -226,9 +226,6 @@ public class FlavorServiceImpl implements FlavorService {
         }
       }
       return segRef;
-
-
-
     } else if (dm instanceof Field) {
       Field field = (Field) dm;
       System.out.println("FIELD : " + field.getName());

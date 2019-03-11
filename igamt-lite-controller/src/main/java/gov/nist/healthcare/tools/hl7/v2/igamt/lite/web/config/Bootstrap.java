@@ -436,9 +436,8 @@ public class Bootstrap implements InitializingBean {
 	// 11/27/18
 	// fixOBX2ValuesetMissingAndDuplicated();
 
-//	createDynTable0396();
-    	iGDocumentService.makePreloaded("57a9f1c384ae90ce1244d327");
-    	fixOBX2ValuesetMissingAndDuplicated();
+    	//	createDynTable0396();
+    	//  fixOBX2ValuesetMissingAndDuplicated();
     }
 
     private void createDynTable0396() throws IOException {
