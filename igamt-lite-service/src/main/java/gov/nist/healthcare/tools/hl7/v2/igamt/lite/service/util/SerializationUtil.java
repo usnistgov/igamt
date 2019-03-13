@@ -53,6 +53,7 @@ public class SerializationUtil {
     richtext = richtext.replace("</p>", "</div>");
     //richtext = richtext.replace("&reg;","&amp;reg;");
     richtext = richtext.replace("&lsquo;", "&#39;");
+    richtext=richtext.replace("&rsquo;", "&#39;");
     richtext = richtext.replaceAll("[^\\p{Print}]", "?");
     org.jsoup.nodes.Document doc = Jsoup.parse(richtext);
     Elements elements1 = doc.select("h1");
@@ -302,4 +303,12 @@ public class SerializationUtil {
     // temporary fix
     return true;
   }
+  
+  public String getParentLocation(String location){
+	  int index = location.indexOf(".");
+	  if(index>-1){
+		  return location.substring(0,index);
+	  }else return  location ;
+  }
+ 
 }

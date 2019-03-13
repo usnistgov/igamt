@@ -124,6 +124,7 @@ import javax.xml.crypto.Data;
                 Map<Field, List<ValueSetOrSingleCodeBinding>> fieldValueSetBindingsMap = new HashMap<>();
                 Map<String, Table> coConstraintValueTableMap = new HashMap<>();
                 Map<String, Datatype> coConstraintDatatypeMap = new HashMap<>();
+                List<ValueSetOrSingleCodeBinding> filtredBinding=new ArrayList<>();
                 List<Table> tables = new ArrayList<>();
                 for (ValueSetOrSingleCodeBinding valueSetOrSingleCodeBinding : segment
                     .getValueSetBindings()) {
@@ -163,8 +164,9 @@ import javax.xml.crypto.Data;
                             }
                             List<ValueSetOrSingleCodeBinding> fieldValueSetBindings = new ArrayList<>();
                             for (ValueSetOrSingleCodeBinding valueSetOrSingleCodeBinding : segment.getValueSetBindings()) {
-                                if (valueSetOrSingleCodeBinding.getLocation().equals(String.valueOf(field.getPosition()))) {
+                                if (serializationUtil.getParentLocation(valueSetOrSingleCodeBinding.getLocation()).equals(String.valueOf(field.getPosition()))) {
                                     fieldValueSetBindings.add(valueSetOrSingleCodeBinding);
+                                    filtredBinding.add(valueSetOrSingleCodeBinding);
                                 }
                             }
                             fieldValueSetBindingsMap.put(field, fieldValueSetBindings);
@@ -254,7 +256,7 @@ import javax.xml.crypto.Data;
                         constraints, fieldDatatypeMap, fieldValueSetBindingsMap, tables,
                         coConstraintValueTableMap, dynamicMappingDatatypeMap, showConfLength,
                         showInnerLinks, greyOutOBX2FlavorColumn, host,
-                        coConstraintDatatypeMap, coConstraintExportMode);
+                        coConstraintDatatypeMap, coConstraintExportMode,filtredBinding);
                 serializableSegmentSection.addSection(serializableSegment);
                 return serializableSegmentSection;
             } catch (Exception e){

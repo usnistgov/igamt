@@ -6,6 +6,7 @@ import java.util.List;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Group;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Message;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Table;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ValueSetOrSingleCodeBinding;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.ConstraintSerializationException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.MessageSerializationException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.SerializationException;
@@ -37,10 +38,10 @@ public class SerializableMessage extends SerializableSection {
     private List<Table> tables;
     private boolean showConfLength;
     private HashMap<String,String> locationPathMap;
-    
+    List<ValueSetOrSingleCodeBinding> filtredBinding;
     public SerializableMessage(Message message, String prefix, String headerLevel, List<SerializableSegmentRefOrGroup> serializableSegmentRefOrGroups,
         SerializableConstraints serializableConformanceStatements, SerializableConstraints serializablePredicates, String usageNote,
-        String defPreText, String defPostText, List<Table> tables, HashMap<String,String> locationPathMap, Boolean showConfLength) {
+        String defPreText, String defPostText, List<Table> tables, HashMap<String,String> locationPathMap, Boolean showConfLength, List<ValueSetOrSingleCodeBinding> filtredBinding) {
         super(message.getId(),
             prefix + "." + String.valueOf(message.getPosition()),
             String.valueOf(message.getPosition() + 1),
@@ -59,7 +60,8 @@ public class SerializableMessage extends SerializableSection {
         this.tables = tables;
         this.showConfLength = showConfLength;
         this.locationPathMap = locationPathMap;
-    }
+        this.filtredBinding= filtredBinding;
+        }
 
     @Override public Element serializeElement() throws MessageSerializationException {
         try {
@@ -113,9 +115,9 @@ public class SerializableMessage extends SerializableSection {
                     messageElement.appendChild(segmentSection.serializeElement());
                 }
             }
-            if (message.getValueSetBindings() != null && !message.getValueSetBindings().isEmpty()) {
+            if (this.filtredBinding!= null && !this.filtredBinding.isEmpty()) {
                 Element valueSetBindingListElement = super
-                    .createValueSetBindingListElement(message.getValueSetBindings(), tables, message.getName(),
+                    .createValueSetBindingListElement(this.filtredBinding, tables, message.getName(),
                         locationPathMap);
                 if (valueSetBindingListElement != null) {
                     messageElement.appendChild(valueSetBindingListElement);

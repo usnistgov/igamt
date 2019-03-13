@@ -132,15 +132,16 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.util.SerializationUti
                 Map<Component, Datatype> componentDatatypeMap = new HashMap<>();
                 Map<Component, List<ValueSetOrSingleCodeBinding>> componentValueSetBindingsMap = new HashMap<>();
                 List<Table> tables = new ArrayList<>();
+                List<ValueSetOrSingleCodeBinding> filtredBinding=new ArrayList<>();
                 Map<Component, String> componentTextMap = new HashMap<>();
                 ArrayList<Component> toBeRemovedComponents = new ArrayList<>();
                 for (ValueSetOrSingleCodeBinding valueSetOrSingleCodeBinding : datatype
                     .getValueSetBindings()) {
                     if (valueSetOrSingleCodeBinding.getTableId() != null && !valueSetOrSingleCodeBinding.getTableId().isEmpty()) {
-                        Table table = tableService.findById(valueSetOrSingleCodeBinding.getTableId());
-                        if (table != null) {
-                            tables.add(table);
-                        }
+//                        Table table = tableService.findById(valueSetOrSingleCodeBinding.getTableId());
+//                        if (table != null) {
+//                            tables.add(table);
+//                        }
                     }
                 }
                 if (hasComponentsToBeExported(datatype, datatypeUsageConfig)) {
@@ -155,12 +156,22 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.util.SerializationUti
                                         new ArrayList<>();
                                     for (ValueSetOrSingleCodeBinding valueSetOrSingleCodeBinding : datatype
                                         .getValueSetBindings()) {
-                                        if (valueSetOrSingleCodeBinding.getLocation().equals(String.valueOf(component.getPosition()))) {
-                                            componentValueSetBindings.add(valueSetOrSingleCodeBinding);
+                                    	
+                                    	
+                                        if (serializationUtil.getParentLocation(valueSetOrSingleCodeBinding.getLocation()).equals(String.valueOf(component.getPosition()))) {
+                                            Table table = tableService.findById(valueSetOrSingleCodeBinding.getTableId());
+                                            if (table != null) {
+                                                tables.add(table);
+                                                componentValueSetBindings.add(valueSetOrSingleCodeBinding);
+                                                componentValueSetBindingsMap
+                                                .put(component, componentValueSetBindings);
+                                                filtredBinding.add(valueSetOrSingleCodeBinding);
+                                            }
+                                   
+                                            
                                         }
                                     }
-                                    componentValueSetBindingsMap
-                                        .put(component, componentValueSetBindings);
+                                  
                                 }
 
                                 if (component.getText() != null && !component.getText().isEmpty()) {
@@ -184,13 +195,13 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.util.SerializationUti
                     serializedDatatype = new SerializableDateTimeDatatype(id, prefix, String.valueOf(position),
                         headerLevel, title, datatype, defPreText, defPostText, usageNote,
                         constraintsList, componentDatatypeMap, componentValueSetBindingsMap, tables, componentTextMap,
-                        showConfLength, showInnerLinks, host);
+                        showConfLength, showInnerLinks, host,filtredBinding);
                 } else {
                     serializedDatatype =
                         new SerializableDatatype(id, prefix, String.valueOf(position), headerLevel,
                             title, datatype, defPreText, defPostText, usageNote, constraintsList,
                             componentDatatypeMap, componentValueSetBindingsMap, tables,
-                            componentTextMap, showConfLength, showInnerLinks, host);
+                            componentTextMap, showConfLength, showInnerLinks, host, filtredBinding);
                 }
                 return serializedDatatype;
             } catch (Exception e){

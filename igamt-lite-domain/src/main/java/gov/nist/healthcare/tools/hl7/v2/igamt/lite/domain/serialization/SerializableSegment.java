@@ -55,6 +55,7 @@ public class SerializableSegment extends SerializableSection {
   private Boolean greyOutOBX2FlavorColumn;
   private String host;
   private CoConstraintExportMode coConstraintExportMode;
+  private List<ValueSetOrSingleCodeBinding> filtredBindings;
   
 
   public SerializableSegment(String id, String prefix, String position, String headerLevel,
@@ -64,7 +65,7 @@ public class SerializableSegment extends SerializableSection {
       Map<Field, List<ValueSetOrSingleCodeBinding>> fieldValueSetBindingsMap, List<Table> tables,
       Map<String, Table> coConstraintValueTableMap, Map<String, Datatype> dynamicMappingDatatypeMap,
       Boolean showConfLength, Boolean showInnerLinks, Boolean greyOutOBX2FlavorColumn, String host,
-      Map<String, Datatype> coConstraintDatatypeMap, CoConstraintExportMode coConstraintExportMode) {
+      Map<String, Datatype> coConstraintDatatypeMap, CoConstraintExportMode coConstraintExportMode,List<ValueSetOrSingleCodeBinding> filtredBindings) {
     super(id, prefix, position, headerLevel, title);
     this.segment = segment;
     this.name = name;
@@ -85,6 +86,7 @@ public class SerializableSegment extends SerializableSection {
     this.host = host;
     this.coConstraintDatatypeMap = coConstraintDatatypeMap;
     this.coConstraintExportMode= coConstraintExportMode;
+    this.filtredBindings= filtredBindings;
   }
 
 
@@ -117,9 +119,9 @@ public class SerializableSegment extends SerializableSection {
           }
         }
 
-        if (segment.getValueSetBindings() != null && !segment.getValueSetBindings().isEmpty()) {
+        if (filtredBindings != null && !filtredBindings.isEmpty()) {
           Element valueSetBindingListElement = super
-              .createValueSetBindingListElement(segment.getValueSetBindings(), this.tables,
+              .createValueSetBindingListElement(filtredBindings, this.tables,
                   segment.getLabel());
           if (valueSetBindingListElement != null) {
             segmentElement.appendChild(valueSetBindingListElement);
