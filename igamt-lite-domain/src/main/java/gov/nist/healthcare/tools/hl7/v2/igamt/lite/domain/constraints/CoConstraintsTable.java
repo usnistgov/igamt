@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.annotation.Transient;
+
 public class CoConstraintsTable implements java.io.Serializable, Cloneable {
 
   /**
@@ -21,8 +23,18 @@ public class CoConstraintsTable implements java.io.Serializable, Cloneable {
   private List<CoConstraintIFColumnData> ifColumnData = new ArrayList<CoConstraintIFColumnData>();
   private Map<String, List<CoConstraintTHENColumnData>> thenMapData;
   private Map<String, List<CoConstraintUSERColumnData>> userMapData;
+  @Transient
+  protected boolean temporary =false;
 
-  public CoConstraintsTable() {
+  public boolean isTemporary() {
+	return temporary;
+}
+
+  public void setTemporary(boolean temporary) {
+	this.temporary = temporary;
+  }
+
+public CoConstraintsTable() {
     super();
   }
 

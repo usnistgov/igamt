@@ -173,6 +173,8 @@ public class FlavorServiceImpl implements FlavorService {
                 segmentFlavor.setId(ObjectId.get().toString());
                 segmentFlavor.setTemporary(true);
                 segmentFlavor.setScope(SCOPE.USER);
+                attr.getDynamicMappingDefinition().setTemporary(true);
+
                 segmentFlavor.setDynamicMappingDefinition(attr.getDynamicMappingDefinition());
 
                 // System.out.println(
@@ -196,6 +198,7 @@ public class FlavorServiceImpl implements FlavorService {
                 segmentFlavor.setId(ObjectId.get().toString());
                 segmentFlavor.setTemporary(true);
                 segmentFlavor.setScope(SCOPE.USER);
+                attr.getCoConstraintsTable().setTemporary(true);
                 segmentFlavor.setCoConstraintsTable(attr.getCoConstraintsTable());
 
 
@@ -218,12 +221,11 @@ public class FlavorServiceImpl implements FlavorService {
                 segmentFlavor.setTemporary(true);
                 segmentFlavor.setScope(SCOPE.USER);
                 segmentFlavor.setComments(attr.getComments());
-
-
-                queryService.getSegmentsMap().put(segmentFlavor.getId(), segmentFlavor);
                 segRef.getRef().setId(segmentFlavor.getId());
                 segRef.getRef().setExt(segmentFlavor.getExt());
                 segRef.setTemporary(true);
+                queryService.getSegmentsMap().put(segmentFlavor.getId(), segmentFlavor);
+
 
               } catch (CloneNotSupportedException e) {
                 // TODO Auto-generated catch block

@@ -3,6 +3,8 @@ package gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Transient;
+
 public class DynamicMappingDefinition implements java.io.Serializable, Cloneable {
 
   /**
@@ -12,8 +14,18 @@ public class DynamicMappingDefinition implements java.io.Serializable, Cloneable
   
   private VariesMapItem mappingStructure = new VariesMapItem();
   private List<DynamicMappingItem> dynamicMappingItems = new ArrayList<DynamicMappingItem>();
+  @Transient
+  protected boolean temporary =false;
 
-  public DynamicMappingDefinition() {
+  public static long getSerialversionuid() {
+	return serialVersionUID;
+}
+
+public boolean isTemporary() {
+	return temporary;
+}
+
+public DynamicMappingDefinition() {
     super();
   }
 
@@ -59,5 +71,12 @@ public class DynamicMappingDefinition implements java.io.Serializable, Cloneable
     if(mappingStructure != null) cloned.setMappingStructure(this.mappingStructure.clone());
     return cloned;
   }
+
+public void setTemporary(boolean b) {
+	// TODO Auto-generated method stub
+	
+}
+
+
 
 }
