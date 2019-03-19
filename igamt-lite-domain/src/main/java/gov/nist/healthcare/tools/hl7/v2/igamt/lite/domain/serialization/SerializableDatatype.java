@@ -14,6 +14,7 @@ import nu.xom.Element;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ public class SerializableDatatype extends SerializableSection {
     private List<SerializableConstraint> constraints;
     private Map<Component,Datatype> componentDatatypeMap;
     private Map<Component,List<ValueSetOrSingleCodeBinding>> componentValueSetBindingsMap;
+    private List<ValueSetOrSingleCodeBinding> filtredBinding;
     private String defPreText, defPostText, usageNote;
     private Map<Component,String> componentTextMap;
     private Boolean showConfLength;
@@ -51,7 +53,7 @@ public class SerializableDatatype extends SerializableSection {
         String title, Datatype datatype, String defPreText, String defPostText, String usageNote,
         List<SerializableConstraint> constraints, Map<Component, Datatype> componentDatatypeMap,
         Map<Component, List<ValueSetOrSingleCodeBinding>> componentValueSetBindingsMap, List<Table> tables,
-        Map<Component, String> componentTextMap, Boolean showConfLength, Boolean showInnerLinks, String host) {
+        Map<Component, String> componentTextMap, Boolean showConfLength, Boolean showInnerLinks, String host,List<ValueSetOrSingleCodeBinding> filtredBinding) {
         super(id, prefix, position, headerLevel, title);
         this.datatype = datatype;
         this.defPreText = defPreText;
@@ -60,6 +62,7 @@ public class SerializableDatatype extends SerializableSection {
         this.constraints = constraints;
         this.componentDatatypeMap = componentDatatypeMap;
         this.componentValueSetBindingsMap = componentValueSetBindingsMap;
+        this.filtredBinding=filtredBinding;
         this.tables = tables;
         this.componentTextMap = componentTextMap;
         this.showConfLength = showConfLength;
@@ -91,10 +94,11 @@ public class SerializableDatatype extends SerializableSection {
                 for (SerializableConstraint constraint : constraints) {
                     datatypeElement.appendChild(constraint.serializeElement());
                 }
-                if (datatype.getValueSetBindings() != null && !datatype.getValueSetBindings()
+           
+                if (this.filtredBinding != null && !this.filtredBinding
                     .isEmpty()) {
                     Element valueSetBindingListElement = super
-                        .createValueSetBindingListElement(datatype.getValueSetBindings(),
+                        .createValueSetBindingListElement(this.filtredBinding,
                             this.tables, datatype.getLabel());
                     if (valueSetBindingListElement != null) {
                         datatypeElement.appendChild(valueSetBindingListElement);

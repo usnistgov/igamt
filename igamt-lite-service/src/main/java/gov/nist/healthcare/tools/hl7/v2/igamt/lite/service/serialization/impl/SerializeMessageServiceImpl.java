@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ExportConfig;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Group;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Message;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.SegmentOrGroup;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.SegmentRef;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.SegmentRefOrGroup;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Table;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.UsageConfig;
@@ -25,6 +28,7 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exceptio
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.TableService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.serialization.SerializationLayout;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.serialization.SerializeMessageService;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.util.ExportUtil;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.util.SerializationUtil;
 
 /**
@@ -85,21 +89,28 @@ public class SerializeMessageServiceImpl extends SerializeMessageOrCompositeProf
             }
             Boolean showConfLength = serializationUtil.isShowConfLength(hl7Version);
             List<Table> tables = new ArrayList<>();
+            List<ValueSetOrSingleCodeBinding> filtredBinding= new ArrayList<>();
             for (ValueSetOrSingleCodeBinding valueSetOrSingleCodeBinding : message
                 .getValueSetBindings()) {
                 if (valueSetOrSingleCodeBinding.getTableId() != null && !valueSetOrSingleCodeBinding
-                    .getTableId().isEmpty()) {
+                    .getTableId().isEmpty()) {                	
                     Table table = tableService.findById(valueSetOrSingleCodeBinding.getTableId());
                     if (table != null) {
                         tables.add(table);
                     }
+                   boolean exportable= checkExportability(valueSetOrSingleCodeBinding.getLocation(), getLocationToIgnore( message,exportConfig.getSegmentORGroupsMessageExport()));
+                	   if(exportable){
+                		   filtredBinding.add(valueSetOrSingleCodeBinding);
+                	   }
+                   
                 }
             }
             HashMap<String, String> positionNameSegOrGroupMap = super.retrieveComponentsPaths(message);
+            System.out.println(positionNameSegOrGroupMap);
             SerializableMessage serializableMessage =
                 new SerializableMessage(message, prefix, headerLevel, serializableSegmentRefOrGroups,
                     serializableConformanceStatements, serializablePredicates, usageNote, defPreText,
-                    defPostText, tables, positionNameSegOrGroupMap, showConfLength);
+                    defPostText, tables, positionNameSegOrGroupMap, showConfLength,filtredBinding );
             SerializableSection messageSegments =
                 new SerializableSection(message.getId() + "_segments",
                     prefix + "." + String.valueOf(message.getPosition()) + "."
@@ -129,10 +140,64 @@ public class SerializeMessageServiceImpl extends SerializeMessageOrCompositeProf
     }
 
 
+	private boolean checkExportability(String location, HashMap<String, Boolean> locationToIgnore) {
+		// TODO Auto-generated method stub
+		for(String s: locationToIgnore.keySet()){
+			
+			if((location+".").startsWith(s+".")){
+				System.out.println("Found");
+				return false;
+			}
+		}
+		return true;
+		
+		
+	}
+
+
+	private HashMap<String, Boolean> getLocationToIgnore( Message message,UsageConfig segmentRefOrGroupUsageConfig) {
+		// TODO Auto-generated method stub
+		HashMap<String, Boolean> locationtoIgnore= new HashMap<String, Boolean>();
+		for(SegmentRefOrGroup elm:message.getChildren() ){
+			processChild(elm,segmentRefOrGroupUsageConfig, locationtoIgnore,"" );
+		}
+		return locationtoIgnore;
+
+	}
+		
+		
+
+
+	private void processChild(SegmentRefOrGroup child, UsageConfig segmentRefOrGroupUsageConfig,
+			HashMap<String, Boolean> locationtoIgnore, String path) {
+		// TODO Auto-generated method stub
+		String location = path.length()>0?path+"."+child.getPosition():child.getPosition()+"";
+
+		if(child instanceof SegmentRef){
+			SegmentRef ref= (SegmentRef)child;
+			if(!ExportUtil.diplayUsage(ref.getUsage(),segmentRefOrGroupUsageConfig)){
+				locationtoIgnore.put(location, true);
+			}
+		}else if (child instanceof Group){
+			Group group= (Group)child;
+			if(!ExportUtil.diplayUsage(group.getUsage(),segmentRefOrGroupUsageConfig)){
+				locationtoIgnore.put(location, true);
+				
+			}
+			for(SegmentRefOrGroup sub : group.getChildren()){
+					processChild(sub, segmentRefOrGroupUsageConfig, locationtoIgnore, location);
+			}
+			
+		}
+	}
+
+
 	@Override
 	public SerializableElement serializeMessage(Message message, String host)  throws
       MessageSerializationException {
 		return serializeMessage(message, String.valueOf(0), String.valueOf(1),SerializationLayout.IGDOCUMENT, message.getHl7Version(), ExportConfig.getBasicExportConfig(true), true, host);
 	}
+	
+	
 
 }
