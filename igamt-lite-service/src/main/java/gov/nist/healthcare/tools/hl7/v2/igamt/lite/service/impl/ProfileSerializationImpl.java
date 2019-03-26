@@ -1388,6 +1388,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
 
 
     Profile filteredProfile = new Profile();
+    filteredProfile.setId(doc.getProfile().getId());
     filteredProfile.setBaseId(doc.getProfile().getBaseId());
     filteredProfile.setChanges(doc.getProfile().getChanges());
     filteredProfile.setComment(doc.getProfile().getComment());
