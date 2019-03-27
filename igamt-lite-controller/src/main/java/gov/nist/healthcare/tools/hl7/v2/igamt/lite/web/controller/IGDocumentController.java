@@ -1028,9 +1028,10 @@ public class IGDocumentController extends CommonController {
 	    HttpServletResponse response) throws IOException, IGDocumentNotFoundException, CloneNotSupportedException,
 	    ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
 	IGDocument d = findIGDocument(id);
+	d.getMetaData().setTitle("[Composite Profiles]" + d.getMetaData().getTitle());
 	InputStream content = igDocumentExport.exportAsValidationForSelectedCompositeProfiles(d, compositeProfileIds);
 	response.setContentType("application/zip");
-	response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle())
+	response.setHeader("Content-disposition", "attachment;filename=" + "[Composite Profiles]" + updateFileName(d.getMetaData().getTitle())
 		+ "-CompositeProfile_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
 	FileCopyUtils.copy(content, response.getOutputStream());
     }
@@ -1043,7 +1044,7 @@ public class IGDocumentController extends CommonController {
 	    throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException,
 	    TableSerializationException, ConstraintSerializationException {
     	IGDocument d = findIGDocument(id);
-
+    	d.getMetaData().setTitle("[Conformance Profiles]" + d.getMetaData().getTitle());
 
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -1052,7 +1053,7 @@ public class IGDocumentController extends CommonController {
 
 	InputStream content = igDocumentExport.exportAsValidationForSelectedMessages(d, messageExportInfo);
 	response.setContentType("application/zip");
-	response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle())
+	response.setHeader("Content-disposition", "attachment;filename=" + "[Conformance Profiles]" + updateFileName(d.getMetaData().getTitle())
 		+ "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
 	FileCopyUtils.copy(content, response.getOutputStream());
     }

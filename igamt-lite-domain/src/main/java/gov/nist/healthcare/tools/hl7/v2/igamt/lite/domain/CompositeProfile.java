@@ -324,7 +324,7 @@ public class CompositeProfile extends DataModelWithConstraints
 			}
 		}
 
-		m.setId(ObjectId.get().toString());
+		m.setId(coreProfileId);
 		m.setComment(comment);
 		m.setDescription(description);
 		m.setEvent(event);
