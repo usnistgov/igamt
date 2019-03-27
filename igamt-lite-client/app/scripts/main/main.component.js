@@ -4289,6 +4289,7 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
 
     };
 
+
     $scope.isValidTable = function () {
         var valueCodeSystemList = [];
         var labelCodeSystemList = [];
