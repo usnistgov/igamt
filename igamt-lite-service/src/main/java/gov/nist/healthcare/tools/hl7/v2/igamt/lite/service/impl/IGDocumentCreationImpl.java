@@ -292,16 +292,16 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 			throw new IGDocumentException(e);
 		}
 	}
-
-	private void addDynTable0396(ValueSetOrSingleCodeBinding vsb, TableLibrary vsdTarget) {
-		Table dyn0396 = tableRepository.findDynamicTable0396();
-		if (dyn0396 != null) {
-			if (!vsdTarget.contains(dyn0396.getId())) {
-				vsdTarget.addTable(dyn0396);
-			}
-			vsb.setTableId(dyn0396.getId());
-		}
-	}
+//
+//	private void addDynTable0396(ValueSetOrSingleCodeBinding vsb, TableLibrary vsdTarget) {
+//		Table dyn0396 = tableRepository.findDynamicTable0396();
+//		if (dyn0396 != null) {
+//			if (!vsdTarget.contains(dyn0396.getId())) {
+//				vsdTarget.addTable(dyn0396);
+//			}
+//			vsb.setTableId(dyn0396.getId());
+//		}
+//	}
 
 	int findMaxPosition(Messages msgs) {
 		int maxPos = 0;
@@ -386,16 +386,7 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 		if (t == null)
 			return;
 		TableLibrary vsdTarget = pTarget.getTableLibrary();
-		if (t.getScope().equals(SCOPE.HL7STANDARD) && "0396".equals(t.getBindingIdentifier())
-				&& !"Dyn".equals(t.getHl7Version())) {
-			Table dyn0396 = tableRepository.findDynamicTable0396();
-			if (dyn0396 != null) {
-				if (!vsdTarget.contains(dyn0396.getId())) {
-					vsdTarget.addTable(dyn0396);
-				}
-				vsb.setTableId(dyn0396.getId());
-			}
-		} else if (!vsdTarget.contains(t.getId())) {
+		if (!vsdTarget.contains(t.getId())) {
 			vsdTarget.addTable(t);
 		}
 	}

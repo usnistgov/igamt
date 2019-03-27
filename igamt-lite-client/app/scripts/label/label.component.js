@@ -44,7 +44,9 @@ angular.module('igl').controller('labelController', function($scope) {
       return "-" + element.description;
     }
 
-  }
+  };
+
+
 
   $scope.getScopeLabel = function(leaf) {
     if (leaf) {
@@ -67,5 +69,15 @@ angular.module('igl').controller('labelController', function($scope) {
     }
   };
 
+
+  $scope.isDynamic =function (elm) {
+
+    if($scope.hasHl7Version(elm)){
+
+      return elm.hl7Version.toLowerCase() =='dyn';
+
+    }else return false;
+
+  };
 
 });

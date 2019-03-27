@@ -5695,8 +5695,11 @@
 
         <span ng-if="element.publicationVersion&&element.status==='PUBLISHED'" class="version-badge">v{{element.publicationVersion}}</span>
     </span>
-    <span>{{getLabel(element)}}</span>
-    <span ng-if="description">-{{getDescriptionLabel(element)}}</span>
+        <span ng-class="{'dynamic': isDynamic(element)}">
+            <span>{{getLabel(element)}}</span>
+            <span ng-if="description">-{{getDescriptionLabel(element)}}</span>
+        </span>
+
     </span>
 
 
