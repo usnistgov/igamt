@@ -60,7 +60,7 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         }
     };
 
-    $scope.selectionAll = function (bool) {
+    $scope.selectionAllCompositeProfiles = function (bool) {
         for (var i in $scope.igdocumentToSelect.profile.compositeProfiles.children) {
             var message = $scope.igdocumentToSelect.profile.compositeProfiles.children[i];
             message.selected = bool;
@@ -68,12 +68,30 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         $scope.selected = bool;
     };
 
-    $scope.generatedSelectedMessagesIDs = function () {
+    $scope.selectionAllConformanceProfile = function (bool) {
+        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
+            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+            message.selected = bool;
+        }
+        $scope.selected = bool;
+    };
+
+    $scope.generatedSelectedCompositeProfileIDs = function () {
         $scope.selectedCompositeProfileIDs = [];
         for (var i in $scope.igdocumentToSelect.profile.compositeProfiles.children) {
             var message = $scope.igdocumentToSelect.profile.compositeProfiles.children[i];
             if (message.selected) {
                 $scope.selectedCompositeProfileIDs.push(message.id);
+            }
+        }
+    };
+
+    $scope.generatedSelectedConformanceProfileIDs = function () {
+        $scope.selectedConformanceProfileIDs = [];
+        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
+            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+            if (message.selected) {
+                $scope.selectedConformanceProfileIDs.push(message.id);
             }
         }
     };
@@ -152,10 +170,11 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
     };
 
 
-    $scope.exportAsZIPforSelectedCompositeProfiles = function () {
+    $scope.exportAsZIPforSelectedProfiles = function () {
         $scope.loading = true;
-        $scope.generatedSelectedMessagesIDs();
-        ExportSvc.exportAsXMLByCompositeProfileIds($scope.igdocumentToSelect.id, $scope.selectedCompositeProfileIDs, $scope.xmlFormat);
+        $scope.generatedSelectedConformanceProfileIDs();
+        $scope.generatedSelectedCompositeProfileIDs();
+        ExportSvc.exportAsXMLByProfileIds($scope.igdocumentToSelect.id, $scope.selectedConformanceProfileIDs, $scope.selectedCompositeProfileIDs, $scope.xmlFormat);
         $scope.loading = false;
 
     };

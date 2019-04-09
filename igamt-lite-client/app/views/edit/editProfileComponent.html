@@ -205,7 +205,7 @@
                                                                 <td class="col-md-2 col-fixed-40" ng-if="node.type !== 'segment' &&  node.type !== 'segmentRef'">
                                                                     <span ng-bind="node.name"></span>
                                                                 </td>
-                                                                <td ng-class="{'col-md-2 col-fixed-80 select-change':node.attributes.usage,'col-md-2 col-fixed-80':!node.attributes.usage,'emptyCol':node.type==='message'}">
+                                                                <td ng-class="{'col-md-2 col-fixed-80 select-change':node.attributes.usage || node.attributes.predicate,'col-md-2 col-fixed-80':!node.attributes.usage,'emptyCol':node.type==='message'}">
                                                                     <div ng-if="node.usage !== 'C'  || (node.usage === 'C' && !findPredicate(node))" ng-hide="node.type==='message'">
                                                                         <md-select ng-disabled="viewSettings.tableReadonly" ng-init="initUsage(node)"
                                                                                    placeholder="Select Usage"
@@ -384,8 +384,7 @@
                                                                             </a>
                                                                         </div>
                                                                         <div ng-show="node.usage==='C' && !findPredicate(node) && node.from==='segment'">
-                                                                            <a ng-if="!viewSettings.tableReadonly" ng-click="openDialogPCSegmentPredicate(node)"
-                                                                               class="point">
+                                                                            <a ng-if="!viewSettings.tableReadonly" ng-click="openDialogPCSegmentPredicate(node)" class="point">
                                                                                 <span><i class="fa fa-plus fa-fw"></i></span>
                                                                                 <p class="warning">Need predicate</p>
                                                                             </a>
@@ -401,7 +400,7 @@
                                                                                 </span>
                                                                                 <span ng-show="node.from==='message'">
                                                                                     {{getConstraintAsTruncatedString(findPredicate(node), 15)}}
-                                                                                    <i class="fa fa-pencil fa-fw edit-icon" ng-show="findPredicate(node).context.type === 'message'&&!viewSettings.tableReadonly" ng-click="openDialogPCMessagePredicate(node)"></i>
+                                                                                    <i class="fa fa-pencil fa-fw edit-icon" ng-show="!viewSettings.tableReadonly" ng-click="openDialogPCMessagePredicate(node)"></i>
                                                                                 </span>
                                                                                 <span ng-show="node.attributes.predicate &&!viewSettings.tableReadonly" ng-click="cancelPredicate(node)">
                                                                                     <i class="fa fa-times fa-fw edit-icon"></i>
