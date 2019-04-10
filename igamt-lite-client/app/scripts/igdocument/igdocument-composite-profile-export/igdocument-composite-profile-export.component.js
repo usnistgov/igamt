@@ -58,6 +58,10 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
             var message = $scope.igdocumentToSelect.profile.compositeProfiles.children[i];
             if (message.selected) $scope.selected = true;
         }
+        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
+            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+            if (message.selected) $scope.selected = true;
+        }
     };
 
     $scope.selectionAllCompositeProfiles = function (bool) {

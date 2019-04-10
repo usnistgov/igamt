@@ -51,6 +51,12 @@ public class Messages extends TextbasedSectionModel implements java.io.Serializa
     m.setPosition(children.size() + 1);
     children.add(m);
   }
+  
+  public void addMessage(Message m, String mId) {
+    m.setId(mId);
+    m.setPosition(children.size() + 1);
+    children.add(m);
+  }
 
   public void delete(String id) {
     Message m = findOne(id);
