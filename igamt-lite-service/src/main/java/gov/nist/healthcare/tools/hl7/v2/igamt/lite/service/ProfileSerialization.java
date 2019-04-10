@@ -38,6 +38,8 @@ public interface ProfileSerialization {
 	
 	InputStream serializeCompositeProfileToZip(IGDocument doc, String[] exportInfo) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException;
 	
+	InputStream serializeProfileToZip(IGDocument doc, String[] mids, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException;
+	
 	InputStream serializeCompositeProfileGazelleToZip(IGDocument doc, String[] exportInfo) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException;
    
 	InputStream serializeCompositeProfileDisplayToZip(IGDocument doc, String[] exportInfo) throws IOException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException;

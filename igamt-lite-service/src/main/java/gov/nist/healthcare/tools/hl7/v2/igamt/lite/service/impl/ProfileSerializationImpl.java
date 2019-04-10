@@ -1001,11 +1001,6 @@ public class ProfileSerializationImpl implements ProfileSerialization {
       if (tl != null) {
         Table t = tableService.findById(tl.getId());
         if (t != null) {
-          /*
-           * Temporary script Begin This script is to hack Codes for external-user ValueSet. It is
-           * just temporary script till implementation for external valueset validation
-           */
-
           if (t != null && t.getSourceType().equals(SourceType.EXTERNAL)
               && t.getCreatedFrom() != null && !t.getCreatedFrom().isEmpty()) {
             Table origin = tableService.findById(t.getCreatedFrom());
@@ -1014,9 +1009,6 @@ public class ProfileSerializationImpl implements ProfileSerialization {
             }
           }
 
-          /*
-           * Temporary script End
-           */
           tablesMap.put(t.getId(), t);
         }
       }
@@ -1051,29 +1043,6 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     	
     }
     
-    
-    
-//    for (Message m : original.getMessages().getChildren()) {
-//      if (Arrays.asList(ids).contains(m.getId())) {
-//        if (m.getMessageID() == null) m.setMessageID(UUID.randomUUID().toString());
-//        messages.addMessage(m);
-//        for (SegmentRefOrGroup seog : m.getChildren()) {
-//          this.visit(seog, segmentsMap, datatypesMap, tablesMap);
-//        }
-//        
-//        if(original.getMessages() != null && original.getMessages().getConfig() != null && original.getMessages().getConfig().getAckBinding() != null){
-//          String ackMessageId = original.getMessages().getConfig().getAckBinding().get(m.getId());
-//          if(ackMessageId != null) {
-//            Message ackM = this.messageService.findById(ackMessageId);
-//            ackM.setMessageID("ACK_" + m.getMessageID());
-//            messages.addMessage(ackM);
-//            for (SegmentRefOrGroup seog : ackM.getChildren()) {
-//              this.visit(seog, segmentsMap, datatypesMap, tablesMap);
-//            }
-//          }
-//        }
-//      }
-//    }
 
     SegmentLibrary segments = new SegmentLibrary();
     for (String key : segmentsMap.keySet()) {
@@ -1329,6 +1298,124 @@ public class ProfileSerializationImpl implements ProfileSerialization {
   public void setLog(Logger log) {
     this.log = log;
   }
+  
+  @Override
+  public InputStream serializeProfileToZip(IGDocument doc, String[] mids, String[] cids)
+      throws IOException, CloneNotSupportedException, ProfileSerializationException,
+      TableSerializationException, ConstraintSerializationException {    
+    
+    Map<String, Segment> segmentsMap = new HashMap<String, Segment>();
+    Map<String, Datatype> datatypesMap = new HashMap<String, Datatype>();
+    Map<String, Table> tablesMap = new HashMap<String, Table>();
+
+    for (SegmentLink sl : doc.getProfile().getSegmentLibrary().getChildren()) {
+      if (sl != null) {
+        Segment s = segmentService.findById(sl.getId());
+        if (s != null) {
+          segmentsMap.put(s.getId(), s);
+        }
+      }
+    }
+
+    for (DatatypeLink dl : doc.getProfile().getDatatypeLibrary().getChildren()) {
+      if (dl != null) {
+        Datatype d = datatypeService.findById(dl.getId());
+        if (d != null) {
+          datatypesMap.put(d.getId(), d);
+        }
+      }
+    }
+
+    for (TableLink tl : doc.getProfile().getTableLibrary().getChildren()) {
+      if (tl != null) {
+        Table t = tableService.findById(tl.getId());
+        if (t != null) {
+
+          /*
+           * Temporary script Begin This script is to hack Codes for external-user ValueSet. It is
+           * just temporary script till implementation for external valueset validation
+           */
+
+          if (t != null && t.getSourceType().equals(SourceType.EXTERNAL)
+              && t.getCreatedFrom() != null && !t.getCreatedFrom().isEmpty()) {
+            Table origin = tableService.findById(t.getCreatedFrom());
+            if (origin != null && origin.getCodes() != null && origin.getCodes().size() > 0) {
+              t.setCodes(origin.getCodes());
+            }
+          }
+
+          /*
+           * Temporary script End
+           */
+
+
+          tablesMap.put(t.getId(), t);
+        }
+      }
+    }
+
+
+
+    Profile filteredProfile = new Profile();
+    filteredProfile.setId(doc.getProfile().getId());
+    filteredProfile.setBaseId(doc.getProfile().getBaseId());
+    filteredProfile.setChanges(doc.getProfile().getChanges());
+    filteredProfile.setComment(doc.getProfile().getComment());
+    filteredProfile.setConstraintId(doc.getProfile().getConstraintId());
+    filteredProfile.setScope(doc.getProfile().getScope());
+    filteredProfile.setSectionContents(doc.getProfile().getSectionContents());
+    filteredProfile.setSectionDescription(doc.getProfile().getSectionDescription());
+    filteredProfile.setSectionPosition(doc.getProfile().getSectionPosition());
+    filteredProfile.setSectionTitle(doc.getProfile().getSectionTitle());
+    filteredProfile.setSourceId(doc.getProfile().getSourceId());
+    filteredProfile.setType(doc.getProfile().getType());
+    filteredProfile.setUsageNote(doc.getProfile().getUsageNote());
+    filteredProfile.setMetaData(doc.getProfile().getMetaData());
+    if (doc.getProfile().getMetaData().getExt() != null
+        && !"".equals(doc.getProfile().getMetaData().getExt())) {
+      filteredProfile.getMetaData().setName(doc.getProfile().getMetaData().getExt());
+    }
+    Messages messages = new Messages();
+    for (CompositeProfileStructure cps : doc.getProfile().getCompositeProfiles().getChildren()) {
+      if (Arrays.asList(cids).contains(cps.getId())) {
+        CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
+        segmentsMap.putAll(cp.getSegmentsMap());
+        datatypesMap.putAll(cp.getDatatypesMap());
+        messages.addMessage(cp.convertMessage(), cps.getId());
+      }
+    }
+    
+    for (Message m : doc.getProfile().getMessages().getChildren()) {
+      if (Arrays.asList(mids).contains(m.getId())) {
+        messages.addMessage(m);
+      }
+    }
+
+    SegmentLibrary segments = new SegmentLibrary();
+    for (String key : segmentsMap.keySet()) {
+      segments.addSegment(segmentsMap.get(key));
+    }
+
+    DatatypeLibrary datatypes = new DatatypeLibrary();
+    for (String key : datatypesMap.keySet()) {
+      datatypes.addDatatype(datatypesMap.get(key));
+    }
+
+    TableLibrary tables = new TableLibrary();
+    for (String key : tablesMap.keySet()) {
+      tables.addTable(tablesMap.get(key));
+    }
+
+    filteredProfile.setDatatypeLibrary(datatypes);
+    filteredProfile.setSegmentLibrary(segments);
+    filteredProfile.setMessages(messages);
+    filteredProfile.setTableLibrary(tables);
+
+    return new XMLExportTool().exportXMLAsValidationFormatForSelectedMessages(filteredProfile,
+        doc.getMetaData(), segmentsMap, datatypesMap, tablesMap);
+  }
+  
+  
 
 
   @Override
@@ -1412,7 +1499,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
         CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
         segmentsMap.putAll(cp.getSegmentsMap());
         datatypesMap.putAll(cp.getDatatypesMap());
-        messages.addMessage(cp.convertMessage());
+        messages.addMessage(cp.convertMessage(), cps.getId());
       }
     }
 

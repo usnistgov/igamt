@@ -26,9 +26,9 @@ angular.module('igl').factory(
             form.submit();
         };
 
-        svc.exportAsXMLByCompositeProfileIds = function (id, mids, xmlFormat) {
+        svc.exportAsXMLByProfileIds = function (id, mids, cids, xmlFormat) {
             var form = document.createElement("form");
-            form.action = $rootScope.api('api/igdocuments/' + id + '/export/' + xmlFormat + '/Composite/' + mids);
+            form.action = $rootScope.api('api/igdocuments/' + id + '/export/' + xmlFormat + '/mids/' + mids + '/cids/' + cids);
             form.method = "POST";
             form.target = "_target";
             var csrfInput = document.createElement("input");

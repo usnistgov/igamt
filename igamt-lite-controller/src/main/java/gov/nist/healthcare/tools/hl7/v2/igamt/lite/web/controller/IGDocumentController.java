@@ -1056,6 +1056,16 @@ public class IGDocumentController extends CommonController {
 		+ "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
 	FileCopyUtils.copy(content, response.getOutputStream());
     }
+    
+    @RequestMapping(value = "/{id}/export/Validation/mids/{mids}/cids/{cids}", method = RequestMethod.POST, produces = "application/zip",consumes = "application/x-www-form-urlencoded; charset=UTF-8")
+    public void exportValidationXMLByProfiles(@PathVariable("id") String id, @PathVariable("mids") String[] conformanceProfileIds, @PathVariable("cids") String[] compositeProfileIds, HttpServletRequest request, HttpServletResponse response)
+        throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
+      IGDocument d = findIGDocument(id);
+      InputStream content = igDocumentExport.exportAsValidationForSelectedProfiles(d, conformanceProfileIds, compositeProfileIds);
+      response.setContentType("application/zip");
+      response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle()) + "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
+      FileCopyUtils.copy(content, response.getOutputStream());
+    }
 
     @RequestMapping(value = "/{id}/export/Display/Composite/{cIds}", method = RequestMethod.POST, produces = "application/zip", consumes = "application/x-www-form-urlencoded; charset=UTF-8")
     public void exportDisplayXMLByCompositeProfile(@PathVariable("id") String id,

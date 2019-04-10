@@ -43,6 +43,8 @@ public interface IGDocumentExportService {
   InputStream exportAsDisplayForSelectedCompositeProfiles(IGDocument d, String[] mids) throws IOException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException;
   
   InputStream exportAsValidationForSelectedCompositeProfiles(IGDocument d, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException;
+  
+  InputStream exportAsValidationForSelectedProfiles(IGDocument d, String[] mids, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException;
 
   InputStream exportAsGazelleForSelectedCompositeProfiles(IGDocument d, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException;
 

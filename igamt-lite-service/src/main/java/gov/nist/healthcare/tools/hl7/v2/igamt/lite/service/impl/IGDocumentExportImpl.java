@@ -232,6 +232,17 @@ public class IGDocumentExportImpl implements IGDocumentExportService {
       return new NullInputStream(1L);
     }
   }
+  
+  
+  @Override
+  public InputStream exportAsValidationForSelectedProfiles(IGDocument d, String[] mids, String[] cids)
+      throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
+    if (d != null) {
+      return profileSerializationService.serializeProfileToZip(d, mids, cids);
+    } else {
+      return new NullInputStream(1L);
+    }
+  }
 
   @Override
   public InputStream exportAsGazelleForSelectedCompositeProfiles(IGDocument d, String[] cids)
