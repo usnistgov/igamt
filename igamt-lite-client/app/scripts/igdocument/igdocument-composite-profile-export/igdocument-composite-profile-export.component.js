@@ -88,6 +88,12 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
                 $scope.selectedCompositeProfileIDs.push(message.id);
             }
         }
+
+        console.log($scope.selectedCompositeProfileIDs);
+
+        if($scope.selectedCompositeProfileIDs.length === 0) {
+            $scope.selectedCompositeProfileIDs.push('NOTHING');
+        }
     };
 
     $scope.generatedSelectedConformanceProfileIDs = function () {
@@ -97,6 +103,10 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
             if (message.selected) {
                 $scope.selectedConformanceProfileIDs.push(message.id);
             }
+        }
+        console.log($scope.selectedConformanceProfileIDs);
+        if($scope.selectedConformanceProfileIDs.length === 0) {
+            $scope.selectedConformanceProfileIDs.push('NOTHING');
         }
     };
 
@@ -178,6 +188,9 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         $scope.loading = true;
         $scope.generatedSelectedConformanceProfileIDs();
         $scope.generatedSelectedCompositeProfileIDs();
+
+
+
         ExportSvc.exportAsXMLByProfileIds($scope.igdocumentToSelect.id, $scope.selectedConformanceProfileIDs, $scope.selectedCompositeProfileIDs, $scope.xmlFormat);
         $scope.loading = false;
 
