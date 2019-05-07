@@ -1062,6 +1062,10 @@ public class IGDocumentController extends CommonController {
     public void exportValidationXMLByProfiles(@PathVariable("id") String id, @PathVariable("mids") String[] conformanceProfileIds, @PathVariable("cids") String[] compositeProfileIds, HttpServletRequest request, HttpServletResponse response)
         throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
       IGDocument d = findIGDocument(id);
+      
+      if(conformanceProfileIds != null && conformanceProfileIds.length == 1 && conformanceProfileIds[0].equals("NOTHING")) conformanceProfileIds = null;
+      if(compositeProfileIds != null && compositeProfileIds.length == 1 && compositeProfileIds[0].equals("NOTHING")) compositeProfileIds = null;
+      
       InputStream content = igDocumentExport.exportAsValidationForSelectedProfiles(d, conformanceProfileIds, compositeProfileIds);
       response.setContentType("application/zip");
       response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle()) + "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");

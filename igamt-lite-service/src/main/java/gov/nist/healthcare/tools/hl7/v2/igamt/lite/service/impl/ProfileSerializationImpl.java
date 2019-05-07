@@ -1376,19 +1376,24 @@ public class ProfileSerializationImpl implements ProfileSerialization {
       filteredProfile.getMetaData().setName(doc.getProfile().getMetaData().getExt());
     }
     Messages messages = new Messages();
-    for (CompositeProfileStructure cps : doc.getProfile().getCompositeProfiles().getChildren()) {
-      if (Arrays.asList(cids).contains(cps.getId())) {
-        CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
-        segmentsMap.putAll(cp.getSegmentsMap());
-        datatypesMap.putAll(cp.getDatatypesMap());
-        messages.addMessage(cp.convertMessage(), cps.getId());
-      }
-    }
     
-    for (Message m : doc.getProfile().getMessages().getChildren()) {
-      if (Arrays.asList(mids).contains(m.getId())) {
-        messages.addMessage(m);
-      }
+    if(cids != null) {
+      for (CompositeProfileStructure cps : doc.getProfile().getCompositeProfiles().getChildren()) {
+        if (Arrays.asList(cids).contains(cps.getId())) {
+          CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
+          segmentsMap.putAll(cp.getSegmentsMap());
+          datatypesMap.putAll(cp.getDatatypesMap());
+          messages.addMessage(cp.convertMessage(), cps.getId());
+        }
+      }      
+    }
+
+    if(mids != null) {
+      for (Message m : doc.getProfile().getMessages().getChildren()) {
+        if (Arrays.asList(mids).contains(m.getId())) {
+          messages.addMessage(m);
+        }
+      }      
     }
 
     SegmentLibrary segments = new SegmentLibrary();
