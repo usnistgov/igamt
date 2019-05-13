@@ -370,6 +370,7 @@ public class TableServiceImpl implements TableService {
 				table.setVersion(Integer.parseInt(table.getVersion()) + 1 + "");
 			}
 
+			table.setDateUpdated(new Date());
 			return save(table);
 		} catch (EncryptedDocumentException e) {
 			throw new TableUpdateStreamException("Document is encrypted and cannot be read");

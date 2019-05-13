@@ -436,7 +436,7 @@ public class Bootstrap implements InitializingBean {
 	// 11/27/18
 	// fixOBX2ValuesetMissingAndDuplicated();
 
-    	//	createDynTable0396();
+    		createDynTable0396();
     	//  fixOBX2ValuesetMissingAndDuplicated();
     }
 
@@ -449,7 +449,7 @@ public class Bootstrap implements InitializingBean {
 		if (t != null) {
 		    table = new Table();
 		    table.setBindingIdentifier(t.getBindingIdentifier());
-		    table.setDescription(t.getDefPostText());
+		    //table.setDescription(t.getDefPostText());
 		    table.setDefPreText(t.getDefPreText());
 		    table.setName(t.getName());
 		    table.setOid(t.getOid());
@@ -463,7 +463,7 @@ public class Bootstrap implements InitializingBean {
 		    table.setType(Constant.TABLE);
 		    table.setComment(t.getComment());
 		    table.setCodeSystems(new HashSet<>(Arrays.asList(new String[] { "HL70396" })));
-		    table.setHl7Version("Dyn");
+		    table.setHl7Version("DYN");
 		    table.setContentDefinition(ContentDefinition.Extensional);
 		    table.setReferenceUrl(DynTableDownloadServiceImpl.TABLE_0396_URL);
 		}

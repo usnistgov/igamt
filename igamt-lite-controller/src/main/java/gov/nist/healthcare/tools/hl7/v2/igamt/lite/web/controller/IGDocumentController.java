@@ -283,7 +283,6 @@ public class IGDocumentController extends CommonController {
 		igDocuments.addAll(igDocumentService.findByAccountIdAndScopesAndVersion(account.getId(),
 			scopesAndVersion.getScopes(), scopesAndVersion.getHl7Version()));
 	    }
-
 	    if (igDocuments.isEmpty()) {
 		throw new NotFoundException("IG Document not found for scopesAndVersion=" + scopesAndVersion);
 	    }
@@ -1735,18 +1734,7 @@ public class IGDocumentController extends CommonController {
 	    Table t = tableService.findOneShortById(vsb.getTableId());
 	    if (t == null)
 		return;
-
-	    if (t.getScope().equals(SCOPE.HL7STANDARD) && t.getBindingIdentifier().equals("0396")
-		    && !t.getHl7Version().equals("Dyn")) {
-		Table dyn0396 = tableService.findDynamicTable0396();
-		if (dyn0396 != null) {
-		    if (!tablesMap.containsKey(dyn0396.getId())) {
-			ret.addTable(dyn0396);
-			tablesMap.put(dyn0396.getId(), true);
-		    }
-		    vsb.setTableId(dyn0396.getId());
-		}
-	    } else if (!tablesMap.containsKey(t.getId())) {
+	    if (!tablesMap.containsKey(t.getId())) {
 		ret.addTable(t);
 		tablesMap.put(t.getId(), true);
 	    }
