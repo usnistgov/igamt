@@ -44,20 +44,24 @@ angular.module('igl').factory('GVTSvc',
         };
 
 
-        svc.exportToGVT = function(id,mids, auth,targetUrl,targetDomain) {
-             var httpHeaders = {};
-            httpHeaders['target-auth'] = auth;
-            httpHeaders['target-url'] = targetUrl;
-            httpHeaders['target-domain'] = targetDomain;
-            return $http.post('api/igdocuments/' + id + '/connect/messages',mids,{headers:httpHeaders});
-        };
+        // svc.exportToGVT = function(id,mids, auth,targetUrl,targetDomain) {
+        //      var httpHeaders = {};
+        //     httpHeaders['target-auth'] = auth;
+        //     httpHeaders['target-url'] = targetUrl;
+        //     httpHeaders['target-domain'] = targetDomain;
+        //     return $http.post('api/igdocuments/' + id + '/connect/messages',mids,{headers:httpHeaders});
+        // };
 
-        svc.exportToGVTForCompositeProfile = function(id, cids, auth,targetUrl,targetDomain) {
+        svc.exportToGVT = function(id, mids, cids, auth,targetUrl,targetDomain) {
             var httpHeaders = {};
             httpHeaders['target-auth'] = auth;
             httpHeaders['target-url'] = targetUrl;
             httpHeaders['target-domain'] = targetDomain;
-            return $http.post('api/igdocuments/' + id + '/connect/composites',cids,{headers:httpHeaders});
+
+            var ids = {};
+            ids.mids = mids;
+            ids.cids = cids;
+            return $http.post('api/igdocuments/' + id + '/connect/gvt',ids,{headers:httpHeaders});
         };
 
         svc.getDomains = function(targetUrl,auth) {
