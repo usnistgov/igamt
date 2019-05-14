@@ -172,7 +172,12 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         } else if($scope.exportStep === 'ERROR_STEP'){
             $scope.loadDomains();
         } else if($scope.exportStep === 'MESSAGE_STEP'){
-            $scope.generatedSelectedMessagesIDs();
+            $scope.generatedSelectedConformanceProfileIDs();
+            $scope.generatedSelectedCompositeProfileIDs();
+
+
+            console.log($scope.selectedConformanceProfileIDs);
+            console.log($scope.selectedCompositeProfileIDs);
             $scope.exportStep = 'LOGIN_STEP';
         }
     };
@@ -218,7 +223,7 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         var auth =  StorageService.getGVTBasicAuth();
         if($scope.app.url != null && $scope.target.domain != null && auth!= null) {
             $scope.loading = true;
-            GVTSvc.exportToGVTForCompositeProfile($scope.igdocumentToSelect.id, $scope.selectedCompositeProfileIDs,auth, $scope.app.url, $scope.target.domain).then(function (map) {
+            GVTSvc.exportToGVT($scope.igdocumentToSelect.id, $scope.selectedConformanceProfileIDs,  $scope.selectedCompositeProfileIDs,auth, $scope.app.url, $scope.target.domain).then(function (map) {
                 $scope.loading = false;
                 var response = angular.fromJson(map.data);
                 if (response.success === false) {

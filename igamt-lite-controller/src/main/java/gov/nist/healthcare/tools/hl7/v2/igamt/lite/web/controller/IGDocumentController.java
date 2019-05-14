@@ -2099,36 +2099,26 @@ public class IGDocumentController extends CommonController {
 	return sortedList;
     }
 
-    @RequestMapping(value = "/{id}/connect/messages", method = RequestMethod.POST, produces = "application/json")
-    public Map<String, Object> exportToGVT(@PathVariable("id") String id, @RequestBody List<MessageExportInfo> messageExportInfo,
-	    @RequestHeader("target-auth") String authorization, @RequestHeader("target-url") String url,
-	    @RequestHeader("target-domain") String domain, HttpServletRequest request, HttpServletResponse response)
-	    throws GVTExportException {
-	try {
-	    log.info("Exporting messages to GVT from IG Document with id=" + id + ", messages=" + messageExportInfo);
-	    IGDocument d = findIGDocument(id);
-	    InputStream content = igDocumentExport.exportAsValidationForSelectedMessages(d,
-	    		messageExportInfo);
 
-	    ResponseEntity<?> rsp = gvtService.send(content, authorization, url, domain);
-	    Map<String, Object> res = (Map<String, Object>) rsp.getBody();
-	    return res;
-	} catch (Exception e) {
-	    throw new GVTExportException(e);
-	}
-    }
-
-    @RequestMapping(value = "/{id}/connect/composites", method = RequestMethod.POST, produces = "application/json")
-    public Map<String, Object> exportToGVTForComposite(@PathVariable("id") String id,
-	    @RequestBody Set<String> messageIds, @RequestHeader("target-auth") String authorization,
-	    @RequestHeader("target-url") String url, @RequestHeader("target-domain") String domain,
+    @RequestMapping(value = "/{id}/connect/gvt", method = RequestMethod.POST, produces = "application/json")
+    public Map<String, Object> exportToGVT(
+        @PathVariable("id") String id,
+	    @RequestBody ReqId reqIds, 
+	    @RequestHeader("target-auth") String authorization,
+	    @RequestHeader("target-url") String url, 
+	    @RequestHeader("target-domain") String domain,
 	    HttpServletRequest request, HttpServletResponse response) throws GVTExportException {
 	try {
-	    log.info("Exporting messages to GVT from IG Document with id=" + id + ", messages=" + messageIds);
+	    log.info("Exporting messages to GVT from IG Document with id=" + id);
+	    
+	    
 	    IGDocument d = findIGDocument(id);
-	    InputStream content = igDocumentExport.exportAsValidationForSelectedCompositeProfiles(d,
-		    messageIds.toArray(new String[messageIds.size()]));
-
+	      
+	    if(reqIds != null && reqIds.getMids().length == 1 && reqIds.getMids()[0].equals("NOTHING")) reqIds.setMids(null);
+	    if(reqIds != null && reqIds.getCids().length == 1 && reqIds.getCids()[0].equals("NOTHING")) reqIds.setCids(null);
+	      
+	    InputStream content = igDocumentExport.exportAsValidationForSelectedProfiles(d, reqIds.getMids(), reqIds.getCids());
+	    
 	    ResponseEntity<?> rsp = gvtService.send(content, authorization, url, domain);
 	    Map<String, Object> res = (Map<String, Object>) rsp.getBody();
 	    return res;
