@@ -25,6 +25,7 @@ angular.module('igl').controller('AddHL7TableOpenCtrl', function ($scope, $mdDia
         hl7Versions.push(response.data[i]);
       }
       $scope.hl7Versions = hl7Versions;
+      $scope.hl7Versions.push("DYN");
     });
   };
 

@@ -58,9 +58,13 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
             var message = $scope.igdocumentToSelect.profile.compositeProfiles.children[i];
             if (message.selected) $scope.selected = true;
         }
+        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
+            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+            if (message.selected) $scope.selected = true;
+        }
     };
 
-    $scope.selectionAll = function (bool) {
+    $scope.selectionAllCompositeProfiles = function (bool) {
         for (var i in $scope.igdocumentToSelect.profile.compositeProfiles.children) {
             var message = $scope.igdocumentToSelect.profile.compositeProfiles.children[i];
             message.selected = bool;
@@ -68,13 +72,41 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         $scope.selected = bool;
     };
 
-    $scope.generatedSelectedMessagesIDs = function () {
+    $scope.selectionAllConformanceProfile = function (bool) {
+        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
+            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+            message.selected = bool;
+        }
+        $scope.selected = bool;
+    };
+
+    $scope.generatedSelectedCompositeProfileIDs = function () {
         $scope.selectedCompositeProfileIDs = [];
         for (var i in $scope.igdocumentToSelect.profile.compositeProfiles.children) {
             var message = $scope.igdocumentToSelect.profile.compositeProfiles.children[i];
             if (message.selected) {
                 $scope.selectedCompositeProfileIDs.push(message.id);
             }
+        }
+
+        console.log($scope.selectedCompositeProfileIDs);
+
+        if($scope.selectedCompositeProfileIDs.length === 0) {
+            $scope.selectedCompositeProfileIDs.push('NOTHING');
+        }
+    };
+
+    $scope.generatedSelectedConformanceProfileIDs = function () {
+        $scope.selectedConformanceProfileIDs = [];
+        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
+            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+            if (message.selected) {
+                $scope.selectedConformanceProfileIDs.push(message.id);
+            }
+        }
+        console.log($scope.selectedConformanceProfileIDs);
+        if($scope.selectedConformanceProfileIDs.length === 0) {
+            $scope.selectedConformanceProfileIDs.push('NOTHING');
         }
     };
 
@@ -140,7 +172,12 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         } else if($scope.exportStep === 'ERROR_STEP'){
             $scope.loadDomains();
         } else if($scope.exportStep === 'MESSAGE_STEP'){
-            $scope.generatedSelectedMessagesIDs();
+            $scope.generatedSelectedConformanceProfileIDs();
+            $scope.generatedSelectedCompositeProfileIDs();
+
+
+            console.log($scope.selectedConformanceProfileIDs);
+            console.log($scope.selectedCompositeProfileIDs);
             $scope.exportStep = 'LOGIN_STEP';
         }
     };
@@ -152,10 +189,14 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
     };
 
 
-    $scope.exportAsZIPforSelectedCompositeProfiles = function () {
+    $scope.exportAsZIPforSelectedProfiles = function () {
         $scope.loading = true;
-        $scope.generatedSelectedMessagesIDs();
-        ExportSvc.exportAsXMLByCompositeProfileIds($scope.igdocumentToSelect.id, $scope.selectedCompositeProfileIDs, $scope.xmlFormat);
+        $scope.generatedSelectedConformanceProfileIDs();
+        $scope.generatedSelectedCompositeProfileIDs();
+
+
+
+        ExportSvc.exportAsXMLByProfileIds($scope.igdocumentToSelect.id, $scope.selectedConformanceProfileIDs, $scope.selectedCompositeProfileIDs, $scope.xmlFormat);
         $scope.loading = false;
 
     };
@@ -182,7 +223,7 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
         var auth =  StorageService.getGVTBasicAuth();
         if($scope.app.url != null && $scope.target.domain != null && auth!= null) {
             $scope.loading = true;
-            GVTSvc.exportToGVTForCompositeProfile($scope.igdocumentToSelect.id, $scope.selectedCompositeProfileIDs,auth, $scope.app.url, $scope.target.domain).then(function (map) {
+            GVTSvc.exportToGVT($scope.igdocumentToSelect.id, $scope.selectedConformanceProfileIDs,  $scope.selectedCompositeProfileIDs,auth, $scope.app.url, $scope.target.domain).then(function (map) {
                 $scope.loading = false;
                 var response = angular.fromJson(map.data);
                 if (response.success === false) {

@@ -283,7 +283,6 @@ public class IGDocumentController extends CommonController {
 		igDocuments.addAll(igDocumentService.findByAccountIdAndScopesAndVersion(account.getId(),
 			scopesAndVersion.getScopes(), scopesAndVersion.getHl7Version()));
 	    }
-
 	    if (igDocuments.isEmpty()) {
 		throw new NotFoundException("IG Document not found for scopesAndVersion=" + scopesAndVersion);
 	    }
@@ -1028,9 +1027,10 @@ public class IGDocumentController extends CommonController {
 	    HttpServletResponse response) throws IOException, IGDocumentNotFoundException, CloneNotSupportedException,
 	    ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
 	IGDocument d = findIGDocument(id);
+	d.getMetaData().setTitle("[Composite Profiles]" + d.getMetaData().getTitle());
 	InputStream content = igDocumentExport.exportAsValidationForSelectedCompositeProfiles(d, compositeProfileIds);
 	response.setContentType("application/zip");
-	response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle())
+	response.setHeader("Content-disposition", "attachment;filename=" + "[Composite Profiles]" + updateFileName(d.getMetaData().getTitle())
 		+ "-CompositeProfile_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
 	FileCopyUtils.copy(content, response.getOutputStream());
     }
@@ -1043,7 +1043,7 @@ public class IGDocumentController extends CommonController {
 	    throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException,
 	    TableSerializationException, ConstraintSerializationException {
     	IGDocument d = findIGDocument(id);
-
+    	d.getMetaData().setTitle("[Conformance Profiles]" + d.getMetaData().getTitle());
 
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -1052,9 +1052,23 @@ public class IGDocumentController extends CommonController {
 
 	InputStream content = igDocumentExport.exportAsValidationForSelectedMessages(d, messageExportInfo);
 	response.setContentType("application/zip");
-	response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle())
+	response.setHeader("Content-disposition", "attachment;filename=" + "[Conformance Profiles]" + updateFileName(d.getMetaData().getTitle())
 		+ "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
 	FileCopyUtils.copy(content, response.getOutputStream());
+    }
+    
+    @RequestMapping(value = "/{id}/export/Validation/mids/{mids}/cids/{cids}", method = RequestMethod.POST, produces = "application/zip",consumes = "application/x-www-form-urlencoded; charset=UTF-8")
+    public void exportValidationXMLByProfiles(@PathVariable("id") String id, @PathVariable("mids") String[] conformanceProfileIds, @PathVariable("cids") String[] compositeProfileIds, HttpServletRequest request, HttpServletResponse response)
+        throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
+      IGDocument d = findIGDocument(id);
+      
+      if(conformanceProfileIds != null && conformanceProfileIds.length == 1 && conformanceProfileIds[0].equals("NOTHING")) conformanceProfileIds = null;
+      if(compositeProfileIds != null && compositeProfileIds.length == 1 && compositeProfileIds[0].equals("NOTHING")) compositeProfileIds = null;
+      
+      InputStream content = igDocumentExport.exportAsValidationForSelectedProfiles(d, conformanceProfileIds, compositeProfileIds);
+      response.setContentType("application/zip");
+      response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle()) + "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
+      FileCopyUtils.copy(content, response.getOutputStream());
     }
 
     @RequestMapping(value = "/{id}/export/Display/Composite/{cIds}", method = RequestMethod.POST, produces = "application/zip", consumes = "application/x-www-form-urlencoded; charset=UTF-8")
@@ -1720,18 +1734,7 @@ public class IGDocumentController extends CommonController {
 	    Table t = tableService.findOneShortById(vsb.getTableId());
 	    if (t == null)
 		return;
-
-	    if (t.getScope().equals(SCOPE.HL7STANDARD) && t.getBindingIdentifier().equals("0396")
-		    && !t.getHl7Version().equals("Dyn")) {
-		Table dyn0396 = tableService.findDynamicTable0396();
-		if (dyn0396 != null) {
-		    if (!tablesMap.containsKey(dyn0396.getId())) {
-			ret.addTable(dyn0396);
-			tablesMap.put(dyn0396.getId(), true);
-		    }
-		    vsb.setTableId(dyn0396.getId());
-		}
-	    } else if (!tablesMap.containsKey(t.getId())) {
+	    if (!tablesMap.containsKey(t.getId())) {
 		ret.addTable(t);
 		tablesMap.put(t.getId(), true);
 	    }
@@ -2096,36 +2099,26 @@ public class IGDocumentController extends CommonController {
 	return sortedList;
     }
 
-    @RequestMapping(value = "/{id}/connect/messages", method = RequestMethod.POST, produces = "application/json")
-    public Map<String, Object> exportToGVT(@PathVariable("id") String id, @RequestBody List<MessageExportInfo> messageExportInfo,
-	    @RequestHeader("target-auth") String authorization, @RequestHeader("target-url") String url,
-	    @RequestHeader("target-domain") String domain, HttpServletRequest request, HttpServletResponse response)
-	    throws GVTExportException {
-	try {
-	    log.info("Exporting messages to GVT from IG Document with id=" + id + ", messages=" + messageExportInfo);
-	    IGDocument d = findIGDocument(id);
-	    InputStream content = igDocumentExport.exportAsValidationForSelectedMessages(d,
-	    		messageExportInfo);
 
-	    ResponseEntity<?> rsp = gvtService.send(content, authorization, url, domain);
-	    Map<String, Object> res = (Map<String, Object>) rsp.getBody();
-	    return res;
-	} catch (Exception e) {
-	    throw new GVTExportException(e);
-	}
-    }
-
-    @RequestMapping(value = "/{id}/connect/composites", method = RequestMethod.POST, produces = "application/json")
-    public Map<String, Object> exportToGVTForComposite(@PathVariable("id") String id,
-	    @RequestBody Set<String> messageIds, @RequestHeader("target-auth") String authorization,
-	    @RequestHeader("target-url") String url, @RequestHeader("target-domain") String domain,
+    @RequestMapping(value = "/{id}/connect/gvt", method = RequestMethod.POST, produces = "application/json")
+    public Map<String, Object> exportToGVT(
+        @PathVariable("id") String id,
+	    @RequestBody ReqId reqIds, 
+	    @RequestHeader("target-auth") String authorization,
+	    @RequestHeader("target-url") String url, 
+	    @RequestHeader("target-domain") String domain,
 	    HttpServletRequest request, HttpServletResponse response) throws GVTExportException {
 	try {
-	    log.info("Exporting messages to GVT from IG Document with id=" + id + ", messages=" + messageIds);
+	    log.info("Exporting messages to GVT from IG Document with id=" + id);
+	    
+	    
 	    IGDocument d = findIGDocument(id);
-	    InputStream content = igDocumentExport.exportAsValidationForSelectedCompositeProfiles(d,
-		    messageIds.toArray(new String[messageIds.size()]));
-
+	      
+	    if(reqIds != null && reqIds.getMids().length == 1 && reqIds.getMids()[0].equals("NOTHING")) reqIds.setMids(null);
+	    if(reqIds != null && reqIds.getCids().length == 1 && reqIds.getCids()[0].equals("NOTHING")) reqIds.setCids(null);
+	      
+	    InputStream content = igDocumentExport.exportAsValidationForSelectedProfiles(d, reqIds.getMids(), reqIds.getCids());
+	    
 	    ResponseEntity<?> rsp = gvtService.send(content, authorization, url, domain);
 	    Map<String, Object> res = (Map<String, Object>) rsp.getBody();
 	    return res;

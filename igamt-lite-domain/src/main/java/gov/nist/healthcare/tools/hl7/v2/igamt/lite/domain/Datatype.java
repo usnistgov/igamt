@@ -404,8 +404,7 @@ public class Datatype extends DataModelWithConstraints
       String description = this.getName() + "." + constant.getLocation() + "(" + constant.getName()
           + ") SHALL contain the constant value '" + constant.getValue() + "'.";
       String assertion =
-          "<Assertion><AND><Presence Path=\"" + path + "\"/><PlainText Path=\"" + path
-              + "\" Text=\"" + constant.getValue() + "\" IgnoreCase=\"false\"/></AND></Assertion>";
+          "<Assertion><PlainText Path=\"" + path  + "\" Text=\"" + constant.getValue() + "\" IgnoreCase=\"false\"/></Assertion>";
       ConformanceStatement cs = new ConformanceStatement();
       cs.setId(ObjectId.get().toString());
       cs.setConstraintId(constraintId);
@@ -438,16 +437,16 @@ public class Datatype extends DataModelWithConstraints
             + "' drawn from the code system '" + scb.getCode().getCodeSystem() + "'.";
         String assertion = "";
         if (scb.isCodedElement()) {
-          assertion = "<Assertion>" + "<AND>" + "<AND><Presence Path=\"" + path + ".1[1]"
-              + "\"/><PlainText Path=\"" + path + ".1[1]" + "\" Text=\"" + scb.getCode().getValue()
-              + "\" IgnoreCase=\"false\"/></AND>" + "<AND><Presence Path=\"" + path + ".3[1]"
-              + "\"/><PlainText Path=\"" + path + ".3[1]" + "\" Text=\""
-              + scb.getCode().getCodeSystem() + "\" IgnoreCase=\"false\"/></AND>" + "</AND>"
+          assertion = "<Assertion>" 
+              + "<AND>" 
+              + "<PlainText Path=\"" + path + ".1[1]" + "\" Text=\"" + scb.getCode().getValue() + "\" IgnoreCase=\"false\"/>" 
+              + "<PlainText Path=\"" + path + ".3[1]" + "\" Text=\"" + scb.getCode().getCodeSystem() + "\" IgnoreCase=\"false\"/>" 
+              + "</AND>"
               + "</Assertion>";
         } else {
-          assertion = "<Assertion><AND><Presence Path=\"" + path + "\"/><PlainText Path=\"" + path
+          assertion = "<Assertion><PlainText Path=\"" + path
               + "\" Text=\"" + scb.getCode().getValue()
-              + "\" IgnoreCase=\"false\"/></AND></Assertion>";
+              + "\" IgnoreCase=\"false\"/></Assertion>";
         }
         ConformanceStatement cs = new ConformanceStatement();
         cs.setId(ObjectId.get().toString());
