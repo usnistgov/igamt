@@ -298,13 +298,19 @@
                                                     <thead>
                                                         <tr class="tbl-header">
                                                             <th st-sort="constraintId" class="col-md-2">ID</th>
-                                                            <th class="col-md-10">Description</th>
+                                                            <th class="col-md-9">Description</th>
+                                                            <th class="col-md-1">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr ng-repeat="c in displayedCS track by $index">
                                                             <td class="col-md-2">{{c.constraintId}}</td>
-                                                            <td class="col-md-10">{{c.description}}</td>
+                                                            <td class="col-md-9">{{c.description}}</td>
+                                                            <td class="col-md-1">
+                                                                <span ng-click="deleteConformanceStatement(c, node)" class="point">
+                                                                    <span style="color: red;"><i class="fa fa-trash fa-fw"></i></span>
+                                                                </span>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
