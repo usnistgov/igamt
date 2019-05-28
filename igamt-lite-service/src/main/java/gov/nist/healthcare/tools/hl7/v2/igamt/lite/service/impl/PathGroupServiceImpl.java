@@ -72,7 +72,7 @@ public class PathGroupServiceImpl implements PathGroupService {
 			pc.getChildren().removeAll(toRemove);
 			pc.getChildren().addAll(toAdd);
 		}
-		for (ProfileComponent p : pcs) {
+		for (ProfileComponent p : pcs) {  
 			for (SubProfileComponent sub : p.getChildren()) {
 				List<ValueSetOrSingleCodeBinding> toRemove = new ArrayList<>();
 				List<Comment> commentToRemove = new ArrayList<>();

@@ -52,20 +52,27 @@ public class FlavorServiceImpl implements FlavorService {
 
           if (attr.getMax() != null) {
             grp.setMax(attr.getMax());
+            grp.setTemporary(true);
+
           }
           if (attr.getMin() != null) {
             grp.setMin(attr.getMin());
+            grp.setTemporary(true);
+
           }
           if (attr.getUsage() != null) {
             grp.setUsage(attr.getUsage());
+            grp.setTemporary(true);
+
           }
           if (attr.getConformanceStatements() != null
               && attr.getConformanceStatements().size() > 0) {
             grp.setConformanceStatements(attr.getConformanceStatements());
+            grp.setTemporary(true);
+
           }
         }
       }
-      grp.setTemporary(true);
       return grp;
     } else if (dm instanceof SegmentRef) {
       SegmentRef segRef = (SegmentRef) dm;
@@ -76,15 +83,19 @@ public class FlavorServiceImpl implements FlavorService {
           // }
           if (attr.getMax() != null) {
             segRef.setMax(attr.getMax());
+            segRef.setTemporary(true);
+
           }
           if (attr.getMin() != null) {
             segRef.setMin(attr.getMin());
+            segRef.setTemporary(true);
+
           }
           if (attr.getUsage() != null) {
             segRef.setUsage(attr.getUsage());
+            segRef.setTemporary(true);
+
           }
-
-
         }
       }
       if (!pathGroups.isEmpty()) {
@@ -162,6 +173,8 @@ public class FlavorServiceImpl implements FlavorService {
                 segmentFlavor.setId(ObjectId.get().toString());
                 segmentFlavor.setTemporary(true);
                 segmentFlavor.setScope(SCOPE.USER);
+                attr.getDynamicMappingDefinition().setTemporary(true);
+
                 segmentFlavor.setDynamicMappingDefinition(attr.getDynamicMappingDefinition());
 
                 // System.out.println(
@@ -185,6 +198,7 @@ public class FlavorServiceImpl implements FlavorService {
                 segmentFlavor.setId(ObjectId.get().toString());
                 segmentFlavor.setTemporary(true);
                 segmentFlavor.setScope(SCOPE.USER);
+                attr.getCoConstraintsTable().setTemporary(true);
                 segmentFlavor.setCoConstraintsTable(attr.getCoConstraintsTable());
 
 
@@ -207,11 +221,10 @@ public class FlavorServiceImpl implements FlavorService {
                 segmentFlavor.setTemporary(true);
                 segmentFlavor.setScope(SCOPE.USER);
                 segmentFlavor.setComments(attr.getComments());
-
-
-                queryService.getSegmentsMap().put(segmentFlavor.getId(), segmentFlavor);
                 segRef.getRef().setId(segmentFlavor.getId());
                 segRef.getRef().setExt(segmentFlavor.getExt());
+                segRef.setTemporary(true);
+                queryService.getSegmentsMap().put(segmentFlavor.getId(), segmentFlavor);
 
 
               } catch (CloneNotSupportedException e) {
@@ -236,24 +249,38 @@ public class FlavorServiceImpl implements FlavorService {
           // }
           if (attr.getMax() != null) {
             field.setMax(attr.getMax());
+            field.setTemporary(true);
+
           }
           if (attr.getText() != null) {
             field.setText(attr.getText());
+            field.setTemporary(true);
+
           }
           if (attr.getMin() != null) {
             field.setMin(attr.getMin());
+            field.setTemporary(true);
+
           }
           if (attr.getUsage() != null) {
             field.setUsage(attr.getUsage());
+            field.setTemporary(true);
+
           }
           if (attr.getConfLength() != null) {
             field.setConfLength(attr.getConfLength());
+            field.setTemporary(true);
+
           }
           if (attr.getMaxLength() != null) {
             field.setMaxLength(attr.getMaxLength());
+            field.setTemporary(true);
+
           }
           if (attr.getMinLength() != null) {
             field.setMinLength(attr.getMinLength());
+            field.setTemporary(true);
+
           }
           if (attr.getDatatype() != null) {
             if (!queryService.getDatatypesMap().containsKey(attr.getDatatype().getId())) {
@@ -261,6 +288,8 @@ public class FlavorServiceImpl implements FlavorService {
               queryService.getDatatypesMap().put(d.getId(), d);
             }
             field.setDatatype(attr.getDatatype());
+            field.setTemporary(true);
+
 
           }
         }
@@ -273,9 +302,10 @@ public class FlavorServiceImpl implements FlavorService {
           datatypeFlavor.setId(ObjectId.get().toString());
           datatypeFlavor.setTemporary(true);
           datatypeFlavor.setScope(SCOPE.USER);
-          queryService.getDatatypesMap().put(datatypeFlavor.getId(), datatypeFlavor);
           field.getDatatype().setId(datatypeFlavor.getId());
           field.getDatatype().setExt(datatypeFlavor.getExt());
+          field.setTemporary(true);
+          queryService.getDatatypesMap().put(datatypeFlavor.getId(), datatypeFlavor);
 
         } catch (CloneNotSupportedException e) {
           // TODO Auto-generated catch block
@@ -295,18 +325,28 @@ public class FlavorServiceImpl implements FlavorService {
           // }
           if (attr.getUsage() != null) {
             component.setUsage(attr.getUsage());
+            component.setTemporary(true);
+
           }
           if (attr.getConfLength() != null) {
             component.setConfLength(attr.getConfLength());
+            component.setTemporary(true);
+
           }
           if (attr.getText() != null) {
             component.setText(attr.getText());
+            component.setTemporary(true);
+
           }
           if (attr.getMaxLength() != null) {
             component.setMaxLength(attr.getMaxLength());
+            component.setTemporary(true);
+
           }
           if (attr.getMinLength() != null) {
             component.setMinLength(attr.getMinLength());
+            component.setTemporary(true);
+
           }
           if (attr.getDatatype() != null) {
             if (!queryService.getDatatypesMap().containsKey(attr.getDatatype().getId())) {
@@ -314,6 +354,8 @@ public class FlavorServiceImpl implements FlavorService {
               queryService.getDatatypesMap().put(d.getId(), d);
             }
             component.setDatatype(attr.getDatatype());
+            component.setTemporary(true);
+
           }
         }
       }
@@ -321,13 +363,14 @@ public class FlavorServiceImpl implements FlavorService {
         Datatype originalDt = queryService.getDatatypesMap().get(component.getDatatype().getId());
         try {
           Datatype datatypeFlavor = originalDt.clone();
-          datatypeFlavor.setExt(ext + "_" + component.getPosition());
+          datatypeFlavor.setExt(ext + "_" +component.getPosition());
           datatypeFlavor.setId(ObjectId.get().toString());
           datatypeFlavor.setTemporary(true);
           datatypeFlavor.setScope(SCOPE.USER);
-          queryService.getDatatypesMap().put(datatypeFlavor.getId(), datatypeFlavor);
           component.getDatatype().setId(datatypeFlavor.getId());
           component.getDatatype().setExt(datatypeFlavor.getExt());
+          queryService.getDatatypesMap().put(datatypeFlavor.getId(), datatypeFlavor);
+
         } catch (CloneNotSupportedException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -340,4 +383,42 @@ public class FlavorServiceImpl implements FlavorService {
 
     return dm;
   }
+  
+//  private boolean needsGeneration(List<SubProfileComponentAttributes> attributes){
+//	  if(attributes!=null){
+//	for (SubProfileComponentAttributes attr:attributes ){
+//		 	  if (attr.getUsage() != null) {
+//			 		return true;
+//	          }
+//	          if (attr.getConfLength() != null) {
+//	  	        return true;
+//	          }
+//	          if (attr.getText() != null) {
+//	  	        return true;
+//	          }
+//	          if (attr.getMaxLength() != null) {
+//	  	        return true;
+//	          }
+//	          if (attr.getMinLength() != null) {
+//	  	        return true;
+//	          }
+//	          if (attr.getDatatype() != null) {
+//	  	        return true;
+//	          }if(attr.getMax() !=null){
+//	        	return true;
+//	          }
+//	          if(attr.getMax() !=null){
+//		        	return true;
+//		      }
+//	          if(attr.getCoConstraintsTable()!=null){
+//	        	  return true;
+//	          }
+//	          if(attr.getDynamicMappingDefinition() !=null){
+//	        	  return true;
+//	          }
+//	}  
+//	  }
+//	return false;
+//	  
+//  } 
 }
