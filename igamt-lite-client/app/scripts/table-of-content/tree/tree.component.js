@@ -43,6 +43,12 @@ angular
         $scope.Activate = function(param) {
           $rootScope.activeModel = param;
         }
+
+
+
+
+
+
         $scope.getDeleteLabl = function() {
           // if($rootScope.references.length===0){
           return "Delete"
@@ -1528,10 +1534,10 @@ angular
 
         }
 
-        function processEditRoutSection(param) {
+        function processEditRootSection(param) {
 
           $scope.Activate(param.id);
-          $rootScope.section = $scope.getRoutSectionByname(param);
+          $rootScope.section = $scope.getRootSectionByName(param);
           // $rootScope.currentData=section;
 
           if ($rootScope.section.sectionContents === null) {
@@ -1545,8 +1551,6 @@ angular
 
           else{
               $scope.$emit('event:openSection', $rootScope.section);
-
-
           }
         };
 
@@ -1555,21 +1559,21 @@ angular
 
 
 
-        $scope.editRoutSection = function(param) {
+        $scope.editRootSection = function(param) {
           if ($rootScope.hasChanges()) {
 
             $rootScope.openConfirmLeaveDlg().then(function(result) {
               if(result&&result!=='cancel') {
 
-                processEditRoutSection(param);
+                processEditRootSection(param);
               }
             });
           } else {
-            processEditRoutSection(param);
+            processEditRootSection(param);
           }
         };
 
-        $scope.getRoutSectionByname = function(name) {
+        $scope.getRootSectionByName = function(name) {
           $rootScope.currentData = {};
           $scope.Activate(name);
           if (name.toLowerCase() === 'conformance profiles') {
@@ -1582,6 +1586,13 @@ angular
             $rootScope.currentData = $rootScope.igdocument.profile.tableLibrary;
           } else if (name.toLowerCase() === 'datatypes') {
             $rootScope.currentData = $rootScope.igdocument.profile.datatypeLibrary;
+          }
+          else if(name.toLowerCase() === 'composite profiles') {
+            $rootScope.currentData = $rootScope.igdocument.profile.compositeProfiles;
+          }
+          else if(name.toLowerCase() === 'profile components') {
+            $rootScope.currentData = $rootScope.igdocument.profile.profileComponentLibrary;
+
           }
           if ($rootScope.currentData.sectionContents === null || $rootScope.currentData.sectionContents === undefined) {
             $rootScope.currentData.sectionContents = "";

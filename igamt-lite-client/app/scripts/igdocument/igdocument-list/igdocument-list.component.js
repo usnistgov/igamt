@@ -1154,8 +1154,6 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
         igdocumentToSelect: igdocument,
         toGVT: toGVT
       }
-
-
     });
     modalInstance.then(function () {
     }, function () {
@@ -1306,7 +1304,6 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
 
         if ($rootScope.igdocument != null) {
           if ($scope.editForm) {
-            console.log("Cleeaning");
             $scope.editForm.$setPristine();
             $scope.editForm.$dirty = false;
             $scope.editForm.$invalid = false;
