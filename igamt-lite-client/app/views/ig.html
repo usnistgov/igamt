@@ -929,26 +929,26 @@
                                                         <thead>
                                                         <tr class="tbl-header" layout="row">
                                                             <th flex="10">
-                                                                <md-checkbox type="checkbox" ng-model="bool1"
+                                                                <md-checkbox type="checkbox" ng-model="bool"
                                                                              arial-label="message"
-                                                                             ng-change="selectionAllConformanceProfile(bool1)"></md-checkbox>
+                                                                             ng-change="selectionAllConformanceProfile(bool)"></md-checkbox>
                                                             </th>
-                                                            <th flex="30">Name</th>
-                                                            <th flex="20">Extension</th>
+                                                            <th flex="20">Name</th>
+                                                            <th flex="30">Extension</th>
                                                             <th flex="40">Description</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody style="display:block; overflow-y: scroll;max-height: 400px;">
-                                                        <tr ng-repeat="child in igdocumentToSelect.profile.messages.children track by child.id"
+                                                        <tr ng-repeat="message in dynamicMessages track by $index"
                                                             layout="row">
                                                             <td flex="10">
-                                                                <md-checkbox type="checkbox" ng-model="child.selected"
-                                                                             arial-label="child.id"
+                                                                <md-checkbox type="checkbox" ng-model="message.selected"
+                                                                             arial-label="message.id"
                                                                              ng-change="trackSelections()"></md-checkbox>
                                                             </td>
-                                                            <td flex="30">{{child.name}}</td>
-                                                            <td flex="20">{{child.ext}}</td>
-                                                            <td flex="40">{{child.description}}</td>
+                                                            <td flex="20">{{message.identifier}}</td>
+                                                            <td flex="30">{{message.name}}</td>
+                                                            <td flex="40">{{message.description}}</td>
 
                                                         </tr>
                                                         </tbody>
