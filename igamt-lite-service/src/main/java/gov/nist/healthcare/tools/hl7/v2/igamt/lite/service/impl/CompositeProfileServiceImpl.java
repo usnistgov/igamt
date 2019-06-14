@@ -138,7 +138,7 @@ public class CompositeProfileServiceImpl implements CompositeProfileService {
     compositeProfile.setPredicates(coreMessage.getPredicates());
     compositeProfile.setComments(coreMessage.getComments());
     compositeProfile.setConformanceStatements(coreMessage.getConformanceStatements());
-    browse(compositeProfileStructure.getExt(), compositeProfile, pathGroups);
+    browse(compositeProfileStructure.getExt(), compositeProfile, pathGroups, new HashMap<String, Integer>());
     compositeProfile.setSegmentsMap(queryService.getSegmentsMap());
     compositeProfile.setDatatypesMap(queryService.getDatatypesMap());
     compositeProfile.setName(compositeProfileStructure.getName());
@@ -169,14 +169,14 @@ public class CompositeProfileServiceImpl implements CompositeProfileService {
     
   }
 
-  private void browse(String ext, DataModel dataModel, List<PathGroup> pathGroups) {
+  private void browse(String ext, DataModel dataModel, List<PathGroup> pathGroups,  HashMap<String, Integer> namesMap) {
     for (PathGroup pathGroup : pathGroups) {
       try {
         DataModel dm = queryService.get(dataModel, pathGroup.getPath());
 
         DataModel context =
-            flavorService.createFlavor(ext, dm, pathGroup.getAttributes(), pathGroup.getChildren());
-        browse(ext, context, pathGroup.getChildren());
+            flavorService.createFlavor(ext, dm, pathGroup.getAttributes(), pathGroup.getChildren(), namesMap);
+        browse(ext, context, pathGroup.getChildren(),namesMap);
       } catch (NotFoundException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();

@@ -1176,6 +1176,20 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
     }
     return ret;
   };
+  $scope.processSelectCompositeProfilesForExport = function (igdocument, toGVT) {
+    var modalInstance = $mdDialog.show({
+      templateUrl: 'SelectCompositeProfilesForExportCtrlMd.html',
+      controller: 'SelectCompositeProfilesForExportCtrl',
+
+      locals: {
+        igdocumentToSelect: igdocument,
+        toGVT: toGVT
+      }
+    });
+    modalInstance.then(function () {
+    }, function () {
+    });
+  };
 
   $scope.addSegments = function (hl7Version) {
 
@@ -1321,7 +1335,6 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
 
         if ($rootScope.igdocument != null) {
           if ($scope.editForm) {
-            console.log("Cleeaning");
             $scope.editForm.$setPristine();
             $scope.editForm.$dirty = false;
             $scope.editForm.$invalid = false;

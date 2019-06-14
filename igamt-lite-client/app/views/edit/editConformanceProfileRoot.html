@@ -60,7 +60,13 @@
                 </md-tab-label>
                 <md-tab-body>
 
-                    <table class="table table-bordered table-fix-header">
+                        <h3>
+                            Acknowledgment Mapping
+                        </h3>
+                        <span ng-if="!hasVaries()">
+                            No Acknowledgment to be mapped. To use this configuration, the IG document must have an ACK message with an event type "Varies".
+                        </span>
+                    <table class="table table-bordered table-fix-header" ng-if="hasVaries()">
                         <thead>
 
                         <th>

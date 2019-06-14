@@ -72,5 +72,14 @@ angular.module('igl').controller('ConformanceProfilesSectionCtrl', function ($sc
         return ack.event.toLowerCase()=='varies'||ack.event==null ||ack.event=="";
     };
 
+    $scope.hasVaries  = function () {
+        for(var i = 0; i < $rootScope.igdocument.profile.messages.children.length; i++){
+            console.log($rootScope.igdocument.profile.messages.children[i]);
+            if($scope.isAck($rootScope.igdocument.profile.messages.children[i]) && $scope.isVaries($rootScope.igdocument.profile.messages.children[i])){
+                return true;
+            }
+        }
+        return false;
+    }
 
 });

@@ -1376,16 +1376,13 @@ public class IGDocumentController extends CommonController {
 	    throw new IGDocumentNotFoundException(id);
 	}
 	
-	d.getProfile().getMessages().setSectionDescription(wrapper.getSectionContents());
+	d.getProfile().getMessages().setSectionContents(wrapper.getSectionContents());
 	d.getProfile().getMessages().setConfig(wrapper.getConfig());
 	d.getProfile().setDateUpdated(DateUtils.getCurrentDate());
 	igDocumentService.save(d);
 	return d.getDateUpdated().getTime();
     }
-    
-    
-    
-    
+
     @RequestMapping(value = "/{id}/section/save", method = RequestMethod.POST)
     public Long saveSection(@PathVariable("id") String id, @RequestBody Section section, HttpServletRequest request,
 	    HttpServletResponse response) throws IOException, IGDocumentNotFoundException, IGDocumentException {
@@ -1411,12 +1408,15 @@ public class IGDocumentController extends CommonController {
 	String idSect = section.getId();
 	section.setDateUpdated(new Date());
 	// String msgInfraId= d.getProfile().getId();
-	String conformaneId = d.getProfile().getMessages().getId();
+	String conformanceProfileId = d.getProfile().getMessages().getId();
 	String dataTypesId = d.getProfile().getDatatypeLibrary().getId();
 	String tableId = d.getProfile().getTableLibrary().getId();
 	String segmentId = d.getProfile().getSegmentLibrary().getId();
+	String profileComponentsId = d.getProfile().getProfileComponentLibrary().getId();
+	String compositeProfilesId =d.getProfile().getCompositeProfiles().getId();
+	
 
-	if (idSect.equalsIgnoreCase(conformaneId)) {
+	if (idSect.equalsIgnoreCase(conformanceProfileId)) {
 	    d.getProfile().getMessages().setSectionContents(section.getSectionContents());
 	} else if (idSect.equalsIgnoreCase(dataTypesId)) {
 	    d.getProfile().getDatatypeLibrary().setSectionContents(section.getSectionContents());
@@ -1427,7 +1427,13 @@ public class IGDocumentController extends CommonController {
 	} else if (idSect.equalsIgnoreCase(segmentId)) {
 	    d.getProfile().getSegmentLibrary().setSectionContents(section.getSectionContents());
 	    segmentLibraryService.save(d.getProfile().getSegmentLibrary());
-	} else {
+	} else if(idSect.equalsIgnoreCase(profileComponentsId)){
+		d.getProfile().getProfileComponentLibrary().setSectionContents(section.getSectionContents());
+		profileComponentLibraryService.save(d.getProfile().getProfileComponentLibrary());
+	}else if(idSect.equalsIgnoreCase(compositeProfilesId)){
+		d.getProfile().getCompositeProfiles().setSectionContents(section.getSectionContents());
+	}
+	else {
 	    Section s = findSection(d, idSect);
 	    if (s == null)
 		throw new IGDocumentException("Unknown Section");
