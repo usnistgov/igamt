@@ -1176,20 +1176,20 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
     }
     return ret;
   };
-  $scope.processSelectCompositeProfilesForExport = function (igdocument, toGVT) {
-    var modalInstance = $mdDialog.show({
-      templateUrl: 'SelectCompositeProfilesForExportCtrlMd.html',
-      controller: 'SelectCompositeProfilesForExportCtrl',
-
-      locals: {
-        igdocumentToSelect: igdocument,
-        toGVT: toGVT
-      }
-    });
-    modalInstance.then(function () {
-    }, function () {
-    });
-  };
+  // $scope.processSelectCompositeProfilesForExport = function (igdocument, toGVT) {
+  //   var modalInstance = $mdDialog.show({
+  //     templateUrl: 'SelectCompositeProfilesForExportCtrlMd.html',
+  //     controller: 'SelectCompositeProfilesForExportCtrl',
+  //
+  //     locals: {
+  //       igdocumentToSelect: igdocument,
+  //       toGVT: toGVT
+  //     }
+  //   });
+  //   modalInstance.then(function () {
+  //   }, function () {
+  //   });
+  // };
 
   $scope.addSegments = function (hl7Version) {
 

@@ -155,6 +155,19 @@ public class SerializableSection extends SerializableElement {
         for(ValueSetOrSingleCodeBinding valueSetOrSingleCodeBinding : valueSetOrSingleCodeBindings){
             if(valueSetOrSingleCodeBinding!=null) {
                 Element valueSetBindingElement = new Element("ValueSetBinding");
+                if (valueSetOrSingleCodeBinding.getLocation() != null) {
+                    String location = "";
+                    if(locationPathMap.containsKey(valueSetOrSingleCodeBinding.getLocation())){
+                    	location = locationPathMap.get(valueSetOrSingleCodeBinding.getLocation());
+                    } else {
+                        if (locationPrefix != null && !locationPrefix.isEmpty()) {
+                            location += locationPrefix + "-";
+                        }
+                        location += valueSetOrSingleCodeBinding.getLocation();
+                    }
+                    valueSetBindingElement.addAttribute(new Attribute("Location", location));
+                    valueSetBindingElement.addAttribute(new Attribute("SortLocation", valueSetOrSingleCodeBinding.getLocation()));
+                }
                 if(valueSetOrSingleCodeBinding instanceof SingleCodeBinding){
                     valueSetBindingElement.addAttribute(new Attribute("Type","SC"));
                     if(((SingleCodeBinding) valueSetOrSingleCodeBinding).getCode()!=null) {
@@ -178,19 +191,7 @@ public class SerializableSection extends SerializableElement {
 	                    if(table.getName()!=null){
 	                        valueSetBindingElement.addAttribute(new Attribute("Name", table.getName()));
 	                    }
-	                    if (valueSetOrSingleCodeBinding.getLocation() != null) {
-	                        String location = "";
-	                        if(locationPathMap.containsKey(valueSetOrSingleCodeBinding.getLocation())){
-	                        	location = locationPathMap.get(valueSetOrSingleCodeBinding.getLocation());
-	                        } else {
-		                        if (locationPrefix != null && !locationPrefix.isEmpty()) {
-		                            location += locationPrefix + "-";
-		                        }
-		                        location += valueSetOrSingleCodeBinding.getLocation();
-	                        }
-	                        valueSetBindingElement.addAttribute(new Attribute("Location", location));
-	                        valueSetBindingElement.addAttribute(new Attribute("SortLocation", valueSetOrSingleCodeBinding.getLocation()));
-	                    }
+	       
 	                    if(valueSetOrSingleCodeBinding instanceof ValueSetBinding) {
 	                        valueSetBindingElement.addAttribute(new Attribute("Type","VS"));
 	                        if (((ValueSetBinding) valueSetOrSingleCodeBinding).getBindingLocation() != null) {
@@ -202,11 +203,12 @@ public class SerializableSection extends SerializableElement {
 	                                ((ValueSetBinding) valueSetOrSingleCodeBinding).getBindingStrength().value()));
 	                        }
 	                    }
-	                    valueSetBindingListElement.appendChild(valueSetBindingElement);
 	                } else {
 	                    throw new TableNotFoundException(valueSetOrSingleCodeBinding.getTableId());
 	                }
                 }
+                valueSetBindingListElement.appendChild(valueSetBindingElement);
+
             }
         }
         return valueSetBindingListElement;

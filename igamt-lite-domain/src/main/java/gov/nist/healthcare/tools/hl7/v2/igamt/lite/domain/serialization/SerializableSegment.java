@@ -408,10 +408,8 @@ public class SerializableSegment extends SerializableSection {
 						fieldElement.addAttribute(new Attribute("Position", String.valueOf(field.getPosition())));
 
 						if (field.getText() != null && !field.getText().isEmpty()) {
-							if (field.getTemps().definitionText || includeAuto.definitionText) {
-								if (field.getTemps().definitionText && includeAuto.definitionText) {
+								if (field.getTemps().definitionText || includeAuto.definitionText) {
 									fieldElement.appendChild(this.createTextElement("Text", field.getText()));
-								}
 							}
 						}
 						segmentElement.appendChild(fieldElement);

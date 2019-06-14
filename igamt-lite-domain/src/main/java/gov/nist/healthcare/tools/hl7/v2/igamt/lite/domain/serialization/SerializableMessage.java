@@ -63,6 +63,7 @@ public class SerializableMessage extends SerializableSection {
         this.showConfLength = showConfLength;
         this.locationPathMap = locationPathMap;
         this.filtredBinding= filtredBinding;
+        this.bindingConfig=bindingConfig;
         }
 
     @Override public Element serializeElement() throws MessageSerializationException {
