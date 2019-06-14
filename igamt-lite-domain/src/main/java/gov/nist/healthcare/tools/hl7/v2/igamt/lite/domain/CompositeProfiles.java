@@ -32,6 +32,7 @@ public class CompositeProfiles extends TextbasedSectionModel
   public CompositeProfiles() {
     super();
     this.id = ObjectId.get().toString();
+    this.setSectionTitle("Composite Profiles");
   }
 
   @DBRef

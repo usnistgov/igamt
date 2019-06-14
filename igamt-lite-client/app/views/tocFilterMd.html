@@ -107,8 +107,8 @@
                             <i data-nodrag ng-click="switchermsg()" class="fa fa-caret-down"
                                ng-class="{'fa-caret-down': !collapsemessage, 'fa-caret-right': collapsemessage}"></i>
 
-							 <span  style="font-size:14px;"context-menu="MessagesRootOption" ng-class="{selected :activeModel ==='Conformance Profiles'}"
-                                   ng-click="editRoutSection('Conformance Profiles');" confirm-click data-nodrag >
+							 <span style="font-size:14px;" context-menu="MessagesRootOption" ng-class="{selected :activeModel ==='Conformance Profiles'}"
+                                   ng-click="editRootSection('Conformance Profiles');" confirm-click data-nodrag >
 									{{ig.childSections.length+1}}.2.Conformance Profiles </span>
                         </div>
 
@@ -156,7 +156,7 @@
 
 							   <span data-nodrag  ng-class="{selected :activeModel ==='Segments and field descriptions'}"
                                   confirm-click
-                                  ng-click="editRoutSection('Segments and field descriptions')">
+                                  ng-click="editRootSection('Segments and field descriptions')">
 
                 {{ig.childSections.length+1}}.4.Segments and field descriptions:{{filteredSegmentsList.length}}/{{segments.length}}</span>
                         </div>
@@ -195,7 +195,7 @@
                                ng-class="{'fa-caret-down': !collapsedata, 'fa-caret-right': collapsedata}"></i>
 
 							<span ng-class="{selected :activeModel ==='Datatypes'}"
-                                    data-nodrag ng-click="editRoutSection('Datatypes')" confirm-click>{{ig.childSections.length+1}}.5.Datatypes {{filteredDatatypesList.length}}/{{datatypes.length}}</span>
+                                  data-nodrag ng-click="editRootSection('Datatypes')" confirm-click>{{ig.childSections.length+1}}.5.Datatypes {{filteredDatatypesList.length}}/{{datatypes.length}}</span>
                         </div>
                         <li ng-repeat="data in filteredDatatypesList| orderBy :'label'" ui-tree-node
                             ng-if="!collapsedata" data-type="datatype">
@@ -220,7 +220,7 @@
                                ng-class="{'fa-caret-down': !collapsevalueSet, 'fa-caret-right': collapsevalueSet}"></i>
 
 							<span ng-class="{selected :activeModel ==='Value Sets'}" confirm-click
-                                    data-nodrag ng-click="editRoutSection('Value Sets')">{{ig.childSections.length+1}}.6.Value Sets
+                                    data-nodrag ng-click="editRootSection('Value Sets')">{{ig.childSections.length+1}}.6.Value Sets
                                     {{filteredTablesList.length}}/{{tables.length}}</span>
                         </div>
 

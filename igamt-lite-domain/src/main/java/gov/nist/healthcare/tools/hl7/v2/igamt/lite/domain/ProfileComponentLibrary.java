@@ -24,6 +24,8 @@ public class ProfileComponentLibrary extends TextbasedSectionModel
   public ProfileComponentLibrary() {
     super();
     type = Constant.ProfileComponentLibrary;
+    this.setSectionTitle("Profile Components");
+
   }
 
   private Set<ProfileComponentLink> children = new HashSet<ProfileComponentLink>();

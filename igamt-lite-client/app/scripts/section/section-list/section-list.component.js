@@ -8,8 +8,7 @@ angular.module('igl')
     $scope.saved = false;
 
     $scope.fixedSectionTitles = [
-      'Message Infrastructure','Metadata','Introduction','Conformance Profiles','Segments and Field Descriptions','Datatypes','Value Sets'
-    ];
+      'Message Infrastructure','Metadata','Introduction','Conformance Profiles','Segments and Field Descriptions','Datatypes','Value Sets', 'Profile Components', 'Composite Profiles'];
 
     $scope.close = function () {
       $rootScope.section = null;
@@ -53,21 +52,5 @@ angular.module('igl')
       $rootScope.clearChanges();
       $rootScope.section = angular.copy($rootScope.originalSection);
     };
-
-
-//        $scope.$watch(
-//            function(){
-//              return $scope.editForm.$dirty;
-//            },
-//            function handleFormState( newValue) {
-//                if(newValue){
-//                    $rootScope.recordChanged();
-//                }else{
-//                    $rootScope.clearChanges();
-//                }
-//            }
-//        );
-
-
 
   });
