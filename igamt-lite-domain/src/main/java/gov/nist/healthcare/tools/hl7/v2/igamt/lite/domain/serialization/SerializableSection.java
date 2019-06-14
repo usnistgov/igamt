@@ -145,11 +145,11 @@ public class SerializableSection extends SerializableElement {
         return commentListElement;
     }
 
-    protected Element createValueSetBindingListElement(List<ValueSetOrSingleCodeBinding> valueSetOrSingleCodeBindings, List<Table> tables,String locationPrefix) throws TableNotFoundException {
-        return createValueSetBindingListElement(valueSetOrSingleCodeBindings, tables, locationPrefix,new HashMap<String,String>());
+    protected Element createValueSetBindingListElement(List<ValueSetOrSingleCodeBinding> valueSetOrSingleCodeBindings, List<Table> tables,String locationPrefix, BindingExportConfig bindingConfig ) throws TableNotFoundException {
+        return createValueSetBindingListElement(valueSetOrSingleCodeBindings, tables, locationPrefix,new HashMap<String,String>(),bindingConfig);
     }
     
-    protected Element createValueSetBindingListElement(List<ValueSetOrSingleCodeBinding> valueSetOrSingleCodeBindings, List<Table> tables,String locationPrefix, HashMap<String,String> locationPathMap) throws
+    protected Element createValueSetBindingListElement(List<ValueSetOrSingleCodeBinding> valueSetOrSingleCodeBindings, List<Table> tables,String locationPrefix, HashMap<String,String> locationPathMap,  BindingExportConfig bindingConfig) throws
         TableNotFoundException {
         Element valueSetBindingListElement = new Element("ValueSetBindingList");
         for(ValueSetOrSingleCodeBinding valueSetOrSingleCodeBinding : valueSetOrSingleCodeBindings){

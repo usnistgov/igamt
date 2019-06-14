@@ -108,7 +108,7 @@ public class SerializeCompositeProfileServiceImpl extends SerializeMessageOrComp
                 new SerializableCompositeProfile(compositeProfile, prefix, title,
                     serializableSegmentRefOrGroups, serializableConformanceStatements,
                     serializablePredicates, usageNote, defPreText, defPostText, tables,
-                    positionNameSegOrGroupMap, showConfLength, composition);
+                    positionNameSegOrGroupMap, showConfLength, composition, exportConfig.getBindingConfig());
             
             SerializableSection compositeProfileSegments =
                 new SerializableSection(compositeProfile.getIdentifier() + "_segments",

@@ -1212,7 +1212,6 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
   };
 
   $scope.addMasterDatatype = function () {
-    console.log("=========versionwwww=======");
     var scopes = ['MASTER'];
 
     DatatypeService.getPublishedMaster($rootScope.igdocument.profile.metaData.hl7Version).then(function (result) {

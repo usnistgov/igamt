@@ -1,0 +1,90 @@
+<md-card-content>
+    <md-toolbar>
+        <div class="md-toolbar-tools config-toolbar">Value Set Binding Table Options
+        </div>
+    </md-toolbar>
+
+    <div layout="row" layout-align="start start">
+                <md-card>
+                    <md-card-content>
+                        <h4>Include in</h4>
+
+                        <div layout="row">
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.includeForMessage"
+                                             ng-change="setChanged()" ><label style="color: black">Conformance Profile</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.includeForCompositeProfile"
+                                             ng-change="setChanged()" ><label style="color: black">Composite Profile</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.includeForSegment"
+                                             ng-change="setChanged()" ><label style="color: black">Segment</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.includeForDatatype"
+                                             ng-change="setChanged()"><label style="color: black">Data Types</label></md-checkbox>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </md-content>
+
+        <hr/>
+                <md-card>
+                    <md-card-content>
+                        <h4>Columns to include</h4>
+                        <hr/>
+                        <div layout="row" style="width: 100%">
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.location"
+                                             ng-change="setChanged()" disabled="true"> <label
+                                        style="color: black">Location</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.valueSetId"
+                                             ng-change="setChanged()" disabled="true"> <label
+                                        style="color: black">Value Set ID</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.valueSetName"
+                                             ng-change="setChanged()" disabled="true"> <label
+                                        style="color: black">Value Set name</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.bindingStrength"
+                                             ng-change="setChanged()"> <label
+                                        style="color: black">Binding Strength</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.bindingLocation"
+                                             ng-change="setChanged()"> <label
+                                        style="color: black">Binding Location</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.singleCode"
+                                             ng-change="setChanged()"> <label
+                                        style="color: black">Single Code Value</label></md-checkbox>
+                            </div>
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.bindingConfig.singleCodeSystem"
+                                             ng-change="setChanged()"> <label
+                                        style="color: black">Single Code Code System</label></md-checkbox>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+    </div>
+</md-card-content>

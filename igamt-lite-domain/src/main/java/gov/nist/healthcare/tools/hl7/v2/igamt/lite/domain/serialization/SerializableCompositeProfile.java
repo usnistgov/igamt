@@ -1,5 +1,6 @@
 package gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization;
 
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.BindingExportConfig;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.CompositeProfile;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Group;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Table;
@@ -38,12 +39,13 @@ public class SerializableCompositeProfile extends SerializableSection {
     private boolean showConfLength;
     private HashMap<String,String> locationPathMap;
     private String composition;
+    private BindingExportConfig bindingConfig;
     
     public SerializableCompositeProfile(CompositeProfile compositeProfile, String prefix, String title,
         List<SerializableSegmentRefOrGroup> serializableSegmentRefOrGroups,
         SerializableConstraints serializableConformanceStatements,
         SerializableConstraints serializablePredicates, String usageNote, String defPreText,
-        String defPostText, List<Table> tables, HashMap<String,String> locationPathMap, Boolean showConfLength , String Composition) {
+        String defPostText, List<Table> tables, HashMap<String,String> locationPathMap, Boolean showConfLength , String Composition,  BindingExportConfig bindingConfig) {
         super(compositeProfile.getIdentifier(),
             prefix + "." + String.valueOf(compositeProfile.getPosition()),
             String.valueOf(compositeProfile.getPosition() + 1),
@@ -59,6 +61,7 @@ public class SerializableCompositeProfile extends SerializableSection {
         this.composition=Composition;
         this.showConfLength = showConfLength;
         this.locationPathMap = locationPathMap;
+        this.bindingConfig= bindingConfig;
     }
 
     @Override 
@@ -122,10 +125,10 @@ public class SerializableCompositeProfile extends SerializableSection {
                     compositeProfileElement.appendChild(segmentSection.serializeElement());
                 }
             }
-            if (compositeProfile.getValueSetBindings() != null && !compositeProfile.getValueSetBindings().isEmpty()) {
+            if (compositeProfile.getValueSetBindings() != null && !compositeProfile.getValueSetBindings().isEmpty()&& this.bindingConfig.isIncludeForCompositeProfile()) {
                 Element valueSetBindingListElement = super
                     .createValueSetBindingListElement(compositeProfile.getValueSetBindings(), tables,
-                        compositeProfile.getName(), locationPathMap);
+                        compositeProfile.getName(), locationPathMap, bindingConfig);
                 if (valueSetBindingListElement != null) {
                     compositeProfileElement.appendChild(valueSetBindingListElement);
                 }

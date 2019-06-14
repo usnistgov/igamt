@@ -3,6 +3,7 @@ package gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization;
 import java.util.HashMap;
 import java.util.List;
 
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.BindingExportConfig;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Group;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Message;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Table;
@@ -39,9 +40,10 @@ public class SerializableMessage extends SerializableSection {
     private boolean showConfLength;
     private HashMap<String,String> locationPathMap;
     List<ValueSetOrSingleCodeBinding> filtredBinding;
+    private BindingExportConfig bindingConfig;
     public SerializableMessage(Message message, String prefix, String headerLevel, List<SerializableSegmentRefOrGroup> serializableSegmentRefOrGroups,
         SerializableConstraints serializableConformanceStatements, SerializableConstraints serializablePredicates, String usageNote,
-        String defPreText, String defPostText, List<Table> tables, HashMap<String,String> locationPathMap, Boolean showConfLength, List<ValueSetOrSingleCodeBinding> filtredBinding) {
+        String defPreText, String defPostText, List<Table> tables, HashMap<String,String> locationPathMap, Boolean showConfLength, List<ValueSetOrSingleCodeBinding> filtredBinding,  BindingExportConfig bindingConfig) {
         super(message.getId(),
             prefix + "." + String.valueOf(message.getPosition()),
             String.valueOf(message.getPosition() + 1),
@@ -116,12 +118,14 @@ public class SerializableMessage extends SerializableSection {
                 }
             }
             if (this.filtredBinding!= null && !this.filtredBinding.isEmpty()) {
+            	if(this.bindingConfig !=null && this.bindingConfig.isIncludeForMessage()){
                 Element valueSetBindingListElement = super
                     .createValueSetBindingListElement(this.filtredBinding, tables, message.getName(),
-                        locationPathMap);
+                        locationPathMap,bindingConfig);
                 if (valueSetBindingListElement != null) {
                     messageElement.appendChild(valueSetBindingListElement);
                 }
+            	}
             }
             if (message.getComments() != null && !message.getComments().isEmpty()) {
                 Element commentListElement = super

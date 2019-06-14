@@ -92,7 +92,7 @@
                 <md-content>
                     <md-card>
                         <md-card-content>
-                            <h4>Co-Constraints</h4>
+                            <h4> Co-Constraints </h4>
                             <hr/>
                             <div class="config-checkbox">
                                 <md-checkbox class="md-primary"
@@ -107,8 +107,15 @@
                                 <md-radio-button value="VERBOSE">Verbose</md-radio-button>
                             </md-radio-group>
                             </div>
-
-
+                            <div class="config-checkbox">
+                                <md-checkbox class="md-primary"
+                                             ng-model="config.includeDynamicMapping"
+                                             ng-change="setChanged()">
+                                    <label style="color: black">
+                                        Include Dynamic Mapping
+                                    </label>
+                                </md-checkbox>
+                            </div>
                         </md-card-content>
                     </md-card>
                 </md-content>

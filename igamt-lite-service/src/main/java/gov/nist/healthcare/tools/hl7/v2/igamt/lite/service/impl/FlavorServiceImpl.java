@@ -122,6 +122,7 @@ public class FlavorServiceImpl implements FlavorService {
 							}
 							if (attr.getComments() != null && !attr.getComments().isEmpty()) {
 								segmentFlavor.setComments(attr.getComments());
+								segmentFlavor.getTemps().comment=true;
 							}
 						}
 					}
@@ -212,6 +213,7 @@ public class FlavorServiceImpl implements FlavorService {
 								segmentFlavor.setTemporary(true);
 								segmentFlavor.setScope(SCOPE.USER);
 								segmentFlavor.setComments(attr.getComments());
+								segmentFlavor.getTemps().comment=true;
 								segRef.getRef().setId(segmentFlavor.getId());
 								segRef.getRef().setExt(segmentFlavor.getExt());
 								segRef.setTemporary(true);
@@ -239,37 +241,31 @@ public class FlavorServiceImpl implements FlavorService {
 					if (attr.getMax() != null) {
 						field.setMax(attr.getMax());
 						field.setTemporary(true);
-
 					}
 					if (attr.getText() != null) {
 						field.setText(attr.getText());
+						field.getTemps().definitionText= true;
 						field.setTemporary(true);
-
 					}
 					if (attr.getMin() != null) {
 						field.setMin(attr.getMin());
 						field.setTemporary(true);
-
 					}
 					if (attr.getUsage() != null) {
 						field.setUsage(attr.getUsage());
 						field.setTemporary(true);
-
 					}
 					if (attr.getConfLength() != null) {
 						field.setConfLength(attr.getConfLength());
 						field.setTemporary(true);
-
 					}
 					if (attr.getMaxLength() != null) {
 						field.setMaxLength(attr.getMaxLength());
 						field.setTemporary(true);
-
 					}
 					if (attr.getMinLength() != null) {
 						field.setMinLength(attr.getMinLength());
 						field.setTemporary(true);
-
 					}
 					if (attr.getDatatype() != null) {
 						if (!queryService.getDatatypesMap().containsKey(attr.getDatatype().getId())) {
@@ -278,7 +274,6 @@ public class FlavorServiceImpl implements FlavorService {
 						}
 						field.setDatatype(attr.getDatatype());
 						field.setTemporary(true);
-
 					}
 				}
 			}
@@ -301,7 +296,6 @@ public class FlavorServiceImpl implements FlavorService {
 				}
 			}
 			return field;
-
 		} else if (dm instanceof Component) {
 
 			Component component = (Component) dm;
@@ -314,27 +308,23 @@ public class FlavorServiceImpl implements FlavorService {
 					if (attr.getUsage() != null) {
 						component.setUsage(attr.getUsage());
 						component.setTemporary(true);
-
 					}
 					if (attr.getConfLength() != null) {
 						component.setConfLength(attr.getConfLength());
 						component.setTemporary(true);
-
 					}
 					if (attr.getText() != null) {
 						component.setText(attr.getText());
+						component.getTemps().definitionText= true;
 						component.setTemporary(true);
-
 					}
 					if (attr.getMaxLength() != null) {
 						component.setMaxLength(attr.getMaxLength());
 						component.setTemporary(true);
-
 					}
 					if (attr.getMinLength() != null) {
 						component.setMinLength(attr.getMinLength());
 						component.setTemporary(true);
-
 					}
 					if (attr.getDatatype() != null) {
 						if (!queryService.getDatatypesMap().containsKey(attr.getDatatype().getId())) {
@@ -343,7 +333,6 @@ public class FlavorServiceImpl implements FlavorService {
 						}
 						component.setDatatype(attr.getDatatype());
 						component.setTemporary(true);
-
 					}
 				}
 			}
@@ -365,9 +354,7 @@ public class FlavorServiceImpl implements FlavorService {
 				}
 			}
 			return component;
-
 		}
-
 		return dm;
 	}
 
