@@ -68,6 +68,7 @@ public class Messages extends TextbasedSectionModel implements java.io.Serializa
     if (this.getChildren() != null)
       for (Message m : this.getChildren()) {
         if (m.getId().equals(id)) {
+          System.out.println(id + "::::" + m.getId());
           return m;
         }
       }

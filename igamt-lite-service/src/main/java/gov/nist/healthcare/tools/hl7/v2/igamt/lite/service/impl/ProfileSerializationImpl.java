@@ -1388,12 +1388,19 @@ public class ProfileSerializationImpl implements ProfileSerialization {
       }      
     }
 
-    if(mids != null) {
-      for (Message m : doc.getProfile().getMessages().getChildren()) {
-        if (Arrays.asList(mids).contains(m.getId())) {
+    if(mids != null) {      
+      for (String mid: mids) {
+        if(mid.contains("_ACK")) {
+          Message m = doc.getProfile().getMessages().findOne(mid.substring(mid.indexOf("]") + 1)).clone();
+          Message targetM = doc.getProfile().getMessages().findOne(mid.substring(0, mid.indexOf("["))).clone();
+          m.setId(mid.substring(0, mid.indexOf("[")) + "_ACK");
+          m.setName(mid.substring(mid.indexOf("[") + 1 , mid.indexOf("]")));
+          m.setEvent(targetM.getEvent());
           messages.addMessage(m);
+        }else {
+          messages.addMessage(doc.getProfile().getMessages().findOne(mid));
         }
-      }      
+      }
     }
 
     SegmentLibrary segments = new SegmentLibrary();

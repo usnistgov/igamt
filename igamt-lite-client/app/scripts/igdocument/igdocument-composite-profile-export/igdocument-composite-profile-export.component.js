@@ -2,7 +2,7 @@
  * Created by haffo on 9/11/17.
  */
 
-angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', function ($scope, $mdDialog, igdocumentToSelect, $rootScope, $http, $cookies, ExportSvc, GVTSvc, $timeout, $window, toGVT, StorageService) {
+angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', function ($scope, $mdDialog, igdocumentToSelect, $rootScope, $http, $cookies, ExportSvc, GVTSvc, $timeout, $window, toGVT, dynamicMessages, StorageService) {
     $scope.igdocumentToSelect = igdocumentToSelect;
     $scope.toGVT = toGVT;
     $scope.exportStep = 'MESSAGE_STEP';
@@ -14,6 +14,7 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
     $scope.user = {username: StorageService.getGvtUsername(), password: StorageService.getGvtPassword()};
     $scope.appInfo = $rootScope.appInfo;
     $scope.selected = false;
+    $scope.dynamicMessages=dynamicMessages;
 
     $scope.targetApps = _.sortBy($rootScope.appInfo.connectApps,'position');
     $scope.app=  $scope.targetApps.length&&$scope.targetApps.length? $scope.targetApps[0]:null;
@@ -58,8 +59,8 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
             var message = $scope.igdocumentToSelect.profile.compositeProfiles.children[i];
             if (message.selected) $scope.selected = true;
         }
-        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
-            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+        for (var i in $scope.dynamicMessages) {
+            var message = $scope.dynamicMessages[i];
             if (message.selected) $scope.selected = true;
         }
     };
@@ -73,8 +74,8 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
     };
 
     $scope.selectionAllConformanceProfile = function (bool) {
-        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
-            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+        for (var i in $scope.dynamicMessages) {
+            var message = $scope.dynamicMessages[i];
             message.selected = bool;
         }
         $scope.selected = bool;
@@ -98,9 +99,10 @@ angular.module('igl').controller('SelectCompositeProfilesForExportCtrl', functio
 
     $scope.generatedSelectedConformanceProfileIDs = function () {
         $scope.selectedConformanceProfileIDs = [];
-        for (var i in $scope.igdocumentToSelect.profile.messages.children) {
-            var message = $scope.igdocumentToSelect.profile.messages.children[i];
+        for (var i in $scope.dynamicMessages) {
+            var message = $scope.dynamicMessages[i];
             if (message.selected) {
+                console.log(message);
                 $scope.selectedConformanceProfileIDs.push(message.id);
             }
         }

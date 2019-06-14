@@ -140,8 +140,7 @@ public class XMLExportTool {
       Map<String, Table> tablesMap) throws ConstraintSerializationException {
 
     Constraints predicates = findAllPredicates(profile, segmentsMap, datatypesMap, tablesMap);
-    Constraints conformanceStatements =
-        findAllConformanceStatement(profile, segmentsMap, datatypesMap, tablesMap);
+    Constraints conformanceStatements = findAllConformanceStatement(profile, segmentsMap, datatypesMap, tablesMap);
 
     Element e = new Element("ConformanceContext");
     Attribute schemaDecl = new Attribute("noNamespaceSchemaLocation",
@@ -1274,7 +1273,6 @@ public class XMLExportTool {
 
     byNameOrByIDs = new HashSet<ByNameOrByID>();
     for (Message m : profile.getMessages().getChildren()) {
-
       for (SegmentRefOrGroup sog : m.getChildren()) {
         if (sog instanceof Group) {
           byNameOrByIDs = findAllConformanceStatementsForGroup((Group) sog, byNameOrByIDs);
@@ -1679,8 +1677,7 @@ public class XMLExportTool {
 
   }
 
-  private Set<ByNameOrByID> findAllConformanceStatementsForGroup(Group g,
-      Set<ByNameOrByID> byNameOrByIDs) {
+  private Set<ByNameOrByID> findAllConformanceStatementsForGroup(Group g, Set<ByNameOrByID> byNameOrByIDs) {
     ByID byID = new ByID();
     byID.setByID(g.getId());
     if (g.getConformanceStatements().size() > 0) {
@@ -1690,7 +1687,7 @@ public class XMLExportTool {
 
     for (SegmentRefOrGroup sog : g.getChildren()) {
       if (sog instanceof Group) {
-        byNameOrByIDs.addAll(byNameOrByIDs);
+        byNameOrByIDs.addAll(findAllConformanceStatementsForGroup((Group) sog, byNameOrByIDs));
       }
     }
 
