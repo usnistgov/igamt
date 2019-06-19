@@ -1058,8 +1058,7 @@ public class IGDocumentController extends CommonController {
     }
     
     @RequestMapping(value = "/{id}/export/Validation/mids/{mids}/cids/{cids}", method = RequestMethod.POST, produces = "application/zip",consumes = "application/x-www-form-urlencoded; charset=UTF-8")
-    public void exportValidationXMLByProfiles(@PathVariable("id") String id, @PathVariable("mids") String[] conformanceProfileIds, @PathVariable("cids") String[] compositeProfileIds, HttpServletRequest request, HttpServletResponse response)
-        throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
+    public void exportValidationXMLByProfiles(@PathVariable("id") String id, @PathVariable("mids") String[] conformanceProfileIds, @PathVariable("cids") String[] compositeProfileIds, HttpServletRequest request, HttpServletResponse response) throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException {
       IGDocument d = findIGDocument(id);
       
       if(conformanceProfileIds != null && conformanceProfileIds.length == 1 && conformanceProfileIds[0].equals("NOTHING")) conformanceProfileIds = null;
@@ -1071,13 +1070,14 @@ public class IGDocumentController extends CommonController {
       FileCopyUtils.copy(content, response.getOutputStream());
     }
 
-    @RequestMapping(value = "/{id}/export/Display/Composite/{cIds}", method = RequestMethod.POST, produces = "application/zip", consumes = "application/x-www-form-urlencoded; charset=UTF-8")
-    public void exportDisplayXMLByCompositeProfile(@PathVariable("id") String id,
-	    @PathVariable("cIds") String[] compositeProfileIds, HttpServletRequest request,
-	    HttpServletResponse response) throws IOException, IGDocumentNotFoundException, CloneNotSupportedException,
-	    TableSerializationException, ProfileSerializationException {
+    @RequestMapping(value = "/{id}/export/Display/mids/{mids}/cids/{cids}", method = RequestMethod.POST, produces = "application/zip", consumes = "application/x-www-form-urlencoded; charset=UTF-8")
+    public void exportDisplayXMLByProfiles(@PathVariable("id") String id, @PathVariable("mids") String[] conformanceProfileIds, @PathVariable("cids") String[] compositeProfileIds, HttpServletRequest request, HttpServletResponse response) throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException {
 	IGDocument d = findIGDocument(id);
-	InputStream content = igDocumentExport.exportAsDisplayForSelectedCompositeProfiles(d, compositeProfileIds);
+	
+    if(conformanceProfileIds != null && conformanceProfileIds.length == 1 && conformanceProfileIds[0].equals("NOTHING")) conformanceProfileIds = null;
+    if(compositeProfileIds != null && compositeProfileIds.length == 1 && compositeProfileIds[0].equals("NOTHING")) compositeProfileIds = null;
+    
+	InputStream content = igDocumentExport.exportAsDisplayForSelectedProfiles(d, conformanceProfileIds, compositeProfileIds);
 	response.setContentType("application/zip");
 	response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle())
 		+ "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");
@@ -1115,13 +1115,14 @@ public class IGDocumentController extends CommonController {
 	FileCopyUtils.copy(content, response.getOutputStream());
     }
 
-    @RequestMapping(value = "/{id}/export/Gazelle/Composite/{cIds}", method = RequestMethod.POST, produces = "application/zip", consumes = "application/x-www-form-urlencoded; charset=UTF-8")
-    public void exportGazelleXMLByCompositeProfiles(@PathVariable("id") String id,
-	    @PathVariable("cIds") String[] compositeProfileIds, HttpServletRequest request,
-	    HttpServletResponse response) throws IOException, IGDocumentNotFoundException, CloneNotSupportedException,
-	    ProfileSerializationException, TableSerializationException {
+    @RequestMapping(value = "/{id}/export/Gazelle/mids/{mids}/cids/{cids}", method = RequestMethod.POST, produces = "application/zip", consumes = "application/x-www-form-urlencoded; charset=UTF-8")
+    public void exportGazelleXMLByProfiles(@PathVariable("id") String id, @PathVariable("mids") String[] conformanceProfileIds, @PathVariable("cids") String[] compositeProfileIds, HttpServletRequest request, HttpServletResponse response) throws IOException, IGDocumentNotFoundException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException {
 	IGDocument d = findIGDocument(id);
-	InputStream content = igDocumentExport.exportAsGazelleForSelectedCompositeProfiles(d, compositeProfileIds);
+	
+	if(conformanceProfileIds != null && conformanceProfileIds.length == 1 && conformanceProfileIds[0].equals("NOTHING")) conformanceProfileIds = null;
+    if(compositeProfileIds != null && compositeProfileIds.length == 1 && compositeProfileIds[0].equals("NOTHING")) compositeProfileIds = null;
+    
+	InputStream content = igDocumentExport.exportAsGazelleForSelectedProfiles(d, conformanceProfileIds, compositeProfileIds);
 	response.setContentType("application/zip");
 	response.setHeader("Content-disposition", "attachment;filename=" + updateFileName(d.getMetaData().getTitle())
 		+ "-" + id + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".zip");

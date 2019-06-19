@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.Transient;
+
 public abstract class DataElement extends DataModel
     implements java.io.Serializable, Cloneable, Comparable<DataElement> {
 
   private static final long serialVersionUID = 1L;
   public final static String LENGTH_NA = "NA";
+  @Transient
+  private TemportayAttributes temps =new TemportayAttributes();
 
 
   // @Id
@@ -196,8 +200,16 @@ public abstract class DataElement extends DataModel
     return this.getPosition() - o.getPosition();
   }
 
+  
+  public TemportayAttributes getTemps() {
+	return temps;
+}
 
-  public static String getFixedMaxLength(String minLength, String maxLength) {
+public void setTemps(TemportayAttributes temps) {
+	this.temps = temps;
+}
+
+public static String getFixedMaxLength(String minLength, String maxLength) {
     String minLeng = minLength;
     String maxLeng = maxLength != null && !"".equals(maxLength) ? maxLength : LENGTH_NA;
     if (minLeng.equals(LENGTH_NA) || maxLeng.equals(LENGTH_NA) || maxLeng.equals("*")) {

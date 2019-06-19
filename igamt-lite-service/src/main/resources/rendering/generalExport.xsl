@@ -170,7 +170,16 @@
     <xsl:variable name="compositeProfileMetadata.publicationVersion" select="$compositeProfileMetadataPublicationVersion"/>
     <xsl:param name="compositeProfileMetadataScope" select="'false'"/>
     <xsl:variable name="compositeProfileMetadata.scope" select="$compositeProfileMetadataScope"/>
+    <xsl:param name="includeBindingLocation" select="'false'"/>
+    <xsl:variable name="binding.includeBindingLocation" select="$includeBindingLocation"  />
+    <xsl:param name="includeBindingStrength" select="'false'"/>
+    <xsl:variable name="binding.includeBindingStrength"  select="$includeBindingStrength"/>
+    <xsl:param name="includeSingleCode" select="'false'"/>
+    <xsl:variable name="binding.includeSingleCode" select="$includeSingleCode"/>
+    <xsl:param name="includeSingleCodeSystem" select="'false'"/>
+    <xsl:variable name="binding.includeSingleCodeSystem" select="$includeSingleCodeSystem"/>
     
+  
 <!--     <xsl:output method="html" doctype-system="http://www.w3.org/TR/html4/loose.dtd"
    doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
  -->

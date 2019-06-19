@@ -220,7 +220,7 @@ public class ExportUtil {
 				exportConfig.getMessageColumn().getColumns(), exportConfig.getCompositeProfileColumn().getColumns(),
 				exportConfig.getProfileComponentColumn().getColumns(), exportConfig.getSegmentColumn().getColumns(),
 				exportConfig.getDatatypeColumn().getColumns(), exportConfig.getValueSetColumn().getColumns(),exportConfig.getValueSetsMetadata(),
-				exportConfig.getDatatypeMetadataConfig(), exportConfig.getSegmentMetadataConfig(), exportConfig.getMessageMetadataConfig(), exportConfig.getCompositeProfileMetadataConfig(), exportFontConfig,appInfo.getVersion());
+				exportConfig.getDatatypeMetadataConfig(), exportConfig.getSegmentMetadataConfig(), exportConfig.getMessageMetadataConfig(), exportConfig.getCompositeProfileMetadataConfig(), exportFontConfig,appInfo.getVersion(), exportConfig.getBindingConfig());
 	}
 
 	// Private methods, alphabetically ordered
@@ -242,11 +242,11 @@ public class ExportUtil {
 		// Apply XSL transformation on xml file to generate html
 		transformer = factoryTf.newTransformer(xslt);
 		// Set the parameters
-		for (Map.Entry<String, String> param : exportParameters.toMap().entrySet()) {
-			if (param != null && param.getKey() != null && param.getValue() != null) {
-				transformer.setParameter(param.getKey(), param.getValue());
-			}
+		Map<String, String> mapParams= exportParameters.toMap();
+		for (String key: mapParams.keySet()) {
+				transformer.setParameter(key, mapParams.get(key));
 		}
+		
 		transformer.transform(new StreamSource(tmpXmlFile), new StreamResult(tmpHtmlFile));
 		return tmpHtmlFile;
 	}

@@ -1176,20 +1176,20 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
     }
     return ret;
   };
-  $scope.processSelectCompositeProfilesForExport = function (igdocument, toGVT) {
-    var modalInstance = $mdDialog.show({
-      templateUrl: 'SelectCompositeProfilesForExportCtrlMd.html',
-      controller: 'SelectCompositeProfilesForExportCtrl',
-
-      locals: {
-        igdocumentToSelect: igdocument,
-        toGVT: toGVT
-      }
-    });
-    modalInstance.then(function () {
-    }, function () {
-    });
-  };
+  // $scope.processSelectCompositeProfilesForExport = function (igdocument, toGVT) {
+  //   var modalInstance = $mdDialog.show({
+  //     templateUrl: 'SelectCompositeProfilesForExportCtrlMd.html',
+  //     controller: 'SelectCompositeProfilesForExportCtrl',
+  //
+  //     locals: {
+  //       igdocumentToSelect: igdocument,
+  //       toGVT: toGVT
+  //     }
+  //   });
+  //   modalInstance.then(function () {
+  //   }, function () {
+  //   });
+  // };
 
   $scope.addSegments = function (hl7Version) {
 
@@ -1243,7 +1243,6 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
   };
 
   $scope.addMasterDatatype = function () {
-    console.log("=========versionwwww=======");
     var scopes = ['MASTER'];
 
     DatatypeService.getPublishedMaster($rootScope.igdocument.profile.metaData.hl7Version).then(function (result) {

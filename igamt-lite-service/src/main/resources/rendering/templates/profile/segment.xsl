@@ -212,6 +212,10 @@
 
         <xsl:apply-templates select="./coconstraints"/>
         <xsl:apply-templates select="./ValueSetBindingList"/>
+        
+        
+        
+        
         <xsl:apply-templates select="./DynamicMapping"/>
         <xsl:if test="$columnDisplay.segment.comment = 'true'">
         	<xsl:apply-templates select="./CommentList"/>

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.BindingExportConfig;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ExportFontConfig;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.MetadataConfig;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.NameAndPositionAndPresence;
@@ -40,6 +41,7 @@ public class ExportParameters {
     private MetadataConfig segmentMetadataConfig;
     private MetadataConfig messageMetadataConfig;
     private MetadataConfig compositeProfileMetadataConfig;
+    private BindingExportConfig bindingExportConfig;
     private ExportFontConfig exportFontConfig;
     private String appVersion;
 
@@ -50,7 +52,7 @@ public class ExportParameters {
 
     public ExportParameters(boolean inlineConstraints, boolean includeTOC, String targetFormat,
         String documentTitle,String imageLogo, String appVersion) {
-        this(inlineConstraints,includeTOC,targetFormat,documentTitle,imageLogo,null,null,null,null,null,null,null,null,null,null,null,null, appVersion);
+        this(inlineConstraints,includeTOC,targetFormat,documentTitle,imageLogo,null,null,null,null,null,null,null,null,null,null,null,null, appVersion, null);
     }
 
     public ExportParameters(boolean inlineConstraints, boolean includeTOC, String targetFormat,
@@ -65,7 +67,7 @@ public class ExportParameters {
         MetadataConfig segmentMetadataConfig,
         MetadataConfig messageMetadataConfig,
         MetadataConfig compositeProfileMetadataConfig,
-        ExportFontConfig exportFontConfig, String appVersion) {
+        ExportFontConfig exportFontConfig, String appVersion,BindingExportConfig bindingExportConfig ) {
         this.inlineConstraints = inlineConstraints;
         this.includeTOC = includeTOC;
         this.targetFormat = targetFormat;
@@ -84,6 +86,7 @@ public class ExportParameters {
         this.compositeProfileMetadataConfig = compositeProfileMetadataConfig;
         this.exportFontConfig = exportFontConfig;
         this.appVersion = appVersion;
+        this.bindingExportConfig=bindingExportConfig;
     }
 
     public ExportParameters() {
@@ -166,6 +169,13 @@ public class ExportParameters {
                 params.put(segmentsColumn+currentColumn.getName().replace(" ",""),String.valueOf(currentColumn.isPresent()));
             }
         }
+        if(bindingExportConfig !=null){
+        	
+        	params.put("includeBindingStrength", String.valueOf(bindingExportConfig.isBindingStrength()));
+        	params.put("includeBindingLocation", String.valueOf(bindingExportConfig.isBindingLocation()));
+        	params.put("includeSingleCode",String.valueOf(bindingExportConfig.isSingleCode()));
+        	params.put("includeSingleCodeSystem",String.valueOf(bindingExportConfig.isSingleCodeSystem()));
+        }
         if(valueSetMetadataConfig != null){
             params.put("valueSetMetadataStability",String.valueOf(valueSetMetadataConfig.isStability()));
             params.put("valueSetMetadataExtensibility",String.valueOf(valueSetMetadataConfig.isExtensibility()));
@@ -220,4 +230,12 @@ public class ExportParameters {
     public ExportFontConfig getExportFontConfig() {
         return exportFontConfig;
     }
+
+	public BindingExportConfig getBindingExportConfig() {
+		return bindingExportConfig;
+	}
+
+	public void setBindingExportConfig(BindingExportConfig bindingExportConfig) {
+		this.bindingExportConfig = bindingExportConfig;
+	}
 }
