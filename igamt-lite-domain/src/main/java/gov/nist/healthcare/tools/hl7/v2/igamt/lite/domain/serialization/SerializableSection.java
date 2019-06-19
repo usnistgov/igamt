@@ -124,7 +124,7 @@ public class SerializableSection extends SerializableElement {
                         	location+=comment.getLocation();
                         }
                         commentElement
-                            .addAttribute(new Attribute("Location", location));
+                            .addAttribute(new Attribute("Location", locationPrefix+"."+location));
                     }
                     if(comment.getAuthorId()!=null){
                         commentElement.addAttribute(new Attribute("AuthorId",String.valueOf(
