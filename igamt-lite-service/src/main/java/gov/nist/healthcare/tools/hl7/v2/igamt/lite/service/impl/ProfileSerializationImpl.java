@@ -870,9 +870,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
   }
 
   @Override
-  public InputStream serializeCompositeProfileDisplayToZip(IGDocument doc, String[] ids)
-      throws IOException, CloneNotSupportedException, TableSerializationException,
-      ProfileSerializationException {
+  public InputStream serializeProfileDisplayToZip(IGDocument doc, String[] mids, String[] cids) throws IOException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException {
     Map<String, Segment> segmentsMap = new HashMap<String, Segment>();
     Map<String, Datatype> datatypesMap = new HashMap<String, Datatype>();
     Map<String, Table> tablesMap = new HashMap<String, Table>();
@@ -899,6 +897,25 @@ public class ProfileSerializationImpl implements ProfileSerialization {
       if (tl != null) {
         Table t = tableService.findById(tl.getId());
         if (t != null) {
+
+          /*
+           * Temporary script Begin This script is to hack Codes for external-user ValueSet. It is
+           * just temporary script till implementation for external valueset validation
+           */
+
+          if (t != null && t.getSourceType().equals(SourceType.EXTERNAL)
+              && t.getCreatedFrom() != null && !t.getCreatedFrom().isEmpty()) {
+            Table origin = tableService.findById(t.getCreatedFrom());
+            if (origin != null && origin.getCodes() != null && origin.getCodes().size() > 0) {
+              t.setCodes(origin.getCodes());
+            }
+          }
+
+          /*
+           * Temporary script End
+           */
+
+
           tablesMap.put(t.getId(), t);
         }
       }
@@ -907,6 +924,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
 
 
     Profile filteredProfile = new Profile();
+    filteredProfile.setId(doc.getProfile().getId());
     filteredProfile.setBaseId(doc.getProfile().getBaseId());
     filteredProfile.setChanges(doc.getProfile().getChanges());
     filteredProfile.setComment(doc.getProfile().getComment());
@@ -920,14 +938,35 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     filteredProfile.setType(doc.getProfile().getType());
     filteredProfile.setUsageNote(doc.getProfile().getUsageNote());
     filteredProfile.setMetaData(doc.getProfile().getMetaData());
-
+    if (doc.getProfile().getMetaData().getExt() != null
+        && !"".equals(doc.getProfile().getMetaData().getExt())) {
+      filteredProfile.getMetaData().setName(doc.getProfile().getMetaData().getExt());
+    }
     Messages messages = new Messages();
-    for (CompositeProfileStructure cps : doc.getProfile().getCompositeProfiles().getChildren()) {
-      if (Arrays.asList(ids).contains(cps.getId())) {
-        CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
-        segmentsMap.putAll(cp.getSegmentsMap());
-        datatypesMap.putAll(cp.getDatatypesMap());
-        messages.addMessage(cp.convertMessage());
+    
+    if(cids != null) {
+      for (CompositeProfileStructure cps : doc.getProfile().getCompositeProfiles().getChildren()) {
+        if (Arrays.asList(cids).contains(cps.getId())) {
+          CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
+          segmentsMap.putAll(cp.getSegmentsMap());
+          datatypesMap.putAll(cp.getDatatypesMap());
+          messages.addMessage(cp.convertMessage(), cps.getId());
+        }
+      }      
+    }
+
+    if(mids != null) {      
+      for (String mid: mids) {
+        if(mid.contains("_ACK")) {
+          Message m = doc.getProfile().getMessages().findOne(mid.substring(mid.indexOf("]") + 1)).clone();
+          Message targetM = doc.getProfile().getMessages().findOne(mid.substring(0, mid.indexOf("["))).clone();
+          m.setId(mid.substring(0, mid.indexOf("[")) + "_ACK");
+          m.setName(mid.substring(mid.indexOf("[") + 1 , mid.indexOf("]")));
+          m.setEvent(targetM.getEvent());
+          messages.addMessage(m);
+        }else {
+          messages.addMessage(doc.getProfile().getMessages().findOne(mid));
+        }
       }
     }
 
@@ -951,8 +990,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     filteredProfile.setMessages(messages);
     filteredProfile.setTableLibrary(tables);
 
-    return new XMLExportTool().exportXMLAsDisplayFormatForSelectedMessages(filteredProfile,
-        doc.getMetaData(), segmentsMap, datatypesMap, tablesMap);
+    return new XMLExportTool().exportXMLAsDisplayFormatForSelectedMessages(filteredProfile, doc.getMetaData(), segmentsMap, datatypesMap, tablesMap);
   }
 
   @Override
@@ -1426,9 +1464,6 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     return new XMLExportTool().exportXMLAsValidationFormatForSelectedMessages(filteredProfile,
         doc.getMetaData(), segmentsMap, datatypesMap, tablesMap);
   }
-  
-  
-
 
   @Override
   public InputStream serializeCompositeProfileToZip(IGDocument doc, String[] ids)
@@ -1540,7 +1575,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
   }
 
   @Override
-  public InputStream serializeCompositeProfileGazelleToZip(IGDocument doc, String[] ids)
+  public InputStream serializeProfileGazelleToZip(IGDocument doc, String[] mids, String[] cids)
       throws IOException, CloneNotSupportedException, ProfileSerializationException,
       TableSerializationException {
     HashMap<String, Segment> segmentsMap = new HashMap<String, Segment>();
@@ -1569,6 +1604,25 @@ public class ProfileSerializationImpl implements ProfileSerialization {
       if (tl != null) {
         Table t = tableService.findById(tl.getId());
         if (t != null) {
+
+          /*
+           * Temporary script Begin This script is to hack Codes for external-user ValueSet. It is
+           * just temporary script till implementation for external valueset validation
+           */
+
+          if (t != null && t.getSourceType().equals(SourceType.EXTERNAL)
+              && t.getCreatedFrom() != null && !t.getCreatedFrom().isEmpty()) {
+            Table origin = tableService.findById(t.getCreatedFrom());
+            if (origin != null && origin.getCodes() != null && origin.getCodes().size() > 0) {
+              t.setCodes(origin.getCodes());
+            }
+          }
+
+          /*
+           * Temporary script End
+           */
+
+
           tablesMap.put(t.getId(), t);
         }
       }
@@ -1577,6 +1631,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
 
 
     Profile filteredProfile = new Profile();
+    filteredProfile.setId(doc.getProfile().getId());
     filteredProfile.setBaseId(doc.getProfile().getBaseId());
     filteredProfile.setChanges(doc.getProfile().getChanges());
     filteredProfile.setComment(doc.getProfile().getComment());
@@ -1590,14 +1645,35 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     filteredProfile.setType(doc.getProfile().getType());
     filteredProfile.setUsageNote(doc.getProfile().getUsageNote());
     filteredProfile.setMetaData(doc.getProfile().getMetaData());
-
+    if (doc.getProfile().getMetaData().getExt() != null
+        && !"".equals(doc.getProfile().getMetaData().getExt())) {
+      filteredProfile.getMetaData().setName(doc.getProfile().getMetaData().getExt());
+    }
     Messages messages = new Messages();
-    for (CompositeProfileStructure cps : doc.getProfile().getCompositeProfiles().getChildren()) {
-      if (Arrays.asList(ids).contains(cps.getId())) {
-        CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
-        segmentsMap.putAll(cp.getSegmentsMap());
-        datatypesMap.putAll(cp.getDatatypesMap());
-        messages.addMessage(cp.convertMessage());
+    
+    if(cids != null) {
+      for (CompositeProfileStructure cps : doc.getProfile().getCompositeProfiles().getChildren()) {
+        if (Arrays.asList(cids).contains(cps.getId())) {
+          CompositeProfile cp = compositeProfileService.buildCompositeProfile(cps);
+          segmentsMap.putAll(cp.getSegmentsMap());
+          datatypesMap.putAll(cp.getDatatypesMap());
+          messages.addMessage(cp.convertMessage(), cps.getId());
+        }
+      }      
+    }
+
+    if(mids != null) {      
+      for (String mid: mids) {
+        if(mid.contains("_ACK")) {
+          Message m = doc.getProfile().getMessages().findOne(mid.substring(mid.indexOf("]") + 1)).clone();
+          Message targetM = doc.getProfile().getMessages().findOne(mid.substring(0, mid.indexOf("["))).clone();
+          m.setId(mid.substring(0, mid.indexOf("[")) + "_ACK");
+          m.setName(mid.substring(mid.indexOf("[") + 1 , mid.indexOf("]")));
+          m.setEvent(targetM.getEvent());
+          messages.addMessage(m);
+        }else {
+          messages.addMessage(doc.getProfile().getMessages().findOne(mid));
+        }
       }
     }
 
