@@ -40,13 +40,13 @@ public interface IGDocumentExportService {
 
   InputStream exportAsDisplayForSelectedMessage(IGDocument d, List<MessageExportInfo> messageExportInfo) throws IOException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException;
   
-  InputStream exportAsDisplayForSelectedCompositeProfiles(IGDocument d, String[] mids) throws IOException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException;
+  InputStream exportAsDisplayForSelectedProfiles(IGDocument d, String[] mids, String[] cids) throws IOException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException;
   
   InputStream exportAsValidationForSelectedCompositeProfiles(IGDocument d, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException;
   
   InputStream exportAsValidationForSelectedProfiles(IGDocument d, String[] mids, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException, ConstraintSerializationException;
 
-  InputStream exportAsGazelleForSelectedCompositeProfiles(IGDocument d, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException;
+  InputStream exportAsGazelleForSelectedProfiles(IGDocument d, String[] mids, String[] cids) throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException;
 
   InputStream exportAsXlsx(IGDocument d) throws IOException;
 

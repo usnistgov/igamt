@@ -245,20 +245,20 @@ public class IGDocumentExportImpl implements IGDocumentExportService {
   }
 
   @Override
-  public InputStream exportAsGazelleForSelectedCompositeProfiles(IGDocument d, String[] cids)
+  public InputStream exportAsGazelleForSelectedProfiles(IGDocument d, String[] mids, String[] cids)
       throws IOException, CloneNotSupportedException, ProfileSerializationException, TableSerializationException {
     if (d != null) {
-      return profileSerializationService.serializeCompositeProfileGazelleToZip(d, cids);
+      return profileSerializationService.serializeProfileGazelleToZip(d, mids, cids);
     } else {
       return new NullInputStream(1L);
     }
   }
 
   @Override
-  public InputStream exportAsDisplayForSelectedCompositeProfiles(IGDocument d, String[] cids)
+  public InputStream exportAsDisplayForSelectedProfiles(IGDocument d,  String[] mids, String[] cids)
       throws IOException, CloneNotSupportedException, TableSerializationException, ProfileSerializationException {
     if (d != null) {
-      return profileSerializationService.serializeCompositeProfileDisplayToZip(d, cids);
+      return profileSerializationService.serializeProfileDisplayToZip(d, mids, cids);
     } else {
       return new NullInputStream(1L);
     }
