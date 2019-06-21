@@ -203,9 +203,7 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:if>
-            <xsl:if test="$columnDisplay.dataType.comment = 'true'">
-                <xsl:apply-templates select="./CommentList"/>
-            </xsl:if>
+       
             <xsl:if test="count(./Component/Text[@Type='Text']) &gt; 0">
                 <xsl:element name="br"/>
                 <xsl:element name="span">
@@ -229,6 +227,9 @@
                         </xsl:element>
                     </xsl:if>
                 </xsl:for-each>
+            </xsl:if>
+             <xsl:if test="$columnDisplay.dataType.comment = 'true'">
+                <xsl:apply-templates select="./CommentList"/>
             </xsl:if>
         </xsl:if>
         <xsl:if test="count(Text[@Type='UsageNote']) &gt; 0">

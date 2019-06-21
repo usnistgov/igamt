@@ -119,8 +119,6 @@ public class SerializableSection extends SerializableElement {
                     if (comment.getLocation() != null) {
                         String location = "";
                         if(locationPathMap.containsKey(comment.getLocation())){
-                        	location+=locationPathMap.get(comment.getLocation());
-                        } else {
                         	location+=comment.getLocation();
                         }
                         commentElement
