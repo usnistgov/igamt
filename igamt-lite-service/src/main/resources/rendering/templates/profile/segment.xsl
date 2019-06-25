@@ -217,9 +217,7 @@
         
         
         <xsl:apply-templates select="./DynamicMapping"/>
-        <xsl:if test="$columnDisplay.segment.comment = 'true'">
-        	<xsl:apply-templates select="./CommentList"/>
-       	</xsl:if>
+
 
         <xsl:if test="count(./Text[@Type='DefPostText']) &gt; 0 and ./Text[@Type='DefPostText']!='' ">
         	<xsl:element name="br"/>
@@ -244,6 +242,9 @@
                 </xsl:element>
             </xsl:if>
         </xsl:for-each>
+        <xsl:if test="$columnDisplay.segment.comment = 'true'">
+        	<xsl:apply-templates select="./CommentList"/>
+       	</xsl:if>
         
     </xsl:template>
 

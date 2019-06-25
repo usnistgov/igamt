@@ -110,7 +110,7 @@ public class SerializeMessageServiceImpl extends SerializeMessageOrCompositeProf
             SerializableMessage serializableMessage =
                 new SerializableMessage(message, prefix, headerLevel, serializableSegmentRefOrGroups,
                     serializableConformanceStatements, serializablePredicates, usageNote, defPreText,
-                    defPostText, tables, positionNameSegOrGroupMap, showConfLength,filtredBinding, exportConfig.getBindingConfig() );
+                    defPostText, tables, positionNameSegOrGroupMap, showConfLength,filtredBinding, exportConfig.getBindingConfig());
             SerializableSection messageSegments =
                 new SerializableSection(message.getId() + "_segments",
                     prefix + "." + String.valueOf(message.getPosition()) + "."

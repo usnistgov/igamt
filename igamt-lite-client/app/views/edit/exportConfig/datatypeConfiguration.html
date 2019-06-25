@@ -136,4 +136,10 @@
             </md-content>
         </div>
     </div>
+
+    <div flex>
+        <md-checkbox class="md-primary"
+                     ng-model="config.includePrimitiveDatatype"
+                     ng-change="setChanged()"><label style="color: black">Include Primitive Data Types</label></md-checkbox>
+    </div>
 </md-card-content>
