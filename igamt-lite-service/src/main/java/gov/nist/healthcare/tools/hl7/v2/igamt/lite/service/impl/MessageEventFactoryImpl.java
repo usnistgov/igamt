@@ -37,12 +37,12 @@ public class MessageEventFactoryImpl implements MessageEventFactory {
   }
 
   @Override
-  public List<MessageEvents> createMessageEvents(Messages msgs, String hl7Version) {
+  public List<MessageEvents> createMessageEvents(List<Message> msgs, String hl7Version) {
 
     Table tableO354 = getTable0354(hl7Version);
     List<MessageEvents> list = new ArrayList<MessageEvents>();
     if (tableO354 != null) {
-      for (Message msg : msgs.getChildren()) {
+      for (Message msg : msgs) {
         String id = msg.getId();
         String structID = msg.getStructID();
         Set<String> events = findEvents(structID, tableO354);

@@ -13,6 +13,7 @@ package gov.nist.healthcare.tools.hl7.v2.igamt.lite.service;
 
 import java.util.List;
 
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Message;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Messages;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.messageevents.MessageEvents;
 
@@ -23,5 +24,5 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.messageevents.MessageE
 
 public interface MessageEventFactory {
 
-	public List<MessageEvents> createMessageEvents(Messages msgs, String hl7Version);
+	public List<MessageEvents> createMessageEvents(List<Message> msgs, String hl7Version);
 }

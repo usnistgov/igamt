@@ -68,6 +68,7 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.DatatypeService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.IGDocumentCreationService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.IGDocumentException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.MessageEventFactory;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.MessageService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.ProfileSerialization;
 
 @Service
@@ -97,6 +98,9 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 	private DatatypeService datatypeService;
 
 	@Autowired
+	private MessageService messageService;
+
+	@Autowired
 	private TableLibraryRepository tableLibraryRepository;
 
 	@Autowired
@@ -120,11 +124,14 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 	public List<MessageEvents> findMessageEvents(String hl7Version) {
 		List<IGDocument> igds = igdocumentRepository
 				.findByScopeAndProfile_MetaData_Hl7Version(IGDocumentScope.HL7STANDARD, hl7Version);
+		
+		 
+		
 		List<MessageEvents> messageEvents = new ArrayList<MessageEvents>();
 		if (!igds.isEmpty()) {
 			IGDocument igd = igds.get(0);
 			Messages msgs = igd.getProfile().getMessages();
-			messageEvents = messageEventFactory.createMessageEvents(msgs, hl7Version);
+			messageEvents = messageEventFactory.createMessageEvents(messageService.findByScopeAndVersion(SCOPE.HL7STANDARD.toString(), hl7Version), hl7Version);
 		} else {
 			log.debug("IGDocument Not found for hl7Version=" + hl7Version);
 		}

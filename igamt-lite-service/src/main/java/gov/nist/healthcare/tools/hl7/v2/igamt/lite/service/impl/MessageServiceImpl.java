@@ -132,7 +132,6 @@ public class MessageServiceImpl implements MessageService {
   public List<Message> findByScopeAndVersion(String scope, String hl7Version) {
     return messageRepository.findByScopeAndVersion(scope, hl7Version);
   }
-
   @Override
   public Message findByMessageTypeAndEventAndVersionAndScope(String messageType, String event,
       String hl7Version, String scope) {
