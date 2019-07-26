@@ -99,6 +99,7 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ValueSetOrSingleCodeBi
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.comparator.IgDocumentComparator;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.constraints.CoConstraintTHENColumnData;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.constraints.ValueSetData;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.exception.TableNotFoundException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.messageevents.MessageEvents;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.ConstraintSerializationException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.ProfileSerializationException;
@@ -1595,7 +1596,6 @@ public class IGDocumentController extends CommonController {
 	    throws IOException, IGDocumentNotFoundException, IGDocumentException, CloneNotSupportedException {
 	MessageAddReturn ret = new MessageAddReturn();
 
-	List<Message> newMessages = new ArrayList<Message>();
 	IGDocument d = igDocumentService.findOne(id);
 	if (d == null) {
 	    throw new IGDocumentNotFoundException(id);
@@ -1630,9 +1630,7 @@ public class IGDocumentController extends CommonController {
 		}
 		for (Datatype dt : ret.getDatatypes()) {
 		    p.getDatatypeLibrary().addDatatype(dt);
-
 		}
-
 		for (Table t : ret.getTables()) {
 		    p.getTableLibrary().addTable(t);
 		}
@@ -1654,7 +1652,7 @@ public class IGDocumentController extends CommonController {
 
     }
 
-    private void processMessage(IGDocument d, Message m1, MessageAddReturn ret) {
+    private void processMessage(IGDocument d, Message m1, MessageAddReturn ret) throws TableNotFoundException {
 
 	HashMap<String, Boolean> segmentMap = new HashMap<String, Boolean>();
 	HashMap<String, Boolean> datatypesMap = new HashMap<String, Boolean>();
@@ -1690,7 +1688,7 @@ public class IGDocumentController extends CommonController {
 
     private void processSegmentOrGroup(SegmentRefOrGroup child, MessageAddReturn ret,
 	    HashMap<String, Boolean> segmentMap, HashMap<String, Boolean> datatypesMap,
-	    HashMap<String, Boolean> tablesMap) {
+	    HashMap<String, Boolean> tablesMap) throws TableNotFoundException {
 	// TODO Auto-generated method stub
 
 	if (child instanceof SegmentRef) {
@@ -1712,7 +1710,7 @@ public class IGDocumentController extends CommonController {
     }
 
     private void processSegment(Segment segment, MessageAddReturn ret, HashMap<String, Boolean> segmentMap,
-	    HashMap<String, Boolean> datatypesMap, HashMap<String, Boolean> tablesMap) {
+	    HashMap<String, Boolean> datatypesMap, HashMap<String, Boolean> tablesMap) throws TableNotFoundException {
 
 	ret.addSegment(segment);
 	segmentMap.put(segment.getId(), true);
@@ -1736,11 +1734,12 @@ public class IGDocumentController extends CommonController {
     }
 
     private void processTable(ValueSetOrSingleCodeBinding vsb, MessageAddReturn ret,
-	    HashMap<String, Boolean> tablesMap) {
-	if (vsb != null && vsb.getId() != null) {
+	    HashMap<String, Boolean> tablesMap) throws TableNotFoundException {
+	if (vsb != null && vsb.getTableId() != null) {
 	    Table t = tableService.findOneShortById(vsb.getTableId());
-	    if (t == null)
-		return;
+	    if (t == null){
+				throw new TableNotFoundException(t.getId());
+	    }
 	    if (!tablesMap.containsKey(t.getId())) {
 		ret.addTable(t);
 		tablesMap.put(t.getId(), true);
@@ -1750,7 +1749,7 @@ public class IGDocumentController extends CommonController {
     }
 
     private void processDatatype(Datatype d, MessageAddReturn ret, HashMap<String, Boolean> datatypesMap,
-	    HashMap<String, Boolean> tablesMap) {
+	    HashMap<String, Boolean> tablesMap) throws TableNotFoundException {
 	ret.addDatatype(d);
 	datatypesMap.put(d.getId(), true);
 	for (ValueSetOrSingleCodeBinding c : d.getValueSetBindings()) {
@@ -2153,9 +2152,7 @@ public class IGDocumentController extends CommonController {
 		    t.setReferenceUrl(appInfo.getProperties().get("PHINVADS") + t.getOid());
 
 		} else {
-
 		    t.setCodes(temp.getCodes());
-
 		}
 		t.setAuthorNotes("<p></p>");
 		tableService.save(t);
