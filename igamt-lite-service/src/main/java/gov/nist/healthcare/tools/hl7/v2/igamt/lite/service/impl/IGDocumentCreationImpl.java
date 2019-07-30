@@ -250,11 +250,12 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 		int maxPos = findMaxPosition(pTarget.getMessages());
 		try {
 			for (MessageEvents msgEvt : msgEvts) {
-				Message m = pSource.getMessages().findOne(msgEvt.getId());
+				Message m = messageRepository.findOne(msgEvt.getId());
 				Message m1 = null;
 				m1 = m.clone();
 				m1.setId(null);
 				m1.setScope(Constant.SCOPE.USER);
+				m1.setDescription(msgEvt.getDescription());
 				Iterator<Event> itr = msgEvt.getChildren().iterator();
 				if (itr.hasNext()) {
 					String event = itr.next().getName();
@@ -272,7 +273,6 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 				for (ValueSetOrSingleCodeBinding vsb : m1.getValueSetBindings()) {
 					addTable(vsb, pSource, pTarget);
 				}
-
 				messageRepository.save(m1);
 				log.info("a pos=" + m1.getPosition());
 				messages.addMessage(m1);

@@ -81,19 +81,17 @@ angular.module('igl').controller(
     $scope.eventList = [];
 
     $scope.trackSelections = function(bool, event) {
-      // console.log("event");
-      // console.log(event);
-      console.log(bool);
-
-
-
-      if (bool) {
         $scope.eventList.push(event);
+        console.log(event);
+
+        if (bool) {
         messageEvents.push({
           "id": event.id,
           "children": [{
-            "name": event.name.trim(),
-            "parentStructId": event.parentStructId
+              "name": event.name.trim(),
+              "parentStructId": event.parentStructId,
+              "description": event.description,
+              "id": event.id
           }]
         });
       } else {
@@ -112,6 +110,7 @@ angular.module('igl').controller(
       }
       $scope.okDisabled = messageEvents.length === 0;
     };
+
     $scope.isChecked = function(node) {
       if ($scope.eventList.indexOf(node) !== -1) {
         return true;
@@ -123,12 +122,12 @@ angular.module('igl').controller(
     $scope.ok = function() {
       // create new ig doc submitted.
       $scope.messageEvents = messageEvents;
+      console.log($scope.messageEvents);
+
       switch ($rootScope.clickSource) {
         case "btn":
         {
           createIGDocument($scope.hl7Version, messageEvents);
-
-
           break;
         }
         case "ctx":
@@ -147,6 +146,7 @@ angular.module('igl').controller(
         "accountID": userInfoService.getAccountID(),
         "timeout": 60000
       };
+      console.log(msgEvts);
       $scope.okDisabled = true;
       $http.post('api/igdocuments/createIntegrationProfile', iprw)
         .then(
@@ -174,17 +174,20 @@ angular.module('igl').controller(
      * @param msgIds
      */
     var updateIGDocument = function(msgEvts) {
+        console.log(msgEvts);
 
         var events = [];
         var version = $scope.hl7Version;
       for (var i = 0; i < msgEvts.length; i++) {
         events.push({
-          name: msgEvts[i].children[0].name,
-          parentStructId: msgEvts[i].children[0].parentStructId,
-          scope: "HL7STANDARD",
-          hl7Version: version
+            name: msgEvts[i].children[0].name,
+            parentStructId: msgEvts[i].children[0].parentStructId,
+            scope: "HL7STANDARD",
+            description: msgEvts[i].children[0].description,
+            hl7Version: version
 
         });
+        console.log(events);
       }
       IgDocumentService.findAndAddMessages($rootScope.igdocument.id, events).then(function(result) {
 

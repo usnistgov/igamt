@@ -443,8 +443,8 @@ public class Bootstrap implements InitializingBean {
 		  //  fixOBX2ValuesetMissingAndDuplicated();
 		  //  createDynTable0396();
 		  //  fixOBX2ValuesetMissingAndDuplicated();
-		  fixTableLibraries();
-		  fixDuplicatedMessageStructure();
+//		  fixTableLibraries();
+//		  fixDuplicatedMessageStructure();
 
 	  }
 
@@ -1485,7 +1485,7 @@ public class Bootstrap implements InitializingBean {
 							  collectBindingIds(msg.getValueSetBindings(),vsIds);
 				  }
 			  }
-			  List<Table> tables=	tableService.findShortAllByIds(vsIds);
+			  List<Table> tables = tableService.findShortAllByIds(vsIds);
 			  System.out.println(tables.size());
 			  TableLibrary library = tableLibraryService.findById(igDoc.getProfile().getTableLibrary().getId());
 			  for(Table t: tables) {
