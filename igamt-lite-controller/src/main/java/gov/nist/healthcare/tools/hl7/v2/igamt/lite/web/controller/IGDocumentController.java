@@ -1622,6 +1622,7 @@ public class IGDocumentController extends CommonController {
 		m1.setName(name);
 		int position = messageService.findMaxPosition(msgs);
 		m1.setPosition(++position);
+		m1.setDescription(nands.getDescription());
 		messageRepository.save(m1);
 		processMessage(d, m1, ret);
 		// add segment to the library

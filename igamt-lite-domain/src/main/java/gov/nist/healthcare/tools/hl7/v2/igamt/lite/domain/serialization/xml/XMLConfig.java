@@ -49,7 +49,7 @@ public class XMLConfig {
         "equal to or greater than another node", "less than another node",
         "equal to or less than another node", "equal to", "not-equal to", "greater than",
         "equal to or greater than", "less than", "equal to or less than",
-        "valued sequentially starting with the value '1'"}));
+        "valued sequentially starting with the value '1'", "custom"}));
     config.setPredefinedFormats(toSet(new String[] {"Positive Integer", "ISO-compliant OID",
         "Alphanumeric", "Regular expression"}));
 

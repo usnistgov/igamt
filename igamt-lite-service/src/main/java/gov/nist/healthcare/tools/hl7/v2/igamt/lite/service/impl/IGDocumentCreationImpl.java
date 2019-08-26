@@ -258,9 +258,11 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 				m1.setDescription(msgEvt.getDescription());
 				Iterator<Event> itr = msgEvt.getChildren().iterator();
 				if (itr.hasNext()) {
-					String event = itr.next().getName();
+					Event ev= itr.next();
+					String event = ev.getName();
 					log.debug("msgEvt=" + msgEvt.getId() + " " + event);
 					m1.setEvent(event);
+					m1.setDescription(ev.getDescription());
 				} else {
 					log.error("MessageEvent contains no events id=" + msgEvt.getId() + " name=" + msgEvt.getName());
 				}

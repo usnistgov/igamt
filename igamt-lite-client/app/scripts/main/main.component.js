@@ -2724,7 +2724,6 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
           });
         }
 
-        console.log(result);
         return result;
       }else if(pc.type === 'component'){
         var path = pc.path;
@@ -3016,7 +3015,7 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
         id: new ObjectId().toString(),
         constraintId: newConstraint.constraintId,
         description: newConstraint.location_1 + ' ' + newConstraint.verb + ' ' + newConstraint.contraintType + '.',
-        assertion: '<Assertion><Presence Path=\"' + newConstraint.position_1 + '\"/></Assertion>'
+        assertion: '<Assertion></Assertion>'
       };
     } else if (newConstraint.contraintType === 'a literal value') {
       if (newConstraint.value.indexOf("^") == -1) {
@@ -3188,15 +3187,19 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
         assertion: '<Assertion><SetID Path=\"' + newConstraint.position_1 + '\"/></Assertion>'
       };
     }
-
-
-    if (newConstraint.verb.includes('NOT') || newConstraint.verb.includes('not')) {
-      cs.assertion = cs.assertion.replace("<Assertion>", "<Assertion><NOT><AND><Presence Path=\"" + newConstraint.position_1 + "\"/>");
-      cs.assertion = cs.assertion.replace("</Assertion>", "</AND></NOT></Assertion>");
-    }else {
-      cs.assertion = cs.assertion.replace("<Assertion>", "<Assertion><AND><Presence Path=\"" + newConstraint.position_1 + "\"/>");
-      cs.assertion = cs.assertion.replace("</Assertion>", "</AND></Assertion>");
+    else if (newConstraint.contraintType === "custom") {
+      cs = {
+        id: new ObjectId().toString(),
+        constraintId: newConstraint.constraintId,
+        description: newConstraint.value2,
+        assertion: '<Plugin QualifiedClassName=\"' + newConstraint.plugin + '\"/>'
+      };
     }
+    if (newConstraint.verb.includes('NOT') || newConstraint.verb.includes('not')) {
+        cs.assertion = cs.assertion.replace("<Assertion>", "<Assertion><NOT>");
+        cs.assertion = cs.assertion.replace("</Assertion>", "</NOT></Assertion>");
+    }
+
     cs.description = cs.description.split('[1]').join('');
 
     return cs;
@@ -3444,14 +3447,26 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
         falseUsage: newConstraint.falseUsage,
         assertion: '<Condition><SetID Path=\"' + newConstraint.position_1 + '\"/></Condition>'
       };
+    } else if (newConstraint.contraintType === "custom") {
+      var constraintId = 'CP_' + positionPath + '_' + $rootScope.newPredicateFakeId;
+      cp = {
+        id: new ObjectId().toString(),
+        constraintId: constraintId,
+        constraintTarget: positionPath,
+        description: newConstraint.value2,
+        trueUsage: newConstraint.trueUsage,
+        falseUsage: newConstraint.falseUsage,
+        assertion: '<Condition>'+ '<Plugin QualifiedClassName=\"'+ newConstraint.plugin+ '\"/>' +'</Condition>'
+      };
     }
-
+    if(newConstraint.contraintType !== "custom"){
     if (newConstraint.verb.includes('NOT') || newConstraint.verb.includes('not')) {
       cp.assertion = cp.assertion.replace("<Condition>", "<Condition><NOT><AND><Presence Path=\"" + newConstraint.position_1 + "\"/>");
       cp.assertion = cp.assertion.replace("</Condition>", "</AND></NOT></Condition>");
-    }else {
+    }else{
       cp.assertion = cp.assertion.replace("<Condition>", "<Condition><AND><Presence Path=\"" + newConstraint.position_1 + "\"/>");
       cp.assertion = cp.assertion.replace("</Condition>", "</AND></Condition>");
+    }
     }
 
     cp.description = cp.description.split('[1]').join('');
