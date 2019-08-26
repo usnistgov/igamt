@@ -53,6 +53,17 @@ public class MessageRepositoryImpl implements MessageOperations {
     }
 
   }
+  
+  @Override
+  public List<Message> findByStructureIdAndScopeAndVersion(String structId, String scope,
+      String hl7Version) {
+    Criteria where = Criteria.where("structID").is(structId);
+    where.andOperator(Criteria.where("hl7Version").is(hl7Version),
+        Criteria.where("scope").is(scope));
+    Query qry = Query.query(where);
+    return mongo.find(qry, Message.class);
+
+  }
 
   @Override
   public Date updateDate(String id, Date date) {

@@ -11,7 +11,9 @@
  */
 package gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.messageevents;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,7 +30,7 @@ public class MessageEvents {
 
   private final String type = "message";
 
-  private Set<Event> children = new HashSet<Event>();
+  private List<Event> children = new ArrayList<Event>();
 
   private String description;
 
@@ -36,18 +38,13 @@ public class MessageEvents {
     super();
   }
 
-  public MessageEvents(String id, String structId, Set<String> events, String description) {
+  public MessageEvents(String id, String structId, List<Event> events, String description) {
     this.id = id;
     this.name = structId;
-    createEvents(events,structId);
     this.description = description;
+    this.children = events;
   }
 
-  void createEvents(Set<String> events,String parentStructId) {
-    for (String event : events) {
-      this.children.add(new Event(id, event,parentStructId));
-    }
-  }
 
   public String getId() {
     return id;
@@ -61,7 +58,7 @@ public class MessageEvents {
     return type;
   }
 
-  public Set<Event> getChildren() {
+  public List<Event> getChildren() {
     return children;
   }
 
@@ -77,7 +74,7 @@ public void setName(String name) {
 	this.name = name;
 }
 
-public void setChildren(Set<Event> children) {
+public void setChildren(List<Event> children) {
 	this.children = children;
 }
 

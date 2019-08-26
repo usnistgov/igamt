@@ -16,6 +16,7 @@ public class EventWrapper {
 	private String parentStructId;
 	private String scope;
 	private String hl7Version;
+	private String description; 
 
 	
 	public String getScope() {
@@ -58,5 +59,13 @@ public class EventWrapper {
 	@Override
 	public String toString() {
 		return name + " " + parentStructId+ " " + scope+ " " + hl7Version;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

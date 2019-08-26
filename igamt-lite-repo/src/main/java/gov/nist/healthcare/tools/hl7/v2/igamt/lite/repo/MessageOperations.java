@@ -47,6 +47,8 @@ public interface MessageOperations {
       String event, String hl7Version, String scope);
 
   void updateAttribute(String id, String attributeName, Object value);
+  public List<Message> findByStructureIdAndScopeAndVersion(String structId, String scope,
+	      String hl7Version);
 
 
 }
