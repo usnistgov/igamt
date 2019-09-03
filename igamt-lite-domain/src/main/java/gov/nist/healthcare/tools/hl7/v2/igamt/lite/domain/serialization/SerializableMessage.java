@@ -130,7 +130,7 @@ public class SerializableMessage extends SerializableSection {
             }
             if (message.getComments() != null && !message.getComments().isEmpty()) {
                 Element commentListElement = super
-                    .createCommentListElement(message.getComments(), message.getName(),
+                    .createCommentListElement(message.getComments(), message.getName()+"-"+message.getIdentifier(),
                         locationPathMap);
                 if (commentListElement != null) {
                     messageElement.appendChild(commentListElement);

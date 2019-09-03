@@ -45,15 +45,13 @@ angular.module('igl').factory('MessageEventsSvc', function($http) {
 
 
   svc.getMessageEvents = function(hl7Version) {
-    console.log("loading");
     return $http.post(
       'api/igdocuments/messageListByVersion', hl7Version).then(function(response) {
       var messageEvents = angular.fromJson(response.data);
       messageEvents =  _.filter(messageEvents, function(messageEvent){
+
         return messageEvent.children && messageEvent.children !== null && messageEvent.children.length > 0;
       });
-
-
       return _.sortBy(messageEvents, function(messageEvent) {
         return messageEvent.name;
       });

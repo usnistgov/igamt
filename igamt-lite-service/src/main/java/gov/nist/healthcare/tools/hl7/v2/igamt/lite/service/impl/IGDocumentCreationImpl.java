@@ -68,6 +68,7 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.DatatypeService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.IGDocumentCreationService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.IGDocumentException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.MessageEventFactory;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.MessageService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.ProfileSerialization;
 
 @Service
@@ -97,6 +98,9 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 	private DatatypeService datatypeService;
 
 	@Autowired
+	private MessageService messageService;
+
+	@Autowired
 	private TableLibraryRepository tableLibraryRepository;
 
 	@Autowired
@@ -118,16 +122,10 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 
 	@Override
 	public List<MessageEvents> findMessageEvents(String hl7Version) {
-		List<IGDocument> igds = igdocumentRepository
-				.findByScopeAndProfile_MetaData_Hl7Version(IGDocumentScope.HL7STANDARD, hl7Version);
+		
 		List<MessageEvents> messageEvents = new ArrayList<MessageEvents>();
-		if (!igds.isEmpty()) {
-			IGDocument igd = igds.get(0);
-			Messages msgs = igd.getProfile().getMessages();
-			messageEvents = messageEventFactory.createMessageEvents(msgs, hl7Version);
-		} else {
-			log.debug("IGDocument Not found for hl7Version=" + hl7Version);
-		}
+			messageEvents = messageEventFactory.createMessageEvents(messageService.findByScopeAndVersion(SCOPE.HL7STANDARD.toString(), hl7Version), hl7Version);
+
 		return messageEvents;
 	}
 
@@ -252,16 +250,19 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 		int maxPos = findMaxPosition(pTarget.getMessages());
 		try {
 			for (MessageEvents msgEvt : msgEvts) {
-				Message m = pSource.getMessages().findOne(msgEvt.getId());
+				Message m = messageRepository.findOne(msgEvt.getId());
 				Message m1 = null;
 				m1 = m.clone();
 				m1.setId(null);
 				m1.setScope(Constant.SCOPE.USER);
+				m1.setDescription(msgEvt.getDescription());
 				Iterator<Event> itr = msgEvt.getChildren().iterator();
 				if (itr.hasNext()) {
-					String event = itr.next().getName();
+					Event ev= itr.next();
+					String event = ev.getName();
 					log.debug("msgEvt=" + msgEvt.getId() + " " + event);
 					m1.setEvent(event);
+					m1.setDescription(ev.getDescription());
 				} else {
 					log.error("MessageEvent contains no events id=" + msgEvt.getId() + " name=" + msgEvt.getName());
 				}
@@ -274,7 +275,6 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 				for (ValueSetOrSingleCodeBinding vsb : m1.getValueSetBindings()) {
 					addTable(vsb, pSource, pTarget);
 				}
-
 				messageRepository.save(m1);
 				log.info("a pos=" + m1.getPosition());
 				messages.addMessage(m1);

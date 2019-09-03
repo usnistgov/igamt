@@ -15,41 +15,65 @@ package gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.messageevents;
  * @author gcr1
  *
  */
-public class Event {
+public class Event implements Comparable<Event> {
 
-  String id;
-  String name;
-  String parentStructId;
-  final String type = "event";
+	private String id;
+	private String name;
+	private String parentStructId;
+	public void setId(String id) {
+		this.id = id;
+	}
 
-  public Event() {
-    super();
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public Event(String id, String event,String parentStructId) {
-    super();
-    this.id = id;
-    this.name = event;
-    this.parentStructId=parentStructId;
-  }
+	final String type = "event";
+	private String description;
 
-  public String getParentStructId() {
-	return parentStructId;
-}
+	public Event() {
+		super();
+	}
 
-public void setParentStructId(String parentStructId) {
-	this.parentStructId = parentStructId;
-}
+	public Event(String id, String event,String parentStructId, String description) {
+		super();
+		this.id = id;
+		this.name = event;
+		this.parentStructId=parentStructId;
+		this.description= description;
+	}
 
-public String getId() {
-    return id;
-  }
+	public String getParentStructId() {
+		return parentStructId;
+	}
 
-  public String getType() {
-    return type;
-  }
+	public void setParentStructId(String parentStructId) {
+		this.parentStructId = parentStructId;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public String getId() {
+		return id;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public int compareTo(Event o) {
+		// TODO Auto-generated method stub
+		return this.name.compareTo(o.getName());
+	}
 }

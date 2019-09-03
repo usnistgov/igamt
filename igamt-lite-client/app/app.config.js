@@ -364,7 +364,6 @@ angular.module('igl').run(function ($rootScope, $location, Restangular, $modal, 
       immediateAngularModelUpdate:true,
       events: {
         'froalaEditor.initialized': function () {
-
         },
         'froalaEditor.file.error': function(e, editor, error){
           $rootScope.msg().text= error.text;
@@ -628,13 +627,11 @@ angular.module('igl').run(function ($rootScope, $location, Restangular, $modal, 
 
       var widthNoScroll = outer.offsetWidth;
       // force scrollbars
-      outer.style.overflow = "scroll";
-
+      outer.style.overflow = "scroll"
       // add innerdiv
       var inner = document.createElement("div");
       inner.style.width = "100%";
       outer.appendChild(inner);
-
       var widthWithScroll = inner.offsetWidth;
 
       // remove divs
@@ -642,12 +639,6 @@ angular.module('igl').run(function ($rootScope, $location, Restangular, $modal, 
 
       $rootScope.scrollbarWidth = widthNoScroll - widthWithScroll;
     }
-
     return $rootScope.scrollbarWidth;
   };
-
-
-
-
-
 });
