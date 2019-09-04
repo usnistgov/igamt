@@ -3023,7 +3023,7 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
         id: new ObjectId().toString(),
         constraintId: newConstraint.constraintId,
         description: newConstraint.location_1 + ' ' + newConstraint.verb + ' ' + newConstraint.contraintType + '.',
-        assertion: '<Assertion></Assertion>'
+        assertion: '<Assertion><Presence Path=\"' + newConstraint.position_1 + '\"/></Assertion>'
       };
     } else if (newConstraint.contraintType === 'a literal value') {
       if (newConstraint.value.indexOf("^") == -1) {
@@ -3034,7 +3034,6 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
           assertion: '<Assertion><PlainText Path=\"' + newConstraint.position_1 + '\" Text=\"' + $rootScope.encode(newConstraint.value) + '\" IgnoreCase=\"' + newConstraint.ignoreCase + '\"/></Assertion>'
         };
       } else {
-        console.log(newConstraint.value);
         if (newConstraint.value == '^~\\&') {
           cs = {
             id: new ObjectId().toString(),

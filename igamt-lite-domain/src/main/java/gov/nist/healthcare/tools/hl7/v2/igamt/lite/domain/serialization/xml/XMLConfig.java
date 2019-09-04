@@ -91,6 +91,7 @@ bindingIdentifier='A:B' bindingLocation="4"
     valueSetAllowedComponents.add(new DTComponent("OSD", 4));
     valueSetAllowedComponents.add(new DTComponent("XAD", 3));
     valueSetAllowedComponents.add(new DTComponent("XAD", 4));
+    valueSetAllowedComponents.add(new DTComponent("XAD", 8));
     valueSetAllowedComponents.add(new DTComponent("XAD", 5));
     valueSetAllowedComponents.add(new DTComponent("XON", 3));
     valueSetAllowedComponents.add(new DTComponent("XON", 10));
