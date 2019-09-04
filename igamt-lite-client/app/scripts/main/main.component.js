@@ -3192,7 +3192,7 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
         id: new ObjectId().toString(),
         constraintId: newConstraint.constraintId,
         description: newConstraint.value2,
-        assertion: '<Plugin QualifiedClassName=\"' + newConstraint.plugin + '\"/>'
+        assertion: '<Assertion><Plugin QualifiedClassName=\"' + newConstraint.plugin + '\"/></Assertion>'
       };
     }
     if (newConstraint.verb.includes('NOT') || newConstraint.verb.includes('not')) {
