@@ -3008,6 +3008,14 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
     return cs;
   };
 
+  $rootScope.encode = function(value) {
+      return $rootScope.replaceAll($rootScope.replaceAll($rootScope.replaceAll($rootScope.replaceAll($rootScope.replaceAll(value, "&", "&amp;"), "'", "&apos;"), '"', "&quot;"), "<", "&lt;"), ">", "&gt;");
+  };
+
+  $rootScope.replaceAll = function (str, searchStr, replaceStr) {
+    return str.split(searchStr).join(replaceStr);
+  };
+
   $rootScope.generateConformanceStatement = function(newConstraint) {
     var cs = null;
     if (newConstraint.contraintType === 'valued') {
@@ -3023,7 +3031,7 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
           id: new ObjectId().toString(),
           constraintId: newConstraint.constraintId,
           description: 'The value of ' + newConstraint.location_1 + ' ' + newConstraint.verb + ' \'' + newConstraint.value + '\'.',
-          assertion: '<Assertion><PlainText Path=\"' + newConstraint.position_1 + '\" Text=\"' + newConstraint.value + '\" IgnoreCase=\"' + newConstraint.ignoreCase + '\"/></Assertion>'
+          assertion: '<Assertion><PlainText Path=\"' + newConstraint.position_1 + '\" Text=\"' + $rootScope.encode(newConstraint.value) + '\" IgnoreCase=\"' + newConstraint.ignoreCase + '\"/></Assertion>'
         };
       } else {
         console.log(newConstraint.value);
@@ -3239,7 +3247,7 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
           description: 'If the value of ' + newConstraint.location_1 + ' ' + newConstraint.verb + ' \'' + newConstraint.value + '\'.',
           trueUsage: newConstraint.trueUsage,
           falseUsage: newConstraint.falseUsage,
-          assertion: '<Condition><PlainText Path=\"' + newConstraint.position_1 + '\" Text=\"' + newConstraint.value + '\" IgnoreCase=\"' + newConstraint.ignoreCase + '\"/></Condition>'
+          assertion: '<Condition><PlainText Path=\"' + newConstraint.position_1 + '\" Text=\"' + $rootScope.encode(newConstraint.value) + '\" IgnoreCase=\"' + newConstraint.ignoreCase + '\"/></Condition>'
         };
       } else {
         var componetsList = newConstraint.value.split("^");
