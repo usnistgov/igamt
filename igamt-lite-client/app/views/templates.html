@@ -4774,6 +4774,25 @@
                                                             </md-input-container>
                                                         </div>
                                                     </span>
+
+                                                <span ng-show="newConstraint.contraintType === 'custom'">
+                                                        <div layout="row">
+                                                            <md-input-container flex="100" class="normal">
+                                                                <input ng-model="newConstraint.value2"
+                                                                       placeholder="description"
+                                                                       ng-class="{ 'form-control-invalid' : isEmptyConstraintValue2(newConstraint)}"
+                                                                       type="text"/>
+                                                            </md-input-container>
+                                                        </div>
+                                                        <div layout="row">
+                                                            <md-input-container flex="100" class="normal">
+                                                                <input ng-model="newConstraint.plugin"
+                                                                       placeholder="plugin class name "
+                                                                       ng-class="{ 'form-control-invalid' : !newConstraint.plugin}"
+                                                                       type="text"/>
+                                                            </md-input-container>
+                                                        </div>
+                                                </span>
                                             </td>
 
                                             <td class="col-md-2 drop-zone" align="center" style="vertical-align:middle"
@@ -5341,6 +5360,25 @@
                                                         <div layout="row">
                                                             <md-input-container flex="100" class="normal">
                                                                 <input ng-model="newConstraint.bindingLocation"
+                                                                       type="text"/>
+                                                            </md-input-container>
+                                                        </div>
+                                                    </span>
+
+                                                    <span ng-show="newConstraint.contraintType === 'custom'">
+                                                        <div layout="row">
+                                                            <md-input-container flex="100" class="normal">
+                                                                <input ng-model="newConstraint.value2"
+                                                                       placeholder="description"
+                                                                       ng-class="{ 'form-control-invalid' : isEmptyConstraintValue2(newConstraint)}"
+                                                                       type="text"/>
+                                                            </md-input-container>
+                                                        </div>
+                                                        <div layout="row">
+                                                            <md-input-container flex="100" class="normal">
+                                                                <input ng-model="newConstraint.plugin"
+                                                                       placeholder="plugin class name "
+                                                                       ng-class="{ 'form-control-invalid' : !newConstraint.plugin}"
                                                                        type="text"/>
                                                             </md-input-container>
                                                         </div>
