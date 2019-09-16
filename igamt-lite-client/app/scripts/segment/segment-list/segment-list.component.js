@@ -1309,7 +1309,7 @@ angular.module('igl').controller('SegmentListCtrl', function($scope, $rootScope,
 
   $scope.save=function () {
 
-      if($rootScope.segment.name=='OBX'&& !$rootScope.isValidCoConstraints()){
+      if($rootScope.segment.name=='OBX' && !$rootScope.isValidCoConstraints()){
           $rootScope.saveError=true;
 
       }else{

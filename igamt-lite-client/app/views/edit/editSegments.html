@@ -813,52 +813,45 @@
                 <span ng-show="hasError(node.id) && validationResult && isSegmentValidated()&&node.added!=='yes'"><i class="fa fa-exclamation-triangle" style="color:red;"></i></span>
                 <span ng-show="!hasError(node.id) && validationResult && isSegmentValidated()&&node.added!=='yes'"><i class="fa fa-check-circle" style="color:green;"></i></span>
                 <span ng-if="node.added=='yes'&& validationResult && isSegmentValidated()"><i class="glyphicon glyphicon-exclamation-sign" style="color: blue"></i>
-                        <md-tooltip md-direction="right" >
-                            <span> This Field is ignored by the validation since it is not a part of the original segment</span>
-                        </md-tooltip>
+                    <md-tooltip md-direction="right">
+                        <span> This Field is ignored by the validation since it is not a part of the original segment</span>
+                    </md-tooltip>
                 </span>
                 <span class="label label-field label-icon">F</span>
                 <span>{{node.position}}.</span>
 
-
                 <span>
                     {{node.name}}
-
                 </span>
-                    <a ng-if="node.added=='yes'" ng-click="editField(node,segment)" class="point">
-                        <span><i class="fa fa-pencil fa-fw"></i></span>
-                        <md-tooltip md-direction="right" >
-                            <span> Edit Name </span>
-                        </md-tooltip>
-                    </a>
-                    <span ng-if="(!validationResult ||! isSegmentValidated())&&node.added=='yes'"><i class="glyphicon glyphicon-exclamation-sign" style="color: blue"></i>
+
+                <a ng-if="node.added=='yes'" ng-click="editField(node,segment)" class="point">
+                    <span><i class="fa fa-pencil fa-fw"></i></span>
+                    <md-tooltip md-direction="right" >
+                        <span> Edit Name </span>
+                    </md-tooltip>
+                </a>
+                <span ng-if="(!validationResult ||! isSegmentValidated())&&node.added=='yes'"><i class="glyphicon glyphicon-exclamation-sign" style="color: blue"></i>
                         <md-tooltip md-direction="right" >
                             <span> This Field will be ignored by the validation since it is not a part of the original segment</span>
                         </md-tooltip>
                     </span>
-                    <a ng-click="deleteField(node,segment)" class="point" ng-if="node.added=='yes'&& node.position+''==segment.fields.length+''">
-                        <span style="color: red"><i class="glyphicon glyphicon-trash"></i></span>
-                        <md-tooltip md-direction="right" >
-                            <span> Delete Field </span>
-                        </md-tooltip>
-                    </a>
-
-
+                <a ng-click="deleteField(node,segment)" class="point" ng-if="node.added=='yes'&& node.position+''==segment.fields.length+''">
+                    <span style="color: red"><i class="glyphicon glyphicon-trash"></i></span>
+                    <md-tooltip md-direction="right" >
+                        <span> Delete Field </span>
+                    </md-tooltip>
+                </a>
             </ng-form>
         </td>
         <td ng-class="hasUsageError(node.id)" data-toggle="tooltip" title="{{displayMessageError(node.id,'USAGE')}}">
             <span ng-show="node.usage !=='C' || (node.usage==='C' && countPredicate(node.position)===0 )" ng-controller="FormRowCtrl">
                 <ng-form name="{{formName}}" class="form-inline">
-                             <md-select placeholder="Select Usage" name="usage" id="usage" class="inside-table"
-                                        ng-change="setUsage(node); openPredicateDialog(node); setCardinalities(node)"
-                                        ng-class="{ 'has-error has-feedback' : {{formName}}.usage.$invalid}"
-                                        required ng-model="node.usage" >
-
-                                 <md-option ng-repeat="usage in config.usages track by $index" ng-value="usage">
-                                     {{usage}}
-
-                                 </md-option>
-                             </md-select>
+                    <md-select placeholder="Select Usage" name="usage" id="usage" class="inside-table"
+                               ng-change="setUsage(node); openPredicateDialog(node); setCardinalities(node)"
+                               ng-class="{ 'has-error has-feedback' : {{formName}}.usage.$invalid}"
+                               required ng-model="node.usage" >
+                        <md-option ng-repeat="usage in config.usages track by $index" ng-value="usage">{{usage}}</md-option>
+                    </md-select>
                 </ng-form>
             </span>
             <span ng-show="node.usage==='C' && countPredicate(node.position) !==0">
@@ -893,10 +886,8 @@
                                                        ng-class="{ 'has-error' : {{formName}}.max.$invalid}"
                                                        ng-pattern="/^\d+$|^\*?$/"
                                                        ng-model="node.max" required>
-
                         </md-input-container>
                 </ng-form>
-
         </td>
         <td  ng-class="{'emptyCol':datatypesMap[node.datatype.id].components.length >0 || node.minLength === 'NA' || node.maxLength === 'NA','has-validation-error':hasLengthError(node.id)}" data-toggle="tooltip" title="{{displayMessageError(node.id,'LENGTH')}}" ng-show="viewSettings.isVisibleColumn('length')">
             <div ng-show="datatypesMap[node.datatype.id].components.length == 0" ng-controller="FormRowCtrl" ng-init="init(node)">
@@ -982,7 +973,7 @@
                 </div>
             </ng-form>
         </td>
-        <td ng-class="{'emptyCol':!isAvailableForValueSet(node)}" ng-show="viewSettings.isVisibleColumn('valueSet')">
+        <td ng-class="{'emptyCol':!isAvailableForValueSet(node), 'has-error': segment.name === 'OBX' && node.position === 2 && findingBindings(node).length !== 1}" ng-show="viewSettings.isVisibleColumn('valueSet')">
             <div ng-show="isAvailableForValueSet(node)">
                 <div ng-repeat="binding in findingBindings(node) track by $index">
                     <span class="badge label-white">
@@ -997,6 +988,11 @@
                 <a ng-click="editModalBindingForSeg(node)" class="point">
                     <span><i class="fa fa-pencil fa-fw"></i></span>
                 </a>
+                <div ng-show="segment.name === 'OBX' && node.position === 2 && findingBindings(node).length !== 1">
+                    <p class="warning">OBX-2 MUST have Value Type ValueSet (like HL70125).</p>
+                </div>
+
+
             </div>
         </td>
         <td ng-class="{'emptyCol':!isAvailableConstantValue(node)}" ng-show="viewSettings.isVisibleColumn('singleElm')">
@@ -1641,7 +1637,6 @@
         </form>
     </md-dialog>
 </script>
-
 <script type="text/ng-template" id="EditField.html">
     <md-dialog aria-label="Delete Field">
         <form ng-cloak>
@@ -1677,7 +1672,6 @@
     </md-dialog>
 </script>
 <script type="text/ng-template" id="otherDTModal.html">
-
     <md-dialog aria-label="change Dt">
         <form ng-cloak>
             <md-toolbar>
