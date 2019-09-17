@@ -800,22 +800,24 @@ public class XMLExportTool {
 
         for (ValueSetBinding binding : bindings) {
           try {
-            Table table = tablesMap.get(binding.getTableId());
-            bindingStrength = binding.getBindingStrength().toString();
-            bindingLocation = binding.getBindingLocation();
-            if (table != null && table.getBindingIdentifier() != null
-                && !table.getBindingIdentifier().equals("")) {
-              if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
-                if (table.getBindingIdentifier().startsWith("0396")
-                    || table.getBindingIdentifier().startsWith("HL70396")) {
-                  bindingString = bindingString + table.getBindingIdentifier() + ":";
+            if (binding.getTableId() !=null) {
+              Table table = tablesMap.get(binding.getTableId());
+              bindingStrength = binding.getBindingStrength().toString();
+              bindingLocation = binding.getBindingLocation();
+              if (table != null && table.getBindingIdentifier() != null
+                  && !table.getBindingIdentifier().equals("")) {
+                if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
+                  if (table.getBindingIdentifier().startsWith("0396")
+                      || table.getBindingIdentifier().startsWith("HL70396")) {
+                    bindingString = bindingString + table.getBindingIdentifier() + ":";
+                  } else {
+                    bindingString = bindingString + table.getBindingIdentifier() + "_"
+                        + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  }
                 } else {
-                  bindingString = bindingString + table.getBindingIdentifier() + "_"
-                      + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  bindingString = bindingString + table.getBindingIdentifier() + ":";
                 }
-              } else {
-                bindingString = bindingString + table.getBindingIdentifier() + ":";
-              }
+              }  
             }
           } catch (Exception e) {
             throw new TableSerializationException(e, binding.getLocation());
@@ -953,22 +955,24 @@ public class XMLExportTool {
 
         for (ValueSetBinding binding : bindings) {
           try {
-            Table table = tablesMap.get(binding.getTableId());
-            bindingStrength = binding.getBindingStrength().toString();
-            bindingLocation = binding.getBindingLocation();
-            if (table != null && table.getBindingIdentifier() != null
-                && !table.getBindingIdentifier().equals("")) {
-              if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
-                if (table.getBindingIdentifier().startsWith("0396")
-                    || table.getBindingIdentifier().startsWith("HL70396")) {
-                  bindingString = bindingString + table.getBindingIdentifier() + ":";
+            if(binding.getTableId() != null) {
+              Table table = tablesMap.get(binding.getTableId());
+              bindingStrength = binding.getBindingStrength().toString();
+              bindingLocation = binding.getBindingLocation();
+              if (table != null && table.getBindingIdentifier() != null
+                  && !table.getBindingIdentifier().equals("")) {
+                if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
+                  if (table.getBindingIdentifier().startsWith("0396")
+                      || table.getBindingIdentifier().startsWith("HL70396")) {
+                    bindingString = bindingString + table.getBindingIdentifier() + ":";
+                  } else {
+                    bindingString = bindingString + table.getBindingIdentifier() + "_"
+                        + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  }
                 } else {
-                  bindingString = bindingString + table.getBindingIdentifier() + "_"
-                      + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  bindingString = bindingString + table.getBindingIdentifier() + ":";
                 }
-              } else {
-                bindingString = bindingString + table.getBindingIdentifier() + ":";
-              }
+              }  
             }
           } catch (Exception e) {
             throw new TableSerializationException(e, binding.getLocation());
@@ -1106,22 +1110,24 @@ public class XMLExportTool {
 
         for (ValueSetBinding binding : bindings) {
           try {
-            Table table = tablesMap.get(binding.getTableId());
-            bindingStrength = binding.getBindingStrength().toString();
-            bindingLocation = binding.getBindingLocation();
-            if (table != null && table.getBindingIdentifier() != null
-                && !table.getBindingIdentifier().equals("")) {
-              if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
-                if (table.getBindingIdentifier().startsWith("0396")
-                    || table.getBindingIdentifier().startsWith("HL70396")) {
-                  bindingString = bindingString + table.getBindingIdentifier() + ":";
+            if(binding.getTableId() != null) {
+              Table table = tablesMap.get(binding.getTableId());
+              bindingStrength = binding.getBindingStrength().toString();
+              bindingLocation = binding.getBindingLocation();
+              if (table != null && table.getBindingIdentifier() != null
+                  && !table.getBindingIdentifier().equals("")) {
+                if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
+                  if (table.getBindingIdentifier().startsWith("0396")
+                      || table.getBindingIdentifier().startsWith("HL70396")) {
+                    bindingString = bindingString + table.getBindingIdentifier() + ":";
+                  } else {
+                    bindingString = bindingString + table.getBindingIdentifier() + "_"
+                        + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  }
                 } else {
-                  bindingString = bindingString + table.getBindingIdentifier() + "_"
-                      + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  bindingString = bindingString + table.getBindingIdentifier() + ":";
                 }
-              } else {
-                bindingString = bindingString + table.getBindingIdentifier() + ":";
-              }
+              }              
             }
           } catch (Exception e) {
             throw new TableSerializationException(e, binding.getLocation());
@@ -2050,18 +2056,20 @@ public class XMLExportTool {
               String bindingLocation = null;
 
               for (ValueSetBinding binding : bindings) {
-                Table table = tablesMap.get(binding.getTableId());
-                if (table == null)
-                  throw new TableNotFoundException(binding.getTableId());
-                bindingStrength = binding.getBindingStrength().toString();
-                bindingLocation = binding.getBindingLocation();
-                if (table != null && table.getBindingIdentifier() != null
-                    && !table.getBindingIdentifier().equals("")) {
-                  if (table.getHl7Version() != null && !table.getHl7Version().equals("") && !table.getHl7Version().equals(profile.getMetaData().getHl7Version())) {
-                    bindingString = bindingString + table.getBindingIdentifier() + "_" + table.getHl7Version().replaceAll("\\.", "-") + ":";
-                  } else {
-                    bindingString = bindingString + table.getBindingIdentifier() + ":";
-                  }
+                if(binding.getTableId() != null) {
+                  Table table = tablesMap.get(binding.getTableId());
+                  if (table == null)
+                    throw new TableNotFoundException(binding.getTableId());
+                  bindingStrength = binding.getBindingStrength().toString();
+                  bindingLocation = binding.getBindingLocation();
+                  if (table != null && table.getBindingIdentifier() != null
+                      && !table.getBindingIdentifier().equals("")) {
+                    if (table.getHl7Version() != null && !table.getHl7Version().equals("") && !table.getHl7Version().equals(profile.getMetaData().getHl7Version())) {
+                      bindingString = bindingString + table.getBindingIdentifier() + "_" + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                    } else {
+                      bindingString = bindingString + table.getBindingIdentifier() + ":";
+                    }
+                  }                  
                 }
               }
 
@@ -2308,17 +2316,23 @@ public class XMLExportTool {
 
               for (ValueSetBinding binding : bindings) {
                 try {
-                  Table table = tablesMap.get(binding.getTableId());
-                  bindingStrength = binding.getBindingStrength().toString();
-                  bindingLocation = binding.getBindingLocation();
-                  if (table != null && table.getBindingIdentifier() != null && !table.getBindingIdentifier().equals("")) {
-                    if (table.getHl7Version() != null && !table.getHl7Version().equals("") && !table.getHl7Version().equals(profile.getMetaData().getHl7Version())) {
-                      bindingString = bindingString + table.getBindingIdentifier() + "_"  + table.getHl7Version().replaceAll("\\.", "-") + ":";
-                     
-                    } else {
-                      bindingString = bindingString + table.getBindingIdentifier() + ":";
+                  if(binding.getTableId() != null) {
+                    Table table = tablesMap.get(binding.getTableId());
+                    if(table != null) {
+                      if(binding.getBindingStrength() != null) bindingStrength = binding.getBindingStrength().toString();
+                      
+                      bindingLocation = binding.getBindingLocation();
+                      if (table != null && table.getBindingIdentifier() != null && !table.getBindingIdentifier().equals("")) {
+                        if (table.getHl7Version() != null && !table.getHl7Version().equals("") && !table.getHl7Version().equals(profile.getMetaData().getHl7Version())) {
+                          bindingString = bindingString + table.getBindingIdentifier() + "_"  + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                         
+                        } else {
+                          bindingString = bindingString + table.getBindingIdentifier() + ":";
+                        }
+                      }                       
                     }
                   }
+
                 } catch (Exception e) {
                   throw new TableSerializationException(e, binding.getLocation());
                 }
@@ -3116,21 +3130,27 @@ public class XMLExportTool {
 
         for (ValueSetBinding binding : bindings) {
           try {
-            Table table = tablesMap.get(binding.getTableId());
-            if (table != null && table.getBindingIdentifier() != null
-                && !table.getBindingIdentifier().equals("")) {
-              if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
-                if (table.getBindingIdentifier().startsWith("0396")
-                    || table.getBindingIdentifier().startsWith("HL70396")) {
-                  bindingString = bindingString + table.getBindingIdentifier() + ":";
-                } else {
-                  bindingString = bindingString + table.getBindingIdentifier() + "_"
-                      + table.getHl7Version().replaceAll("\\.", "-") + ":";
-                }
-              } else {
-                bindingString = bindingString + table.getBindingIdentifier() + ":";
+            if(binding.getTableId() != null) {
+              Table table = tablesMap.get(binding.getTableId());
+              
+              if(table != null) {
+                if (table != null && table.getBindingIdentifier() != null
+                    && !table.getBindingIdentifier().equals("")) {
+                  if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
+                    if (table.getBindingIdentifier().startsWith("0396")
+                        || table.getBindingIdentifier().startsWith("HL70396")) {
+                      bindingString = bindingString + table.getBindingIdentifier() + ":";
+                    } else {
+                      bindingString = bindingString + table.getBindingIdentifier() + "_"
+                          + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                    }
+                  } else {
+                    bindingString = bindingString + table.getBindingIdentifier() + ":";
+                  }
+                }                
               }
             }
+            
           } catch (Exception e) {
             throw new TableSerializationException(e, binding.getLocation());
           }
@@ -3232,21 +3252,24 @@ public class XMLExportTool {
 
         for (ValueSetBinding binding : bindings) {
           try {
-            Table table = tablesMap.get(binding.getTableId());
-            if (table != null && table.getBindingIdentifier() != null
-                && !table.getBindingIdentifier().equals("")) {
-              if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
-                if (table.getBindingIdentifier().startsWith("0396")
-                    || table.getBindingIdentifier().startsWith("HL70396")) {
-                  bindingString = bindingString + table.getBindingIdentifier() + ":";
+            if(binding.getTableId() != null) {
+              Table table = tablesMap.get(binding.getTableId());
+              if (table != null && table.getBindingIdentifier() != null
+                  && !table.getBindingIdentifier().equals("")) {
+                if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
+                  if (table.getBindingIdentifier().startsWith("0396")
+                      || table.getBindingIdentifier().startsWith("HL70396")) {
+                    bindingString = bindingString + table.getBindingIdentifier() + ":";
+                  } else {
+                    bindingString = bindingString + table.getBindingIdentifier() + "_"
+                        + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  }
                 } else {
-                  bindingString = bindingString + table.getBindingIdentifier() + "_"
-                      + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  bindingString = bindingString + table.getBindingIdentifier() + ":";
                 }
-              } else {
-                bindingString = bindingString + table.getBindingIdentifier() + ":";
-              }
+              }              
             }
+
           } catch (Exception e) {
             throw new TableSerializationException(e, binding.getLocation());
           }
@@ -3346,21 +3369,24 @@ public class XMLExportTool {
 
         for (ValueSetBinding binding : bindings) {
           try {
-            Table table = tablesMap.get(binding.getTableId());
-            if (table != null && table.getBindingIdentifier() != null
-                && !table.getBindingIdentifier().equals("")) {
-              if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
-                if (table.getBindingIdentifier().startsWith("0396")
-                    || table.getBindingIdentifier().startsWith("HL70396")) {
-                  bindingString = bindingString + table.getBindingIdentifier() + ":";
+            if(binding.getTableId() != null) {
+              Table table = tablesMap.get(binding.getTableId());
+              if (table != null && table.getBindingIdentifier() != null
+                  && !table.getBindingIdentifier().equals("")) {
+                if (table.getHl7Version() != null && !table.getHl7Version().equals("")) {
+                  if (table.getBindingIdentifier().startsWith("0396")
+                      || table.getBindingIdentifier().startsWith("HL70396")) {
+                    bindingString = bindingString + table.getBindingIdentifier() + ":";
+                  } else {
+                    bindingString = bindingString + table.getBindingIdentifier() + "_"
+                        + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  }
                 } else {
-                  bindingString = bindingString + table.getBindingIdentifier() + "_"
-                      + table.getHl7Version().replaceAll("\\.", "-") + ":";
+                  bindingString = bindingString + table.getBindingIdentifier() + ":";
                 }
-              } else {
-                bindingString = bindingString + table.getBindingIdentifier() + ":";
-              }
+              }  
             }
+            
           } catch (Exception e) {
             throw new TableSerializationException(e, binding.getLocation());
           }
