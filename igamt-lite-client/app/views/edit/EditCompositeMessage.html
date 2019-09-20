@@ -233,7 +233,6 @@
         <td class="col-md-1 col-fixed-33 emptyCol" ng-if="node.type!=='field' && node.type!=='component'">
         </td>
         <td class="col-md-1 col-fixed-33" ng-if="node.type==='field' || node.type==='component'">
-
             <a class="point" ng-repeat="table in node.tables">
                 <span>{{table.bindingIdentifier}}</span>
             </a>

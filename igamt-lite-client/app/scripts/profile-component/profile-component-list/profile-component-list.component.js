@@ -107,9 +107,14 @@ angular.module('igl').controller('ListProfileComponentCtrl', function($scope, $m
   $scope.print=function(x){
 
     console.log(x);
-  }
+  };
+
   $scope.findingBindingsPc = function(node) {
-    var result = [];
+      console.log("_________________________");
+      console.log(node);
+      console.log("_________________________");
+
+      var result = [];
 
     if (node && (node.type === "field" || node.type === "component")) {
       var index = node.path.indexOf(".");
@@ -700,8 +705,15 @@ angular.module('igl').controller('ListProfileComponentCtrl', function($scope, $m
     node.valueSetBindings = null;
     $rootScope.recordChanged ();
     $scope.editForm.$pristine=false;
-
   };
+
+  $scope.makeNULLBinding = function(node) {
+      node.valueSetBindings = [];
+      node.valueSetBindings.push({ tableId: null, bindingStrength: null, location: node.path.substring(node.path.indexOf('.') + 1), bindingLocation: null, usage: null, type: "valueset" });
+      $rootScope.recordChanged ();
+      $scope.editForm.$pristine=false;
+  };
+
   $scope.cancelComments = function(node) {
     node.comments = null;
     $rootScope.recordChanged ();

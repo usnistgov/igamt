@@ -521,15 +521,14 @@
                 <div ng-repeat="binding in findingBindings(node)">
                     <span class="badge label-white">
                         <span ng-class="{'label-message-icon' : binding.bindingFrom == 'compositeProfile', 'label-field-icon' : binding.bindingFrom == 'segment', 'label-component-icon' : binding.bindingFrom == 'field', 'label-sub-component-icon' : binding.bindingFrom == 'component'}"><i class="fa fa-circle fa-fw"/></span>
-                    <span title="For this Composite Profile" ng-show="binding.bindingFrom == 'compositeProfile'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
-                    <span title="For {{getSegmentLabel(compositeProfile.segmentsMap[node.segment])}}" ng-show="binding.bindingFrom == 'segment'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
-                    <span title="For {{getDatatypeLabel(compositeProfile.datatypesMap[node.fieldDT])}}" ng-show="binding.bindingFrom == 'field'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
-                    <span title="For {{getDatatypeLabel(compositeProfile.datatypesMap[node.componentDT])}}" ng-show="binding.bindingFrom == 'component'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
-                    <span title="For this Composite Profile" ng-show="binding.bindingFrom == 'compositeProfile' && binding.type == 'singlecode'" ng-click="redirectVS(binding)">{{binding.code.value}}<i class="fa fa-arrow-right" aria-hidden="true"></i>[{{binding.code.codeSystem}}]</span>
-                    <span title="For {{getSegmentLabel(compositeProfile.segmentsMap[node.segment])}}" ng-show="binding.bindingFrom == 'segment' && binding.type == 'singlecode'" ng-click="redirectVS(binding)">{{binding.code.value}}<i class="fa fa-arrow-right" aria-hidden="true"></i>[{{binding.code.codeSystem}}]</span>
-                    <span title="For {{getDatatypeLabel(compositeProfile.datatypesMap[node.fieldDT])}}" ng-show="binding.bindingFrom == 'field' && binding.type == 'singlecode'" ng-click="redirectVS(binding)">{{binding.code.value}}<i class="fa fa-arrow-right" aria-hidden="true"></i>[{{binding.code.codeSystem}}]</span>
-                    <span title="For {{getDatatypeLabel(compositeProfile.datatypesMap[node.componentDT])}}" ng-show="binding.bindingFrom == 'component' && binding.type == 'singlecode'" ng-click="redirectVS(binding)">{{binding.code.value}}<i class="fa fa-arrow-right" aria-hidden="true"></i>[{{binding.code.codeSystem}}]</span>
-                    <!--<span title="Delete ValueSet Binding" ng-show="binding.bindingFrom == 'message'" ng-click="deleteBinding(binding)"><i class="fa fa-times fa-fw edit-icon"></i></span>-->
+                        <span title="For this Composite Profile" ng-show="binding.tableId && binding.bindingFrom == 'compositeProfile'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
+                        <span title="For {{getSegmentLabel(compositeProfile.segmentsMap[node.segment])}}" ng-show="binding.tableId && binding.bindingFrom == 'segment'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
+                        <span title="For {{getDatatypeLabel(compositeProfile.datatypesMap[node.fieldDT])}}" ng-show="binding.tableId && binding.bindingFrom == 'field'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
+                        <span title="For {{getDatatypeLabel(compositeProfile.datatypesMap[node.componentDT])}}" ng-show="binding.tableId && binding.bindingFrom == 'component'" ng-click="redirectVS(binding)">{{getTableLabel(binding)}}</span>
+                        <span title="For this Composite Profile" ng-show="binding.tableId && binding.bindingFrom == 'compositeProfile' && binding.type == 'singlecode'" ng-click="redirectVS(binding)">{{binding.code.value}}<i class="fa fa-arrow-right" aria-hidden="true"></i>[{{binding.code.codeSystem}}]</span>
+                        <span title="For {{getSegmentLabel(compositeProfile.segmentsMap[node.segment])}}" ng-show="binding.tableId && binding.bindingFrom == 'segment' && binding.type == 'singlecode'" ng-click="redirectVS(binding)">{{binding.code.value}}<i class="fa fa-arrow-right" aria-hidden="true"></i>[{{binding.code.codeSystem}}]</span>
+                        <span title="For {{getDatatypeLabel(compositeProfile.datatypesMap[node.fieldDT])}}" ng-show="binding.tableId && binding.bindingFrom == 'field' && binding.type == 'singlecode'" ng-click="redirectVS(binding)">{{binding.code.value}}<i class="fa fa-arrow-right" aria-hidden="true"></i>[{{binding.code.codeSystem}}]</span>
+                        <span ng-show="!binding.tableId">NULL</span>
                     </span>
                 </div>
 
