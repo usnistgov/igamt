@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 public abstract class ValueSetOrSingleCodeBinding {
 	@Id
 	protected String id;
-
 	protected String location;
 	protected String tableId;
 	@Deprecated

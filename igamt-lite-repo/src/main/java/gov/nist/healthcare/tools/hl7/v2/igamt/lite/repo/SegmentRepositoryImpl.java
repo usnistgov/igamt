@@ -121,7 +121,7 @@ public class SegmentRepositoryImpl implements SegmentOperations {
 
   @Override
   public List<Segment> findByScopeAndVersion(String scope, String version) {
-    Criteria where = Criteria.where("scope").is(SCOPE.USER.toString());
+    Criteria where = Criteria.where("scope").is(scope);
     where.andOperator(Criteria.where("hl7Version").is(version));
     Query qry = Query.query(where);
     List<Segment> segments = mongo.find(qry, Segment.class);

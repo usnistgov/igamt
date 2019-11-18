@@ -40,6 +40,8 @@ import org.springframework.stereotype.Service;
 
 import gov.nist.healthcare.nht.acmgt.repo.AccountRepository;
 import gov.nist.healthcare.nht.acmgt.service.UserService;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.data.BindingCollector;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.data.DataFixer;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.AppInfo;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Case;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Code;
@@ -232,7 +234,10 @@ public class Bootstrap implements InitializingBean {
 
 	@Autowired
 	private ProfileSerialization profileSerialization;
-
+	@Autowired
+	DataFixer dataFixer;
+	@Autowired
+	BindingCollector bindingCollector;
 	/*
 	 * 
 	 */
@@ -446,6 +451,8 @@ public class Bootstrap implements InitializingBean {
 //		  fixTableLibraries();
 //		  fixDuplicatedMessageStructure();
 
+		  //this.dataFixer.fixFromCSV();
+		  this.bindingCollector.collect();
 	  }
 
 	  private void createDynTable0396() throws IOException {
