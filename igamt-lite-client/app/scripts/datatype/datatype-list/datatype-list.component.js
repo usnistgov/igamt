@@ -22,6 +22,7 @@ angular.module('igl')
     $scope.viewSettings = ViewSettings;
     $scope.selectedChildren = [];
     $scope.saving = false;
+    $scope.regexList = undefined;
     $scope.init = function() {
 
       $scope.accordStatus = {
@@ -35,6 +36,100 @@ angular.module('igl')
       $scope.tabStatus = {
         active: 1
       };
+
+    };
+
+    $scope.usageChange = function(dt, name, item){
+      if (item.usage === 'X') {
+        $scope.makeX(item.position, dt.dateTimeConstraints.dateTimeComponentDefinitions);
+      }
+
+      if (item.usage === 'R') {
+        $scope.makeR(item.position, dt.dateTimeConstraints.dateTimeComponentDefinitions);
+      }
+
+      if (item.usage === 'RE') {
+        $scope.makeRE(item.position, dt.dateTimeConstraints.dateTimeComponentDefinitions);
+      }
+
+      if (item.usage === 'O') {
+        $scope.makeO(item.position, dt.dateTimeConstraints.dateTimeComponentDefinitions);
+      }
+
+      $scope.loadRegexDataAndUpdateAssertion();
+      // this.updateChanges();
+    };
+
+    $scope.makeX = function(position, dateTimeComponentDefinitions) {
+      angular.forEach(dateTimeComponentDefinitions, function(item) {
+        if (item.position > position && item.position !== 11) {
+          item.usage = 'X';
+        }
+      });
+    };
+
+    $scope.makeR = function(position, dateTimeComponentDefinitions) {
+      angular.forEach(dateTimeComponentDefinitions, function(item) {
+        if (item.position > position && item.position !== 11) {
+          item.usage = 'R';
+        }
+      });
+    };
+
+    $scope.makeRE = function(position, dateTimeComponentDefinitions) {
+      angular.forEach(dateTimeComponentDefinitions, function(item) {
+        if (item.position < position && item.position !== 11 && item.usage !== 'R') {
+          item.usage = 'RE';
+        }
+        if (item.position > position && item.position !== 11 && item.usage === 'R') {
+          item.usage = 'RE';
+        }
+      });
+    };
+
+    $scope.makeO = function(position, dateTimeComponentDefinitions) {
+      angular.forEach(dateTimeComponentDefinitions, function(item) {
+        if (item.position < position && item.position !== 11 && item.usage !== 'R' && item.usage !== 'RE') {
+          item.usage = 'O';
+        }
+        if (item.position > position && item.position !== 11 && (item.usage === 'R' || item.usage === 'RE')) {
+          item.usage = 'O';
+        }
+      });
+    };
+
+    $scope.timeZoneUsageChange = function(dt, name, item){
+      $scope.loadRegexDataAndUpdateAssertion(dt.name);
+      // this.updateChanges();
+    };
+
+    $scope.loadRegexDataAndUpdateAssertion = function(dtName) {
+      // if (!$scope.regexList) {
+        // this.http.get('assets/' + dtName + ' regex list.csv', {responseType: 'text'})
+        //     .subscribe((data) => {
+        //   this.regexList = {};
+        // for (const line of data.split(/[\r\n]+/)) {
+        //
+        //   const lineSplits = line.split(',');
+        //   const key = lineSplits[0] + '-' + lineSplits[1] + '-' + lineSplits[2];
+        //
+        //   this.regexList[key] = {
+        //     format : lineSplits[3],
+        //     errorMessage : lineSplits[4],
+        //     regex : lineSplits[5],
+        //   };
+        // }
+
+        // this.updateAssertion();
+      // });
+      // } else {
+      //   // this.updateAssertion();
+      // }
+      //
+      // $http.get('api/usernames').then(function(response) {
+      //   var userList = response.data;
+      // }, function(error) {
+      // });
 
     };
 
