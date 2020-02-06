@@ -169,7 +169,6 @@ angular.module('igl')
 
 
     $scope.genHTML = function(dateTimeConstraints) {
-      console.log(dateTimeConstraints);
       var pattern = dateTimeConstraints.simplePattern;
 
       if (pattern && dateTimeConstraints.dateTimeComponentDefinitions) {
@@ -185,8 +184,6 @@ angular.module('igl')
         result = result.replace('S2', 'S');
         result = result.replace('S3', 'S');
         result = result.replace('S4', 'S');
-
-        console.log(result);
         return result;
       }
 

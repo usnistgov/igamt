@@ -77,7 +77,7 @@ public class Datatype extends DataModelWithConstraints
 
   protected DTMConstraints dtmConstraints;
   
-  private boolean newMethodForDateTime;
+  private boolean newMethodForDateTime = false;
   
   private DateTimeConstraints dateTimeConstraints;
 
