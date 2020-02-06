@@ -56,8 +56,7 @@ angular.module('igl')
         $scope.makeO(item.position, dt.dateTimeConstraints.dateTimeComponentDefinitions);
       }
 
-      $scope.loadRegexDataAndUpdateAssertion();
-      // this.updateChanges();
+      $scope.loadRegexDataAndUpdateAssertion(dt.name, dt);
     };
 
     $scope.makeX = function(position, dateTimeComponentDefinitions) {
@@ -70,7 +69,7 @@ angular.module('igl')
 
     $scope.makeR = function(position, dateTimeComponentDefinitions) {
       angular.forEach(dateTimeComponentDefinitions, function(item) {
-        if (item.position > position && item.position !== 11) {
+        if (item.position < position && item.position !== 11) {
           item.usage = 'R';
         }
       });
@@ -99,38 +98,127 @@ angular.module('igl')
     };
 
     $scope.timeZoneUsageChange = function(dt, name, item){
-      $scope.loadRegexDataAndUpdateAssertion(dt.name);
-      // this.updateChanges();
+      $scope.loadRegexDataAndUpdateAssertion(dt.name, dt);
     };
 
-    $scope.loadRegexDataAndUpdateAssertion = function(dtName) {
-      // if (!$scope.regexList) {
-        // this.http.get('assets/' + dtName + ' regex list.csv', {responseType: 'text'})
-        //     .subscribe((data) => {
-        //   this.regexList = {};
-        // for (const line of data.split(/[\r\n]+/)) {
-        //
-        //   const lineSplits = line.split(',');
-        //   const key = lineSplits[0] + '-' + lineSplits[1] + '-' + lineSplits[2];
-        //
-        //   this.regexList[key] = {
-        //     format : lineSplits[3],
-        //     errorMessage : lineSplits[4],
-        //     regex : lineSplits[5],
-        //   };
-        // }
+    $scope.loadRegexDataAndUpdateAssertion = function(dtName, dt) {
+      if (!$scope.regexList) {
+        $scope.regexList = {};
 
-        // this.updateAssertion();
-      // });
-      // } else {
-      //   // this.updateAssertion();
-      // }
-      //
-      // $http.get('api/usernames').then(function(response) {
-      //   var userList = response.data;
-      // }, function(error) {
-      // });
+        for (var i = 0, len = $rootScope.config.dateTimeCSV[dtName].split(/[\r\n]+/).length; i < len; i++) {
+          var line = $rootScope.config.dateTimeCSV[dtName].split(/[\r\n]+/)[i];
 
+          var lineSplits = line.split(',');
+          var key = lineSplits[0] + '-' + lineSplits[1] + '-' + lineSplits[2];
+
+          $scope.regexList[key] = {
+            format: lineSplits[3],
+            errorMessage: lineSplits[4],
+            regex: lineSplits[5],
+          };
+        }
+
+        $scope.updateAssertion(dt);
+      }else {
+        $scope.updateAssertion(dt);
+      }
+    };
+
+    $scope.updateAssertion = function(dt) {
+      if ($scope.regexList) {
+        $scope.updateDateTimeConstraints($scope.generateKey(dt.dateTimeConstraints.dateTimeComponentDefinitions), dt.dateTimeConstraints);
+      }
+    };
+
+    $scope.updateDateTimeConstraints = function(key, dateTimeConstraints) {
+      if ($scope.regexList[key]) {
+        dateTimeConstraints.simplePattern = $scope.regexList[key].format;
+        dateTimeConstraints.errorMessage = $scope.regexList[key].errorMessage;
+        dateTimeConstraints.regex = $scope.regexList[key].regex;
+      }
+    };
+
+    $scope.generateKey = function(dateTimeComponentDefinitions) {
+      var countR = 0;
+      var countX = 0;
+      var timeZoneUsage = null;
+
+      angular.forEach(dateTimeComponentDefinitions, function (item) {
+        if (item.position === 11) {
+          timeZoneUsage = item.usage;
+        } else {
+          if (item.usage === 'R') {
+            countR++;
+          }
+          if (item.usage === 'X') {
+            countX++;
+          }
+        }
+      });
+
+      if (!timeZoneUsage) {
+        timeZoneUsage = 'X';
+      }
+      if (timeZoneUsage === 'RE' || timeZoneUsage === 'O') {
+        timeZoneUsage = 'REO';
+      }
+
+      return countR + '-' + countX + '-' + timeZoneUsage;
+
+    };
+
+
+    $scope.genHTML = function(dateTimeConstraints) {
+      console.log(dateTimeConstraints);
+      var pattern = dateTimeConstraints.simplePattern;
+
+      if (pattern && dateTimeConstraints.dateTimeComponentDefinitions) {
+
+        var result  = pattern.replace('YYYY', '<b>YYYY</b>');
+
+        for (var i = 0, len = dateTimeConstraints.dateTimeComponentDefinitions.length; i < len; i++) {
+          result = $scope.replaceItemByUsage(dateTimeConstraints.dateTimeComponentDefinitions[i], result);
+        }
+
+        result = result.replace('mm', 'MM');
+        result = result.replace('S1', 'S');
+        result = result.replace('S2', 'S');
+        result = result.replace('S3', 'S');
+        result = result.replace('S4', 'S');
+
+        console.log(result);
+        return result;
+      }
+
+      return null;
+    };
+
+    $scope.replaceItemByUsage = function(item, result) {
+      if (item.usage === 'R' || item.usage === 'RE') {
+        if (item.position === 2) {
+          result = result.replace('MM', '<b>MM</b>');
+        } else if (item.position === 3) {
+          result = result.replace('DD', '<b>DD</b>');
+        } else if (item.position === 4) {
+          result = result.replace('HH', '<b>HH</b>');
+        } else if (item.position === 5) {
+          result = result.replace('mm', '<b>MM</b>');
+        } else if (item.position === 6) {
+          result = result.replace('SS', '<b>SS</b>');
+        } else if (item.position === 7) {
+          result = result.replace('S1', '<b>S</b>');
+        } else if (item.position === 8) {
+          result = result.replace('S2', '<b>S</b>');
+        } else if (item.position === 9) {
+          result = result.replace('S3', '<b>S</b>');
+        } else if (item.position === 10) {
+          result = result.replace('S4', '<b>S</b>');
+        } else if (item.position === 11) {
+          result = result.replace('+/-ZZZZ', '<b>+/-ZZZZ</b>');
+        }
+      }
+
+      return result;
     };
 
 

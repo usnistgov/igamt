@@ -46,6 +46,7 @@ public class IGDocumentConfiguration {
 	private HashMap<Integer, String> dtmCUsageIsValuedRegexCodes = new HashMap<Integer, String>();
 	private HashMap<Integer, String> dtmCUsageIsNOTValuedRegexCodes = new HashMap<Integer, String>();
 	private HashMap<Integer, String> dtmCUsageIsLiteralValueRegexCodes = new HashMap<Integer, String>();
+	private HashMap<String, String> dateTimeCSV = new HashMap<String, String>();
 	
 	public Set<String> getUsages() {
 		return usages;
@@ -253,5 +254,13 @@ public class IGDocumentConfiguration {
 
   public void setValueSetAllowedFields(Set<SegmentField> valueSetAllowedFields) {
     this.valueSetAllowedFields = valueSetAllowedFields;
+  }
+
+  public HashMap<String, String> getDateTimeCSV() {
+    return dateTimeCSV;
+  }
+
+  public void setDateTimeCSV(HashMap<String, String> dateTimeCSV) {
+    this.dateTimeCSV = dateTimeCSV;
   }
 }

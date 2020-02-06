@@ -412,16 +412,16 @@
                                                                 <div class="col-md-6">
                                                                     <table>
                                                                         <tr>
-                                                                            <td>Pattern (R, RE: <b>bold</b>):</td>
-                                                                            <td style="color:#0607f4"><!--<div [innerHTML]="genHTML(dateTimeConstraints.simplePattern)"></div>--></td>
+                                                                            <td style="width: 20em">Pattern (R, RE: <b>bold</b>):</td>
+                                                                            <td style="color:#0607f4"><p ng-bind-html="genHTML(datatype.dateTimeConstraints)"></p></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td>Error Message:</td>
-                                                                            <td style="color:#0607f4">{{datatype.dateTimeConstraints.errorMessage}}</td>
+                                                                            <td style="width: 20em">Error Message:</td>
+                                                                            <td style="color:#0607f4"><p>{{datatype.dateTimeConstraints.errorMessage}}</p></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td>Regular Expression:</td>
-                                                                            <td style="color:#0607f4">{{datatype.dateTimeConstraints.regex}}</td>
+                                                                            <td style="width: 20em">Regular Expression:</td>
+                                                                            <td style="color:#0607f4"><p>{{datatype.dateTimeConstraints.regex}}</p></td>
                                                                         </tr>
                                                                     </table>
                                                                 </div>
