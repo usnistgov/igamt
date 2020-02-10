@@ -1976,29 +1976,34 @@ angular.module('igl').controller('IGDocumentListCtrl', function (TableService, $
     }
   });
   var buildCpDatatype = function (path, segPath, segmentId, type, fieldDatatype, datatype, datatypesMap) {
-    datatype.components.sort(function (a, b) {
-      return a.position - b.position
-    });
-    for (var i = 0; i < datatype.components.length; i++) {
-      datatype.components[i].path = path + "." + datatype.components[i].position + "[1]";
-      datatype.components[i].segmentPath = segPath + "." + datatype.components[i].position;
-      datatype.components[i].segment = segmentId;
-      if (type === "field") {
-        datatype.components[i].fieldDT = datatype.id;
-      } else if (type === "component") {
-        datatype.components[i].componentDT = datatype.id;
-        datatype.components[i].fieldDT = fieldDatatype;
+    if(datatype) {
+      datatype.components.sort(function (a, b) {
+        return a.position - b.position
+      });
 
-      }
-      var dt = angular.copy(datatypesMap[datatype.components[i].datatype.id]);
-      if(!dt) {
+      for (var i = 0; i < datatype.components.length; i++) {
+        datatype.components[i].path = path + "." + datatype.components[i].position + "[1]";
+        datatype.components[i].segmentPath = segPath + "." + datatype.components[i].position;
+        datatype.components[i].segment = segmentId;
+        if (type === "field") {
+          datatype.components[i].fieldDT = datatype.id;
+        } else if (type === "component") {
+          datatype.components[i].componentDT = datatype.id;
+          datatype.components[i].fieldDT = fieldDatatype;
+
+        }
+        var dt = angular.copy(datatypesMap[datatype.components[i].datatype.id]);
+        buildCpDatatype(datatype.components[i].path, datatype.components[i].segmentPath, datatype.components[i].segment, "component", fieldDatatype, dt, datatypesMap);
+        datatype.components[i].datatype = dt;
+        if (!dt) {
           console.log("NOT FOUND!!!");
           console.log(datatypesMap);
           console.log($rootScope.compositeProfile.datatypesMap);
           console.log(datatype.components[i].datatype);
+
+        }
+
       }
-      buildCpDatatype(datatype.components[i].path, datatype.components[i].segmentPath, datatype.components[i].segment, "component", fieldDatatype, dt, datatypesMap);
-      datatype.components[i].datatype = dt;
     }
   };
   var buildCpSegment = function (path, segment, datatypesMap) {

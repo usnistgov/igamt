@@ -452,7 +452,7 @@ public class Bootstrap implements InitializingBean {
 //		  fixDuplicatedMessageStructure();
 
 		  //this.dataFixer.fixFromCSV();
-		  this.bindingCollector.collect();
+		 // this.bindingCollector.collect();
 	  }
 
 	  private void createDynTable0396() throws IOException {
@@ -497,11 +497,11 @@ public class Bootstrap implements InitializingBean {
 	  private void fixDuplicatedMessageStructure() {
 		  
 		  this.appInfo.getHl7Versions();
-		  for(String s: this.appInfo.getHl7Versions()){
+		  for(String s: this.appInfo.getHl7Versions()) {
 			  List<Message> messages = messageRepo.findByStructureIdAndScopeAndVersion("ACK", SCOPE.HL7STANDARD.toString(), s);
 			  if(messages !=null && messages.size()>1){
 				  Message message =  messages.get(0); 
-				  for(Message m : messages){
+				  for(Message m : messages) {
 					  messageRepo.delete(m.getId());
 				  }
 				  messageRepo.save(message);
