@@ -359,9 +359,84 @@
                                                         Primitive Data Type
                                                     </div>
 
-                                                    <div ng-show="datatype.name === 'DTM'" class="igl-def-table-container">
+                                                    <div ng-show="datatype.name === 'DTM' && datatype.newMethodForDateTime" class="igl-def-table-container">
                                                         <div class="panel panel-primary">
-                                                            <div class="panel-heading">Date, Time, and TimeZone Format</div>
+                                                            <div class="panel-heading">Date, Time, and TimeZone Format (New)
+                                                                <button class="pull-right" ng-click="datatype.newMethodForDateTime = false; setDirty();">Use old formatter</button>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <div class="col-md-6">
+                                                                    <table class="table table-striped table-bordered">
+                                                                        <thead>
+                                                                        <tr class="tbl-header">
+                                                                            <th style="width: 15em">Name</th>
+                                                                            <th style="width: 15em">Format</th>
+                                                                            <th>Usage</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <tr ng-repeat="item in datatype.dateTimeConstraints.dateTimeComponentDefinitions track by $index">
+                                                                            <td>{{item.name}}</td>
+                                                                            <td>
+                                                                                <div ng-if="item.usage === 'R'"><b>{{item.format}}</b></div>
+                                                                                <div ng-if="item.usage === 'RE'">[<b>{{item.format}}</b>]</div>
+                                                                                <div ng-if="item.usage === 'O'">[{{item.format}}]</div>
+                                                                                <div ng-if="item.usage === 'X'"><del>{{item.format}}</del></div>
+                                                                            </td>
+                                                                            <td ng-if="item.position === 1">
+                                                                                <md-select placeholder="Select Usage" ng-change="setDirty();" class="inside-table" required ng-model="item.usage" ng-disabled="viewSettings.tableReadonly">
+                                                                                    <md-option ng-repeat="usage in config.conditionalUsage track by $index" ng-value="usage" disabled>
+                                                                                        {{usage}}
+                                                                                    </md-option>
+                                                                                </md-select>
+                                                                            </td>
+                                                                            <td ng-if="item.position !== 1 && item.position !== 11">
+                                                                                <md-select placeholder="Select Usage" ng-change="setDirty(); usageChange(datatype, item.name, item);" class="inside-table" required ng-model="item.usage" ng-disabled="viewSettings.tableReadonly">
+                                                                                    <md-option ng-repeat="usage in config.conditionalUsage track by $index" ng-value="usage">
+                                                                                        {{usage}}
+                                                                                    </md-option>
+                                                                                </md-select>
+                                                                            </td>
+                                                                            <td ng-if="item.position === 11">
+                                                                                <md-select placeholder="Select Usage" ng-change="setDirty(); timeZoneUsageChange(datatype, item.name, item)" class="inside-table" required ng-model="item.usage" ng-disabled="viewSettings.tableReadonly">
+                                                                                    <md-option ng-repeat="usage in config.conditionalUsage track by $index" ng-value="usage">
+                                                                                        {{usage}}
+                                                                                    </md-option>
+                                                                                </md-select>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+
+                                                                <div class="col-md-6">
+                                                                    <table>
+                                                                        <tr>
+                                                                            <td style="width: 20em">Pattern (R, RE: <b>bold</b>):</td>
+                                                                            <td style="color:#0607f4"><p ng-bind-html="genHTML(datatype.dateTimeConstraints)"></p></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="width: 20em">Error Message:</td>
+                                                                            <td style="color:#0607f4"><p>{{datatype.dateTimeConstraints.errorMessage}}</p></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="width: 20em">Regular Expression:</td>
+                                                                            <td style="color:#0607f4"><p>{{datatype.dateTimeConstraints.regex}}</p></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div ng-show="datatype.name === 'DTM' && !datatype.newMethodForDateTime" class="igl-def-table-container">
+                                                        <div class="panel panel-primary">
+                                                            <div class="panel-heading">Date, Time, and TimeZone Format
+                                                                <button class="pull-right" ng-click="datatype.newMethodForDateTime = true; setDirty();">Use new formatter</button>
+                                                            </div>
                                                             <div class="panel-body">
                                                                 <table class="table table-striped table-bordered">
                                                                     <thead>

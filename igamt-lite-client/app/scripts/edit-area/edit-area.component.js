@@ -54,7 +54,6 @@ angular.module('igl')
       }
     );
 
-
     $scope.setDirty = function() {
       $scope.editForm.$dirty = true;
       $scope.editForm.$pristine = false;
