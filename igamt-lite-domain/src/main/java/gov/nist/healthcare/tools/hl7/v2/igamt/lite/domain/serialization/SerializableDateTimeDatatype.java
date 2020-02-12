@@ -40,53 +40,77 @@ public class SerializableDateTimeDatatype extends SerializableDatatype {
         try {
             Element element = super.serializeElement();
             Element dtmElement = new Element("DateTimeDatatype");
-            DTMConstraints dtmConstraints = datatype.getDtmConstraints();
-            if (dtmConstraints != null) {
-                for (DTMComponentDefinition dtmComponentDefinition : dtmConstraints
-                    .getDtmComponentDefinitions()) {
-                    if (dtmComponentDefinition != null) {
-                        Element dtmDefinitionElement = new Element("DateTimeDatatypeDefinition");
-                        if (dtmComponentDefinition.getName() != null && !dtmComponentDefinition
-                            .getName().isEmpty()) {
-                            dtmDefinitionElement.addAttribute(
-                                new Attribute("Name", dtmComponentDefinition.getName()));
-                        }
-                        if (dtmComponentDefinition.getPosition() != null) {
-                            dtmDefinitionElement.addAttribute(new Attribute("Position", String.valueOf(dtmComponentDefinition.getPosition())));
-                        }
-                        if (dtmComponentDefinition.getUsage() != null && !dtmComponentDefinition
-                            .getUsage().value().isEmpty()) {
-                            String usage = dtmComponentDefinition.getUsage().value();
-                            if (usage.equals(Usage.C.value())) {
-                                if (dtmComponentDefinition.getDtmPredicate() != null) {
-                                    String trueUsage, falseUsage;
-                                    if (dtmComponentDefinition.getDtmPredicate().getTrueUsage() != null && !dtmComponentDefinition.getDtmPredicate()
-                                        .getTrueUsage().value().isEmpty()
-                                        && dtmComponentDefinition.getDtmPredicate().getFalseUsage()
-                                        != null && !dtmComponentDefinition.getDtmPredicate()
-                                        .getFalseUsage().value().isEmpty()) {
-                                        trueUsage = dtmComponentDefinition.getDtmPredicate().getTrueUsage()
-                                            .value();
-                                        falseUsage = dtmComponentDefinition.getDtmPredicate().getFalseUsage()
-                                            .value();
-                                        usage =
-                                            usage.concat("(" + trueUsage + "/" + falseUsage + ")");
-                                    }
-                                    if (dtmComponentDefinition.getDtmPredicate()
-                                        .getPredicateDescription() != null && !dtmComponentDefinition.getDtmPredicate()
-                                        .getPredicateDescription().isEmpty()) {
-                                        dtmDefinitionElement.addAttribute(new Attribute("Predicate",
-                                            dtmComponentDefinition.getDtmPredicate()
-                                                .getPredicateDescription()));
-                                    }
-                                }
-                            }
-                            dtmDefinitionElement.addAttribute(new Attribute("Usage", usage));
-                        }
-                        dtmElement.appendChild(dtmDefinitionElement);
-                    }
-                }
+            
+            if(!datatype.isNewMethodForDateTime()) {
+              DTMConstraints dtmConstraints = datatype.getDtmConstraints();
+              if (dtmConstraints != null) {
+                  for (DTMComponentDefinition dtmComponentDefinition : dtmConstraints
+                      .getDtmComponentDefinitions()) {
+                      if (dtmComponentDefinition != null) {
+                          Element dtmDefinitionElement = new Element("DateTimeDatatypeDefinition");
+                          if (dtmComponentDefinition.getName() != null && !dtmComponentDefinition
+                              .getName().isEmpty()) {
+                              dtmDefinitionElement.addAttribute(
+                                  new Attribute("Name", dtmComponentDefinition.getName()));
+                          }
+                          if (dtmComponentDefinition.getPosition() != null) {
+                              dtmDefinitionElement.addAttribute(new Attribute("Position", String.valueOf(dtmComponentDefinition.getPosition())));
+                          }
+                          if (dtmComponentDefinition.getUsage() != null && !dtmComponentDefinition
+                              .getUsage().value().isEmpty()) {
+                              String usage = dtmComponentDefinition.getUsage().value();
+                              if (usage.equals(Usage.C.value())) {
+                                  if (dtmComponentDefinition.getDtmPredicate() != null) {
+                                      String trueUsage, falseUsage;
+                                      if (dtmComponentDefinition.getDtmPredicate().getTrueUsage() != null && !dtmComponentDefinition.getDtmPredicate()
+                                          .getTrueUsage().value().isEmpty()
+                                          && dtmComponentDefinition.getDtmPredicate().getFalseUsage()
+                                          != null && !dtmComponentDefinition.getDtmPredicate()
+                                          .getFalseUsage().value().isEmpty()) {
+                                          trueUsage = dtmComponentDefinition.getDtmPredicate().getTrueUsage()
+                                              .value();
+                                          falseUsage = dtmComponentDefinition.getDtmPredicate().getFalseUsage()
+                                              .value();
+                                          usage =
+                                              usage.concat("(" + trueUsage + "/" + falseUsage + ")");
+                                      }
+                                      if (dtmComponentDefinition.getDtmPredicate()
+                                          .getPredicateDescription() != null && !dtmComponentDefinition.getDtmPredicate()
+                                          .getPredicateDescription().isEmpty()) {
+                                          dtmDefinitionElement.addAttribute(new Attribute("Predicate",
+                                              dtmComponentDefinition.getDtmPredicate()
+                                                  .getPredicateDescription()));
+                                      }
+                                  }
+                              }
+                              dtmDefinitionElement.addAttribute(new Attribute("Usage", usage));
+                          }
+                          dtmElement.appendChild(dtmDefinitionElement);
+                      }
+                  }
+              }  
+            } else {
+              System.out.println("WORRRROOOOOOO");
+              DateTimeConstraints dateTimeConstraints = datatype.getDateTimeConstraints();
+              if (dateTimeConstraints != null) {
+                  for (DateTimeComponentDefinition dateTimeComponentDefinition : dateTimeConstraints.getDateTimeComponentDefinitions()) {
+                      if (dateTimeComponentDefinition != null) {
+                          Element dtmDefinitionElement = new Element("DateTimeDatatypeDefinition");
+                          if (dateTimeComponentDefinition.getName() != null && !dateTimeComponentDefinition.getName().isEmpty()) {
+                              dtmDefinitionElement.addAttribute(new Attribute("Name", dateTimeComponentDefinition.getName()));
+                          }
+                          dtmDefinitionElement.addAttribute(new Attribute("Position", String.valueOf(dateTimeComponentDefinition.getPosition())));
+                          if (dateTimeComponentDefinition.getUsage() != null && !dateTimeComponentDefinition.getUsage().value().isEmpty()) {
+                              String usage = dateTimeComponentDefinition.getUsage().value();
+                              dtmDefinitionElement.addAttribute(new Attribute("Usage", usage));
+                          }
+                          dtmElement.appendChild(dtmDefinitionElement);
+                      }
+                  }
+              }
             }
+            
+            
             Element firstChild= element.getFirstChildElement("Datatype");
             firstChild.appendChild(dtmElement);
             return element;
