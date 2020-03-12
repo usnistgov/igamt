@@ -1338,14 +1338,12 @@ public class XMLExportTool {
       for (DTMComponentDefinition def : dtmConstraints.getDtmComponentDefinitions()) {
         if (def.getUsage().equals(Usage.R)) {
           ConformanceStatement cs = new ConformanceStatement();
-          cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE("
-              + def.getUsage().toString() + ")");
+          cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE(" + def.getUsage().toString() + ")");
           cs.setConstraintTarget(".");
           cs.setDescription(def.getDescription() + " usage is '" + def.getUsage().toString() + "'.");
 
           String pattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
-          String assertion =
-              "<Assertion>" + "<Format Path=\".\" Regex=\"" + pattern + "\"/>" + "</Assertion>";
+          String assertion = "<Assertion>" + "<Format Path=\".\" Regex=\"" + pattern + "\"/>" + "</Assertion>";
           cs.setAssertion(assertion);
 
           byID.getConformanceStatements().add(cs);
@@ -1369,13 +1367,12 @@ public class XMLExportTool {
               if (predicate.getVerb() != null && predicate.getVerb().equals("is valued")) {
                 if (predicate.getTarget() != null) {
                   ConformanceStatement cs = new ConformanceStatement();
-                  cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE("
-                      + def.getUsage().toString() + ")");
+                  cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE(" + def.getUsage().toString() + ")");
                   cs.setConstraintTarget(".");
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                       + predicate.getTrueUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(def.getPosition());
+                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(predicate.getTarget().getPosition());
                   String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
                   String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\"" + ifPattern
                       + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
@@ -1391,7 +1388,7 @@ public class XMLExportTool {
                 cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                     + predicate.getTrueUsage() + "'. Predicate is '"
                     + predicate.getPredicateDescription() + "'.");
-                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(def.getPosition());
+                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(predicate.getTarget().getPosition());
                 String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
                 String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\"" + ifPattern
                     + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
@@ -1408,12 +1405,13 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                       + predicate.getTrueUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
-                  ifPattern = ifPattern.replace("%", predicate.getValue());
+                  String ifPattern1 = config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
+                  ifPattern1 = ifPattern1.replace("%", predicate.getValue());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
                   String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
-                  String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\"" + ifPattern
-                      + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                  String assertion = "<Assertion><IMPLY><AND>" + "<Format Path=\".\" Regex=\"" + ifPattern1
+                      + "\"/>" + "<Format Path=\".\" Regex=\"" + ifPattern2
+                      + "\"/>" + "</AND><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
                       + "</IMPLY></Assertion>";
                   cs.setAssertion(assertion);
                   byID.getConformanceStatements().add(cs);
@@ -1428,10 +1426,9 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                       + predicate.getTrueUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern1 =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
+                  String ifPattern1 = config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
                   ifPattern1 = ifPattern1.replace("%", predicate.getValue());
-                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
                   String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
                   String assertion = "<Assertion><IMPLY><AND><NOT>" + "<Format Path=\".\" Regex=\""
                       + ifPattern1 + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern2
@@ -1452,7 +1449,7 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                       + predicate.getTrueUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(def.getPosition());
+                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(predicate.getTarget().getPosition());
                   String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
                   String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\"" + ifPattern
                       + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
@@ -1468,15 +1465,14 @@ public class XMLExportTool {
                 cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                     + predicate.getTrueUsage() + "'. Predicate is '"
                     + predicate.getPredicateDescription() + "'.");
-                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(def.getPosition());
+                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(predicate.getTarget().getPosition());
                 String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
                 String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\"" + ifPattern
                     + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
                     + "</IMPLY></Assertion>";
                 cs.setAssertion(assertion);
                 byID.getConformanceStatements().add(cs);
-              } else if (predicate.getVerb() != null
-                  && predicate.getVerb().equals("is literal value")) {
+              } else if (predicate.getVerb() != null && predicate.getVerb().equals("is literal value")) {
                 if (predicate.getValue() != null && !predicate.getValue().equals("")) {
                   ConformanceStatement cs = new ConformanceStatement();
                   cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE("
@@ -1485,18 +1481,18 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                       + predicate.getTrueUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
-                  ifPattern = ifPattern.replace("%", predicate.getValue());
+                  String ifPattern1 = config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
+                  ifPattern1 = ifPattern1.replace("%", predicate.getValue());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
                   String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
-                  String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\"" + ifPattern
-                      + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                  String assertion = "<Assertion><IMPLY><AND>" + "<Format Path=\".\" Regex=\"" + ifPattern1
+                      + "\"/>" + "<Format Path=\".\" Regex=\"" + ifPattern2
+                      + "\"/>" + "</AND><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
                       + "</IMPLY></Assertion>";
                   cs.setAssertion(assertion);
                   byID.getConformanceStatements().add(cs);
                 }
-              } else if (predicate.getVerb() != null
-                  && predicate.getVerb().equals("is not literal value")) {
+              } else if (predicate.getVerb() != null && predicate.getVerb().equals("is not literal value")) {
                 if (predicate.getValue() != null && !predicate.getValue().equals("")) {
                   ConformanceStatement cs = new ConformanceStatement();
                   cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE("
@@ -1505,10 +1501,9 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "True Usage is '"
                       + predicate.getTrueUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern1 =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
+                  String ifPattern1 = config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
                   ifPattern1 = ifPattern1.replace("%", predicate.getValue());
-                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
                   String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
                   String assertion = "<Assertion><IMPLY><AND><NOT>" + "<Format Path=\".\" Regex=\""
                       + ifPattern1 + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern2
@@ -1530,7 +1525,7 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "False Usage is '"
                       + predicate.getFalseUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(def.getPosition());
+                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(predicate.getTarget().getPosition());
                   String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
                   String assertion = "<Assertion><IMPLY><NOT>" + "<Format Path=\".\" Regex=\""
                       + ifPattern + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + thenPattern
@@ -1546,15 +1541,14 @@ public class XMLExportTool {
                 cs.setDescription(def.getDescription() + " usage is 'C'." + "False Usage is '"
                     + predicate.getFalseUsage() + "'. Predicate is '"
                     + predicate.getPredicateDescription() + "'.");
-                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(def.getPosition());
+                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(predicate.getTarget().getPosition());
                 String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
-                String assertion = "<Assertion><IMPLY><NOT>" + "<Format Path=\".\" Regex=\""
-                    + ifPattern + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\""
+                    + ifPattern + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
                     + "</IMPLY></Assertion>";
                 cs.setAssertion(assertion);
                 byID.getConformanceStatements().add(cs);
-              } else if (predicate.getVerb() != null
-                  && predicate.getVerb().equals("is literal value")) {
+              } else if (predicate.getVerb() != null && predicate.getVerb().equals("is literal value")) {
                 if (predicate.getValue() != null && !predicate.getValue().equals("")) {
                   ConformanceStatement cs = new ConformanceStatement();
                   cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE("
@@ -1563,18 +1557,18 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "False Usage is '"
                       + predicate.getFalseUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
-                  ifPattern = ifPattern.replace("%", predicate.getValue());
+                  String ifPattern1 = config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
+                  ifPattern1 = ifPattern1.replace("%", predicate.getValue());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
                   String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
-                  String assertion = "<Assertion><IMPLY><NOT>" + "<Format Path=\".\" Regex=\""
-                      + ifPattern + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + thenPattern
-                      + "\"/>" + "</IMPLY></Assertion>";
+                  String assertion = "<Assertion><IMPLY><AND>" + "<NOT><Format Path=\".\" Regex=\"" + ifPattern1
+                      + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern2
+                      + "\"/>" + "</AND><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                      + "</IMPLY></Assertion>";
                   cs.setAssertion(assertion);
                   byID.getConformanceStatements().add(cs);
                 }
-              } else if (predicate.getVerb() != null
-                  && predicate.getVerb().equals("is not literal value")) {
+              } else if (predicate.getVerb() != null && predicate.getVerb().equals("is not literal value")) {
                 if (predicate.getValue() != null && !predicate.getValue().equals("")) {
                   ConformanceStatement cs = new ConformanceStatement();
                   cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE("
@@ -1583,15 +1577,14 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "False Usage is '"
                       + predicate.getFalseUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern1 =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
+                  String ifPattern1 = config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
                   ifPattern1 = ifPattern1.replace("%", predicate.getValue());
-                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
                   String thenPattern = config.getDtmRUsageRegexCodes().get(def.getPosition());
                   String assertion =
-                      "<Assertion><IMPLY><NOT><AND><NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern1
-                          + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern2 + "\"/>"
-                          + "</AND></NOT><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                      "<Assertion><IMPLY><AND>" + "<Format Path=\".\" Regex=\"" + ifPattern1
+                          + "\"/>" + "<Format Path=\".\" Regex=\"" + ifPattern2 + "\"/>"
+                          + "</AND><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
                           + "</IMPLY></Assertion>";
                   cs.setAssertion(assertion);
                   byID.getConformanceStatements().add(cs);
@@ -1608,7 +1601,7 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "False Usage is '"
                       + predicate.getFalseUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(def.getPosition());
+                  String ifPattern = config.getDtmCUsageIsValuedRegexCodes().get(predicate.getTarget().getPosition());
                   String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
                   String assertion = "<Assertion><IMPLY><NOT>" + "<Format Path=\".\" Regex=\""
                       + ifPattern + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + thenPattern
@@ -1624,15 +1617,14 @@ public class XMLExportTool {
                 cs.setDescription(def.getDescription() + " usage is 'C'." + "False Usage is '"
                     + predicate.getFalseUsage() + "'. Predicate is '"
                     + predicate.getPredicateDescription() + "'.");
-                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(def.getPosition());
+                String ifPattern = config.getDtmCUsageIsNOTValuedRegexCodes().get(predicate.getTarget().getPosition());
                 String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
-                String assertion = "<Assertion><IMPLY><NOT>" + "<Format Path=\".\" Regex=\""
-                    + ifPattern + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                String assertion = "<Assertion><IMPLY>" + "<Format Path=\".\" Regex=\""
+                    + ifPattern + "\"/>" + "<Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
                     + "</IMPLY></Assertion>";
                 cs.setAssertion(assertion);
                 byID.getConformanceStatements().add(cs);
-              } else if (predicate.getVerb() != null
-                  && predicate.getVerb().equals("is literal value")) {
+              } else if (predicate.getVerb() != null && predicate.getVerb().equals("is literal value")) {
                 if (predicate.getValue() != null && !predicate.getValue().equals("")) {
                   ConformanceStatement cs = new ConformanceStatement();
                   cs.setConstraintId(d.getLabel() + "_" + def.getDescription() + "_USAGE("
@@ -1641,13 +1633,14 @@ public class XMLExportTool {
                   cs.setDescription(def.getDescription() + " usage is 'C'." + "False Usage is '"
                       + predicate.getFalseUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
-                  String ifPattern =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
-                  ifPattern = ifPattern.replace("%", predicate.getValue());
-                  String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
-                  String assertion = "<Assertion><IMPLY><NOT>" + "<Format Path=\".\" Regex=\""
-                      + ifPattern + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + thenPattern
-                      + "\"/>" + "</IMPLY></Assertion>";
+                  String ifPattern1 = config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
+                  ifPattern1 = ifPattern1.replace("%", predicate.getValue());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
+                  String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());                  
+                  String assertion = "<Assertion><IMPLY><AND>" + "<NOT><Format Path=\".\" Regex=\"" + ifPattern1
+                      + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern2
+                      + "\"/>" + "</AND><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                      + "</IMPLY></Assertion>";
                   cs.setAssertion(assertion);
                   byID.getConformanceStatements().add(cs);
                 }
@@ -1662,14 +1655,14 @@ public class XMLExportTool {
                       + predicate.getFalseUsage() + "'. Predicate is '"
                       + predicate.getPredicateDescription() + "'.");
                   String ifPattern1 =
-                      config.getDtmCUsageIsLiteralValueRegexCodes().get(def.getPosition());
+                      config.getDtmCUsageIsLiteralValueRegexCodes().get(predicate.getTarget().getPosition());
                   ifPattern1 = ifPattern1.replace("%", predicate.getValue());
-                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition());
+                  String ifPattern2 = config.getDtmRUsageRegexCodes().get(def.getPosition() - 1);
                   String thenPattern = config.getDtmXUsageRegexCodes().get(def.getPosition());
                   String assertion =
-                      "<Assertion><IMPLY><NOT><AND><NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern1
-                          + "\"/></NOT>" + "<Format Path=\".\" Regex=\"" + ifPattern2 + "\"/>"
-                          + "</AND></NOT><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
+                      "<Assertion><IMPLY><AND>" + "<Format Path=\".\" Regex=\"" + ifPattern1
+                          + "\"/>" + "<Format Path=\".\" Regex=\"" + ifPattern2 + "\"/>"
+                          + "</AND><Format Path=\".\" Regex=\"" + thenPattern + "\"/>"
                           + "</IMPLY></Assertion>";
                   cs.setAssertion(assertion);
                   byID.getConformanceStatements().add(cs);
