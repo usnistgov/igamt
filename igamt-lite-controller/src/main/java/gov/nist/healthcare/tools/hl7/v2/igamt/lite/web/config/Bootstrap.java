@@ -117,6 +117,7 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.constraints.Conformanc
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.constraints.Predicate;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.constraints.ValueData;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.constraints.ValueSetData;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.fixer.StructureCreator;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.repo.DatatypeLibraryRepository;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.repo.DatatypeMatrixRepository;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.repo.ExportConfigRepository;
@@ -192,6 +193,9 @@ public class Bootstrap implements InitializingBean {
 	@Autowired
 	MessageRepository messageRepo;
 
+	@Autowired 
+	StructureCreator strctureCreator;
+	
 	@Autowired
 	SegmentService segmentService;
 	@Autowired
@@ -453,6 +457,9 @@ public class Bootstrap implements InitializingBean {
 
 		  //this.dataFixer.fixFromCSV();
 		 // this.bindingCollector.collect();
+		  
+		  //strctureCreator.fixMessage();
+		  //fixUsageForDatatypes("2.3.1");
 	  }
 
 	  private void createDynTable0396() throws IOException {
@@ -509,6 +516,19 @@ public class Bootstrap implements InitializingBean {
 		  }
 		  
 		
+	  }
+	  
+	  
+	  private void fixUsageForDatatypes(String version){
+		 List<Datatype> datatypes =this.datatypeService.findByScopeAndVersion(SCOPE.HL7STANDARD.toString(), "2.3.1");
+		 for(Datatype d : datatypes){
+			 if(d.getComponents() !=null && !d.getComponents().isEmpty()){
+				 for(Component c : d.getComponents()){
+					 c.setUsage(Usage.O);
+				 }
+			 }
+			 datatypeService.save(d); 
+		 }
 	  }
 
 

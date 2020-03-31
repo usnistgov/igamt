@@ -70,7 +70,7 @@ public class SerializableSegmentRefOrGroup extends SerializableElement{
             String location = "";
             if(this.segmentRefOrGroup != null){
                 if (this.segmentRefOrGroup instanceof SegmentRef && ((SegmentRef) this.segmentRefOrGroup).getRef() != null) {
-                    throw new SegmentSerializationException(e,((SegmentRef) this.segmentRefOrGroup).getRef().getLabel());
+                    throw new SegmentSerializationException(e,((SegmentRef) this.segmentRefOrGroup).getRef().getName());
                 } else if (this.segmentRefOrGroup instanceof Group) {
                     throw new GroupSerializationException(e,((Group)this.segmentRefOrGroup).getName());
                 }
@@ -139,8 +139,7 @@ public class SerializableSegmentRefOrGroup extends SerializableElement{
         if (this.segment != null && this.segment.getName() != null) {
             elementSegment.addAttribute(new Attribute("Ref", StringUtils.repeat(".", 4 * depth)
                 + this.segment.getName()));
-            String label = (segmentRef.getRef().getExt() == null || segmentRef.getRef().getExt().isEmpty())
-                ? segmentRef.getRef().getName() : segmentRef.getRef().getLabel();
+            String label = this.segment.getLabel();
             elementSegment.addAttribute(new Attribute("Label", label));
             if(this.segment.getDescription()!=null) {
                 elementSegment.addAttribute(new Attribute("Description", this.segment.getDescription()));
