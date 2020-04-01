@@ -455,7 +455,7 @@ public class Bootstrap implements InitializingBean {
 //		  fixTableLibraries();
 //		  fixDuplicatedMessageStructure();
 
-		  //this.dataFixer.fixFromCSV();
+		  this.dataFixer.fixFromCSV();
 		 // this.bindingCollector.collect();
 		  
 		  //strctureCreator.fixMessage();
