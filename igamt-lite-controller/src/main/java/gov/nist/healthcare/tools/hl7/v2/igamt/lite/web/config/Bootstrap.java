@@ -455,11 +455,11 @@ public class Bootstrap implements InitializingBean {
 //		  fixTableLibraries();
 //		  fixDuplicatedMessageStructure();
 
-		  this.dataFixer.fixFromCSV();
+		 // this.dataFixer.fixFromCSV();
 		 // this.bindingCollector.collect();
 		  
 		  //strctureCreator.fixMessage();
-		  //fixUsageForDatatypes("2.3.1");
+		 //fixUsageForDatatypes("2.3.1");
 	  }
 
 	  private void createDynTable0396() throws IOException {
