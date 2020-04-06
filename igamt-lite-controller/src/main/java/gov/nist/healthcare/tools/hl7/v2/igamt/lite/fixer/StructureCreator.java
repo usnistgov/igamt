@@ -24,41 +24,113 @@ public class StructureCreator {
 	@Autowired
 	SegmentService seg;
 	
-	public MessageStructure buildStructureOBR_R01(){
+	public MessageStructure buildStructureOBR_R01(String version){
 		MessageStructure structure =  new MessageStructure();
 		structure.children = new ArrayList<SegOrGrp>();
-		addSeg(structure.children , "MSH",Usage.R, 1, "1", 1, "2.3.1" );
-		addSeg(structure.children , "PID",Usage.R, 1, "1", 2, "2.3.1" );
-		addSeg(structure.children , "NK1",Usage.R, 1, "1", 3, "2.3.1" );
-		addSeg(structure.children , "ORC",Usage.R, 1, "1", 4, "2.3.1" );
-		addGroupORDER_OBSERVATION(structure.children);		
+		addSeg(structure.children , "MSH",Usage.R, 1, "1", 1, version );
+		addSeg(structure.children , "PID",Usage.R, 1, "1", 2, version );
+		if(!version.equals("2.3")){
+		addSeg(structure.children , "NK1",Usage.R, 1, "1", structure.children.size()+1, version );
+		}
+		addSeg(structure.children , "ORC",Usage.R, 1, "1", structure.children.size()+1, version );
+		addGroupORDER_OBSERVATION(structure.children, version);		
+		return structure;
+	}
+	
+	public MessageStructure buildStructureOBR_R01_Standard(String version){
+		MessageStructure structure =  new MessageStructure();
+		structure.children = new ArrayList<SegOrGrp>();
+		addSeg(structure.children , "MSH",Usage.R, 1, "1", structure.children.size()+1, version );
+		addGroup_PATIENT_RESULT(structure.children,version);	
+		if(!version.equals("2.3")){
+		addSeg(structure.children , "DSC",Usage.O, 0, "1",structure.children.size()+1, version );
+		}
 		return structure;
 	} 
-	private void addGroupORDER_OBSERVATION(List<SegOrGrp> children) {
+	
+	private void addGroup_PATIENT_RESULT(List<SegOrGrp> children, String version) {
+		// TODO Auto-generated method stub
+		
+		Grp grp = new Grp();
+		grp.name = "PATIENT_RESULT";
+		grp.usage = Usage.R;
+		grp.min=1;
+		grp.max= "*";
+		grp.position = children.size()+1;
+		grp.children = new ArrayList<SegOrGrp>();
+		addGroupPATIENT(grp.children,version);
+		addGroupORDER_OBSERVATION(grp.children, version);
+
+		children.add(grp);
+		
+	}
+
+	private void addGroupPATIENT(List<SegOrGrp> children, String version) {
+		// TODO Auto-generated method stub
+		Grp grp = new Grp();
+		grp.name = "PATIENT";
+		grp.usage = Usage.O;
+		grp.min=0;
+		grp.max= "1";
+		grp.position =  children.size()+1;
+		grp.children = new ArrayList<SegOrGrp>();
+		addSeg(grp.children , "PID",Usage.R, 1, "1", grp.children.size()+1, version );
+		addSeg(grp.children , "PD1",Usage.O, 0, "1", grp.children.size()+1, version );
+		if(!version.equals("2.3")){
+		addSeg(grp.children , "NK1",Usage.O, 0, "*", grp.children.size()+1, version );
+		}
+		addSeg(grp.children , "NTE",Usage.O, 0, "*", grp.children.size()+1, version );
+		
+		addGroupVISIT(grp.children,version);
+
+		children.add(grp);
+		
+	}
+
+	private void addGroupVISIT(List<SegOrGrp> children, String version) {
+		// TODO Auto-generated method stub
+		Grp grp = new Grp();
+		grp.name = "VISIT";
+		grp.usage = Usage.O;
+		grp.min=0;
+		grp.max= "1";
+		grp.position = children.size()+1;
+		grp.children = new ArrayList<SegOrGrp>();
+		addSeg(grp.children , "PV1",Usage.R, 1, "1", grp.children.size()+1, version );
+		addSeg(grp.children , "PV2",Usage.O, 0, "1", grp.children.size()+1, version );
+				
+		children.add(grp);
+	}
+
+	private void addGroupORDER_OBSERVATION(List<SegOrGrp> children, String version) {
 		// TODO Auto-generated method stub
 		Grp grp = new Grp();
 		grp.name = "ORDER_OBSERVATION";
 		grp.usage = Usage.R;
 		grp.min=1;
 		grp.max= "*";
-		grp.position = 5;
+		grp.position = children.size()+1;
 		grp.children = new ArrayList<SegOrGrp>();
-		addSeg(grp.children , "OBR",Usage.R, 1, "1", 1, "2.3.1" );
-		addGroupOBSERVATION(grp.children);
+		addSeg(grp.children , "ORC",Usage.O, 0, "1", grp.children.size()+1, version );
+		addSeg(grp.children , "OBR",Usage.R, 1, "1", grp.children.size()+1, version );
+		addSeg(grp.children , "NTE",Usage.O, 0, "*", grp.children.size()+1, version );
+
+		addGroupOBSERVATION(grp.children, version);
+		addSeg(grp.children , "CTI",Usage.O, 0, "*", grp.children.size()+1, version );
+
 		children.add(grp);
 	}
-	private void addGroupOBSERVATION(List<SegOrGrp> children) {
+	private void addGroupOBSERVATION(List<SegOrGrp> children, String version) {
 		Grp grp = new Grp();
 		grp.name = "OBSERVATION";
 		grp.usage = Usage.R;
 		grp.min=1;
 		grp.max= "*";
-		grp.position = 2;
+		grp.position = children.size()+1;
 		grp.children = new ArrayList<SegOrGrp>();
-		addSeg(grp.children , "OBX",Usage.O, 0, "1", 1, "2.3.1" );
-		addSeg(grp.children , "NTE",Usage.O, 0, "*", 2, "2.3.1" );
+		addSeg(grp.children , "OBX",Usage.O, 0, "1", grp.children.size()+1, version );
+		addSeg(grp.children , "NTE",Usage.O, 0, "*", grp.children.size()+1, version );
 		children.add(grp);
-
 	}
 
 	private void addSeg(List<SegOrGrp> children, String name, Usage usage, int min, String max, int position, String version) {
@@ -68,18 +140,28 @@ public class StructureCreator {
 		seg.usage=usage;
 		seg.min=min;
 		seg.max= max;
-		seg.position=1;
+		seg.position=position;
 		seg.version = version;
 		children.add(seg); 
 	}
 	
-	public void fixMessage(){
-		Message message = this.message.findByStructIdAndScopeAndVersion("ORU_R01", SCOPE.HL7STANDARD.toString(), "2.3.1");
-		MessageStructure newStructure = buildStructureOBR_R01();
+	public void fixMessage(String version){
+		MessageStructure newStructure = buildStructureOBR_R01_Standard(version);
+
+		Message message = this.message.findByStructIdAndScopeAndVersion("ORU_R01", SCOPE.HL7STANDARD.toString(), version);
+		fixSingleMessage(message, newStructure);
+		
+//		List<Message> users = this.message.findByStructureIdAndScopeAndVersion("ORU_R01", SCOPE.USER.toString(), "2.3.1");
+//		for(Message msg: users) {
+//		fixSingleMessage(msg, newStructure);
+//		}
+	}
+	
+	public void fixSingleMessage(Message m, MessageStructure newStructure){
 		List<SegmentRefOrGroup> children = new ArrayList<SegmentRefOrGroup>();
 		fixSturcture(newStructure.children, children);
-		message.setChildren(children);
-		this.message.save(message);
+		m.setChildren(children);
+		this.message.save(m);
 	}
 	private void fixSturcture(List<SegOrGrp> children, List<SegmentRefOrGroup> messageChildren) {
 		// TODO Auto-generated method stub
@@ -130,6 +212,7 @@ public class StructureCreator {
 			System.out.println(child.name+ "Not found");
 		}else {
 			link.setId(s.getId());
+			link.setName(s.getName());
 		}
 		segRef.setRef(link);
 		return segRef;

@@ -305,8 +305,6 @@ angular.module('igl').controller('MessageListCtrl', function($scope, $rootScope,
     $scope.editableGrp = '';
     if (group) {
       group.obj.name = name;
-
-
     }
     if (position) {
       MessageService.updatePosition($rootScope.segParent.children, group.obj.position - 1, position - 1);
@@ -326,6 +324,7 @@ angular.module('igl').controller('MessageListCtrl', function($scope, $rootScope,
   $scope.editableSeg = '';
 
   $scope.editSgmt = function(segmentRef, message) {
+    console.log($rootScope.segments);
     blockUI.start();
     $scope.path = segmentRef.path.replace(/\[[0-9]+\]/g, '');
     $scope.path = $scope.path.split(".");
@@ -340,52 +339,42 @@ angular.module('igl').controller('MessageListCtrl', function($scope, $rootScope,
       $scope.ext = null;
       $scope.results = [];
       $scope.tmpResults = [];
-      $scope.results = $scope.results.concat(filterFlavors($rootScope.igdocument.profile.segmentLibrary, segmentRef.obj.ref.name));
-      $scope.results = _.uniq($scope.results, function(item, key, a) {
-        return item.id;
-      });
-      $scope.tmpResults = [].concat($scope.results);
-      //                SegmentLibrarySvc.findLibrariesByFlavorName(segmentRef.obj.ref.name, 'HL7STANDARD', $rootScope.igdocument.profile.metaData.hl7Version).then(function(libraries) {
-      //                    if (libraries != null) {
-      //                        _.each(libraries, function(library) {
-      //                            $scope.results = $scope.results.concat(filterFlavors(library, segmentRef.obj.ref.name));
-      //
-      //                        });
-      //                    }
-      //
-      //                    $scope.results = _.uniq($scope.results, function(item, key, a) {
-      //                        return item.id;
-      //                    });
-      //
-      //                    $scope.tmpResults = [].concat($scope.results);
-      //                    console.log($scope.tmpResults);
-      //
-      //                    delay.resolve(true);
-      //                }, function(error) {
-      //                    $rootScope.msg().text = "Sorry could not load the segments";
-      //                    $rootScope.msg().type = error.data.type;
-      //                    $rootScope.msg().show = true;
-      //                    delay.reject(error);
-      //                });
+      // $scope.results = $scope.results.concat(filterFlavors($rootScope.igdocument.profile.segmentLibrary, $rootScope.segmentsMap[segmentRef.obj.ref.id]));
+      // $scope.results = _.uniq($scope.results, function(item, key, a) {
+      //   return item.id;
+      // });
+      $scope.tmpResults = $scope.findSegmentFlavorsById(segmentRef.obj.ref.id);
+
+
       blockUI.stop();
       return delay.promise;
 
     };
-
     var filterFlavors = function(library, name) {
       var results = [];
       _.each(library.children, function(link) {
-        console.log("++++++++++");
         console.log(link);
         if (link.name === name) {
           link.libraryName = library.metaData.name;
           link.hl7Version = $rootScope.segmentsMap[link.id].hl7Version;
-          //link.hl7Version = library.metaData.hl7Version;
           results.push(link);
         }
       });
       return results;
     };
+
+    $scope.findSegmentFlavorsById = function(id){
+      var ret  = [];
+      var original = $rootScope.segmentsMap[id];
+      angular.forEach($rootScope.segments, function (seg) {
+        if(seg.name === original.name){
+          ret.push({
+            id: seg.id, hl7Version: seg.hl7Version, name: seg.name, ext: seg.ext
+          })
+        }
+      });
+      return ret;
+    }
     $scope.loadLibrariesByFlavorName().then(function(done) {
       // $scope.selection.selected = $scope.currentSegment.id;
       // $scope.selectSegment($scope.currentSegment);

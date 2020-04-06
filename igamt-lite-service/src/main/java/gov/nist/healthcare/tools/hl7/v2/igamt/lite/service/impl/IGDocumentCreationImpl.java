@@ -369,8 +369,12 @@ public class IGDocumentCreationImpl implements IGDocumentCreationService {
 		if (!dtsTarget.getChildren().contains(link)) {
 			dtsTarget.addDatatype(link);
 			for (Component cpt : dt.getComponents()) {
+				if(cpt.getDatatype().getId() != null) {
+					System.out.println(dt.getName() + "Missing" + cpt.getPosition());
+				
 				Datatype dt1 = datatypeRepository.findOne(cpt.getDatatype().getId());
 				addDatatype(dt1, pSource, pTarget);
+				}
 			}
 		}
 	}
