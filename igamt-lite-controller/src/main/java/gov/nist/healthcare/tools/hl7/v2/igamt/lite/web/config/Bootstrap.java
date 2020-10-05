@@ -457,13 +457,12 @@ public class Bootstrap implements InitializingBean {
 
 		// this.dataFixer.fixFromCSV();
 		// this.bindingCollector.collect();
-		//addStructureTable();
-		fixComponents("TQ", SCOPE.HL7STANDARD, "2.3",2, "RI");
-		fixComponents("TQ", SCOPE.HL7STANDARD, "2.3",10, "NM");
-		// strctureCreator.fixMessage("2.3");
-		// strctureCreator.fixMessage("2.3.1");
-
-		fixUsageForDatatypes("2.3");
+//		addStructureTable();
+//		fixComponents("TQ", SCOPE.HL7STANDARD, "2.3",2, "RI");
+//		fixComponents("TQ", SCOPE.HL7STANDARD, "2.3",10, "NM");
+//		strctureCreator.fixMessage("2.3");
+//	    strctureCreator.fixMessage("2.3.1");
+//		fixUsageForDatatypes("2.3");
 	}
 
 	private void createDynTable0396() throws IOException {

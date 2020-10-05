@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ApplyInfo;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.CompositeProfile;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.CompositeProfileStructure;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Datatype;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.IGDocument;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Message;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ProfileComponent;
@@ -152,7 +153,9 @@ public class CompositeProfileController {
   public CompositeProfile buildCompositeProfile(
       @RequestBody CompositeProfileStructure compositeProfileStructure) {
 
-    return compositeProfileService.buildCompositeProfile(compositeProfileStructure);
+     CompositeProfile ret = compositeProfileService.buildCompositeProfile(compositeProfileStructure);
+     
+     return ret;
   }
 
   @RequestMapping(value = "delete/{id}/{igId}", method = RequestMethod.GET,

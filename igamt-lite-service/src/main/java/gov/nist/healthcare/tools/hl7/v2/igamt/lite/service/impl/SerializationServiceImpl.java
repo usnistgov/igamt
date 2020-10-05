@@ -656,7 +656,7 @@ public class SerializationServiceImpl implements SerializationService {
 		if (bindedDatatypes != null && !bindedDatatypes.isEmpty()) {
 			Iterator<DatatypeLink> itr = bindedDatatypes.iterator();
 			while (itr.hasNext()) {
-				DatatypeLink entry = itr.next();
+				DatatypeLink entry = itr.next();				
 				if (entry.getName().toLowerCase().equals("varies") && !exportConfig.isIncludeVaries()) {
 					itr.remove();
 				} else {
