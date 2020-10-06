@@ -706,13 +706,13 @@
                                 </form>
                             </md-card-content>
                             <md-card-footer>
-                                <div ng-show="target.url != null">
-                                    <a ng-href="{{target.url}}#/forgotten" target="_blank"
+                                <div ng-show="app && app.url != null">
+                                    <a ng-href="{{app.url}}#/forgotten" target="_blank"
                                        style="text-align:center">
                                         <span msg key="gvt.login.forgotPwd"></span>
                                     </a>
                                     <br/>
-                                    <a ng-href="{{target.url}}#/registration" target="_blank"
+                                    <a ng-href="{{app.url}}#/registration" target="_blank"
                                        style="text-align:center">
                                         <span msg key="gvt.login.newAccount"></span>
                                     </a>
@@ -1068,13 +1068,13 @@
 
                                 </md-card-content>
                                 <md-card-footer>
-                                    <div ng-show="target.url != null">
-                                        <a ng-href="{{target.url}}#/forgotten" target="_blank"
+                                    <div ng-show="app.url != null">
+                                        <a ng-href="{{app.url}}#/forgotten" target="_blank"
                                            style="text-align:center">
                                             <span msg key="gvt.login.forgotPwd"></span>
                                         </a>
                                         <br/>
-                                        <a ng-href="{{target.url}}#/registration" target="_blank"
+                                        <a ng-href="{{app.url}}#/registration" target="_blank"
                                            style="text-align:center">
                                             <span msg key="gvt.login.newAccount"></span>
                                         </a>

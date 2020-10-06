@@ -278,9 +278,14 @@ public class FlavorServiceImpl implements FlavorService {
 				}
 			}
 			if (!pathGroups.isEmpty()) {
-				Datatype originalDt = queryService.getDatatypesMap().get(field.getDatatype().getId());
-				try {
-					Datatype datatypeFlavor = originalDt.clone();
+					Datatype originalDt = queryService.getDatatypesMap().get(field.getDatatype().getId());
+					Datatype datatypeFlavor = new Datatype();
+					try {
+						datatypeFlavor = originalDt.clone();
+					} catch (CloneNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					datatypeFlavor.setExt(createExtension(ext, originalDt.getExt(), originalDt.getId(), namesMap));
 					datatypeFlavor.setId(ObjectId.get().toString());
 					datatypeFlavor.setTemporary(true);
@@ -288,12 +293,7 @@ public class FlavorServiceImpl implements FlavorService {
 					field.getDatatype().setId(datatypeFlavor.getId());
 					field.getDatatype().setExt(datatypeFlavor.getExt());
 					field.setTemporary(true);
-					queryService.getDatatypesMap().put(datatypeFlavor.getId(), datatypeFlavor);
-
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					queryService.getDatatypesMap().put(datatypeFlavor.getId(), datatypeFlavor);	
 			}
 			return field;
 		} else if (dm instanceof Component) {

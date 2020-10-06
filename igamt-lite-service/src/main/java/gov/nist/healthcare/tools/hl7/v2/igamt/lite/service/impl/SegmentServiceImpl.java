@@ -126,8 +126,8 @@ public class SegmentServiceImpl implements SegmentService {
   }
 
   @Override
-  public List<Segment> findByScopeAndVersion(String name, String hl7Version) {
-    return segmentRepository.findByScopeAndVersion(name, hl7Version);
+  public List<Segment> findByScopeAndVersion(String scope, String hl7Version) {
+    return segmentRepository.findByScopeAndVersion(scope, hl7Version);
   }
 
   /*

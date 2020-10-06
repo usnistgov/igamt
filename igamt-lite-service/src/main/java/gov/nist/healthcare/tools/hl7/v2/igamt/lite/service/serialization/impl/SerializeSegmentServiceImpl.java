@@ -254,7 +254,9 @@ public class SerializeSegmentServiceImpl implements SerializeSegmentService {
 				Boolean showConfLength = serializationUtil.isShowConfLength(segment.getHl7Version());
 				DynamicMappingDefinition dynamicMappingDefinition = segment.getDynamicMappingDefinition();
 				Map<String, Datatype> dynamicMappingDatatypeMap = new HashMap<>();
-				if (dynamicMappingDefinition != null) {
+				if (dynamicMappingDefinition != null && dynamicMappingDefinition
+						.getDynamicMappingItems() != null && !dynamicMappingDefinition
+								.getDynamicMappingItems().isEmpty()) {
 					try {
 						for (DynamicMappingItem dynamicMappingItem : dynamicMappingDefinition
 								.getDynamicMappingItems()) {

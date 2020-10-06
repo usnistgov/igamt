@@ -89,8 +89,24 @@ public class CompositeProfileServiceImpl implements CompositeProfileService {
     for (Datatype dt : datatypes) {
       datatypesMap.put(dt.getId(), dt);
     }
-
   }
+  
+   public void reloadDatatypes(Map<String, Datatype> datatypesMap){
+	  for(String s: datatypesMap.keySet()){
+		 Datatype d = datatypeService.findById(s);
+		 if(d !=null){
+			 datatypesMap.put(s, d);
+		 }
+	  }
+   }
+   public void reloadSegments(Map<String, Segment> segmentsMap){
+		  for(String s: segmentsMap.keySet()){
+			  Segment seg =segmentService.findById(s);
+				 if(seg !=null){
+					 segmentsMap.put(s, seg);
+				 }
+		  }
+	   }
 
   @Override
   public CompositeProfile buildCompositeProfile(
@@ -99,6 +115,7 @@ public class CompositeProfileServiceImpl implements CompositeProfileService {
     Map<String, Segment> segmentsMap = new HashMap<>();
     Map<String, Datatype> datatypesMap = new HashMap<>();
     createSegAndDtMaps(coreMessage, segmentsMap, datatypesMap);
+
     queryService.setSegmentsMap(segmentsMap);
     queryService.setDatatypesMap(datatypesMap);
     List<ProfileComponent> pcs = new ArrayList<>();
@@ -139,8 +156,11 @@ public class CompositeProfileServiceImpl implements CompositeProfileService {
     compositeProfile.setComments(coreMessage.getComments());
     compositeProfile.setConformanceStatements(coreMessage.getConformanceStatements());
     browse(compositeProfileStructure.getExt(), compositeProfile, pathGroups, new HashMap<String, Integer>());
+
     compositeProfile.setSegmentsMap(queryService.getSegmentsMap());
     compositeProfile.setDatatypesMap(queryService.getDatatypesMap());
+    this.reloadDatatypes(compositeProfile.getDatatypesMap());
+    this.reloadSegments(compositeProfile.getSegmentsMap());
     compositeProfile.setName(compositeProfileStructure.getName());
     compositeProfile.setDescription(compositeProfileStructure.getDescription());
     compositeProfile.setComment(compositeProfileStructure.getComment());
@@ -173,7 +193,6 @@ public class CompositeProfileServiceImpl implements CompositeProfileService {
     for (PathGroup pathGroup : pathGroups) {
       try {
         DataModel dm = queryService.get(dataModel, pathGroup.getPath());
-
         DataModel context =
             flavorService.createFlavor(ext, dm, pathGroup.getAttributes(), pathGroup.getChildren(), namesMap);
         browse(ext, context, pathGroup.getChildren(),namesMap);
