@@ -116,7 +116,6 @@ public class DatatypeRepositoryImpl implements DatatypeOperations {
     List<Datatype> datatypes = mongo.find(qry, Datatype.class);
     for (Datatype dt : datatypes) {
       if (dt.getScope().equals(scope))
-        ;
       return dt;
     }
     Datatype datatype = null;

@@ -42,6 +42,7 @@ import gov.nist.healthcare.nht.acmgt.repo.AccountRepository;
 import gov.nist.healthcare.nht.acmgt.service.UserService;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.data.BindingCollector;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.data.DataFixer;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.data.DatatypeBindingFixer;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.AppInfo;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Case;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Code;
@@ -240,6 +241,8 @@ public class Bootstrap implements InitializingBean {
 	private ProfileSerialization profileSerialization;
 	@Autowired
 	DataFixer dataFixer;
+	@Autowired
+	DatatypeBindingFixer datatypeBindingFixer;
 	@Autowired
 	BindingCollector bindingCollector;
 	/*
@@ -463,6 +466,8 @@ public class Bootstrap implements InitializingBean {
 //		strctureCreator.fixMessage("2.3");
 //	    strctureCreator.fixMessage("2.3.1");
 //		fixUsageForDatatypes("2.3");
+		
+		datatypeBindingFixer.fixFromCSV();
 	}
 
 	private void createDynTable0396() throws IOException {
