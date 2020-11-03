@@ -25,4 +25,17 @@ public class BindingInfo {
     this.vs = vs;
     this.version = version;
   }
+  public BindingInfo(String version, String name, String position, String vs) {
+	    super();
+	    this.name = name;
+	    this.position = position;
+	    this.vs = vs;
+	    this.version = version;
+	  }
+@Override
+public String toString() {
+	return "BindingInfo [name=" + name + ", position=" + position + ", dtName=" + dtName + ", vs=" + vs + ", version="
+			+ version + "]";
+}
+
 }
