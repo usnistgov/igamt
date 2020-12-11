@@ -323,8 +323,13 @@ public class XMLExportTool {
               if (c.getCodeSystemVersion() != null && !c.getCodeSystemVersion().equals(""))
                 elmValueElement.addAttribute(
                     new Attribute("CodeSystemVersion", this.str(c.getCodeSystemVersion())));
-              if (c.getCodeUsage() != null && !c.getCodeUsage().equals(""))
-                elmValueElement.addAttribute(new Attribute("Usage", this.str(c.getCodeUsage())));
+              if (c.getCodeUsage() != null && !c.getCodeUsage().equals("")) {
+            	 if(c.getCodeUsage().equals("R") || c.getCodeUsage().equals("P") || c.getCodeUsage().equals("E")) 
+            		 elmValueElement.addAttribute(new Attribute("Usage", this.str(c.getCodeUsage())));
+            	 else 
+            		 elmValueElement.addAttribute(new Attribute("Usage", "P"));
+              } else 
+            	  elmValueElement.addAttribute(new Attribute("Usage", "P"));
               if (c.getComments() != null && !c.getComments().equals(""))
                 elmValueElement.addAttribute(new Attribute("Comments", this.str(c.getComments())));
               elmValueSetDefinition.appendChild(elmValueElement);
