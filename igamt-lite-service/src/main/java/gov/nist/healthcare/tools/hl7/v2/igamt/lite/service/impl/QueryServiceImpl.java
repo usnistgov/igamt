@@ -39,7 +39,7 @@ public class QueryServiceImpl implements QueryService {
   @Override
   public DataModel get(DataModel context, String path) throws NotFoundException {
     String post = "";
-    if (path.isEmpty()) {
+    if (path==null ||path.isEmpty()) {
       return context;
     } else {
       String[] elements = path.split("\\.", 2);
