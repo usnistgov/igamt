@@ -3,7 +3,7 @@
  */
 
 
-angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope', 'i18n', '$location', 'userInfoService', '$modal', 'Restangular', '$filter', 'base64', '$http', 'Idle', 'IdleService', 'AutoSaveService', 'StorageService', 'ViewSettings', 'DatatypeService', 'SegmentService', 'MessageService', 'ElementUtils', 'SectionSvc', 'VersionAndUseService', '$q', 'DatatypeLibrarySvc', 'CloneDeleteSvc', 'TableService', 'TableLibrarySvc', '$mdDialog','PcService', 'md5','$mdSidenav','SearchService',function($document, $scope, $rootScope, i18n, $location, userInfoService, $modal, Restangular, $filter, base64, $http, Idle, IdleService, AutoSaveService, StorageService, ViewSettings, DatatypeService, SegmentService, MessageService, ElementUtils, SectionSvc, VersionAndUseService, $q, DatatypeLibrarySvc, CloneDeleteSvc, TableService, TableLibrarySvc, $mdDialog,PcService,md5,$mdSidenav,SearchService) {
+angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope', 'i18n', '$location', 'userInfoService', '$modal', 'Restangular', '$filter', 'base64', '$http', 'Idle', 'IdleService', 'AutoSaveService', 'StorageService', 'ViewSettings', 'DatatypeService', 'SegmentService', 'MessageService', 'ElementUtils', 'SectionSvc', 'VersionAndUseService', '$q', 'DatatypeLibrarySvc', 'CloneDeleteSvc', 'TableService', 'TableLibrarySvc', '$mdDialog','PcService', 'md5','$mdSidenav','SearchService','$window',function($document, $scope, $rootScope, i18n, $location, userInfoService, $modal, Restangular, $filter, base64, $http, Idle, IdleService, AutoSaveService, StorageService, ViewSettings, DatatypeService, SegmentService, MessageService, ElementUtils, SectionSvc, VersionAndUseService, $q, DatatypeLibrarySvc, CloneDeleteSvc, TableService, TableLibrarySvc, $mdDialog,PcService,md5,$mdSidenav,SearchService,$window) {
 
 
   $rootScope.goNav = function(path){
@@ -326,6 +326,41 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
     } else {
       $scope.execLogout();
     }
+  };
+
+  $rootScope.chooseTool = function(param) {
+    console.log(param);
+      var modalInstance = $mdDialog.show({
+        templateUrl: 'chooseTool.html',
+        controller: 'ChooseToolCtrl',
+        escapeToClose: true,
+        locals: {
+          param: param,
+        }
+      });
+      modalInstance.then(function(choice) {
+        console.log(choice);
+        if(choice){
+          if(param ==='LOGIN'){
+            $window.open("https://hl7v2.igamt-2.nist.gov/igamt/login", "_self");
+
+          }else if(param ==='REGISTER'){
+            $window.open("https://hl7v2.igamt-2.nist.gov/igamt/register", "_self");
+          }
+          else if(param ==='CREATE'){
+            $window.open("https://hl7v2.igamt-2.nist.gov/igamt/register", "_self");
+          }
+        }else {
+          if(param ==='LOGIN'){
+            $scope.loginReq();
+          }else if(param ==='REGISTER'){
+            $location.path('/registration');
+          }else if(param ==='CREATE'){
+            $scope.create('btn');
+          }
+        }
+      }, function() {
+      });
   };
 
   $scope.execLogout = function() {

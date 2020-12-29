@@ -8245,4 +8245,38 @@
     </md-dialog>
 </script>
 
+<script type="text/ng-template" id="chooseTool.html">
+    <md-dialog aria-label="Warning for duplicated Constant Value">
+        <form ng-cloak role="form">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2> <i class="fa fa-warning"></i>  New version of IGAMT is available</h2>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                      <div class="alert" style="background: #ffec9d!important; color: black">
+
+                         <p>Dear User</p>
+                          <p> A new version of IGAMT (IGAMT-2) is available here. For new projects (implementation guides) please use IGAMT-2. IGAMT-1 (Old IGAMT) is being retained only for existing projects (implementation guides).</p>
+                          <br/>
+                          Thank You
+                          <br/>
+                          NIST IGAMT Team
+                      </div>
+
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="btn btn-raised btn-danger btn-sm" ng-click="stay()"><span>Continue with this version </span>
+                </md-button>
+                <md-button class="btn btn-raised btn-success btn-sm" ng-click="redirect()"><span>
+                  Redirect to new IGAMT </span>
+                </md-button>
+
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>
 
