@@ -329,7 +329,6 @@ angular.module('igl').controller('MainCtrl', ['$document', '$scope', '$rootScope
   };
 
   $rootScope.chooseTool = function(param) {
-    console.log(param);
       var modalInstance = $mdDialog.show({
         templateUrl: 'chooseTool.html',
         controller: 'ChooseToolCtrl',
