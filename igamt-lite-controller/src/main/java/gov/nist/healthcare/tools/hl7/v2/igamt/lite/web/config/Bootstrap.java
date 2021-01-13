@@ -467,7 +467,7 @@ public class Bootstrap implements InitializingBean {
 //	    strctureCreator.fixMessage("2.3.1");
 //		fixUsageForDatatypes("2.3");
 		
-		datatypeBindingFixer.fixFromCSV();
+		//datatypeBindingFixer.fixFromCSV();
 	}
 
 	private void createDynTable0396() throws IOException {

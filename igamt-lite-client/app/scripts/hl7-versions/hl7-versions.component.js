@@ -10,8 +10,8 @@ angular.module('igl').controller(
 
     $rootScope.scrollbarWidth = $rootScope.getScrollbarWidth();
 
-    $scope.create = function(clickSource) {
-      $rootScope.clickSource = clickSource;
+      $rootScope.create = function(clickSource) {
+        $rootScope.clickSource = clickSource;
       if ($rootScope.hasChanges()) {
         $rootScope.openConfirmLeaveDlg().then(function() {
           $rootScope.clearChanges();

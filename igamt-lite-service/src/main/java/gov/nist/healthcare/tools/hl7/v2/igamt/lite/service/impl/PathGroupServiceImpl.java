@@ -142,7 +142,8 @@ public class PathGroupServiceImpl implements PathGroupService {
 							}
 						}
 						if (!predExist) {
-							if (pred.getContext().getPath() == null) {
+
+							if (pred.getContext().getPath() == null && !pred.getContext().getType().equals("segment")) {
 								coreMessage.getPredicates().add(pred);
 							} else {
 
