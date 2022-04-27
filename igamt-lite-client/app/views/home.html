@@ -28,10 +28,6 @@
                         Management Tool (IGAMT)
                         </span>
                         <span class="pull-right">
-                                <!--<button title="Login" ng-show="!isAuthenticated()" type="button" class="btn btn-raised btn-md btn-success"-->
-                                        <!--ng-click="loginReq()">-->
-                                    <!---->
-                                <!--</button>-->
 
                             <md-button title="Login"  class="md-raised md-primary igl-md-button-green" ng-click="chooseTool('LOGIN')" ng-show="!isAuthenticated()" type="button" ><span><i
                                     class="fa fa-user"></i> Login</span></md-button>
@@ -53,7 +49,9 @@
                 <md-content flex layout-padding class="home-page-panel" md-whiteframe>
                     <div class="home-page-panel-content">
                         <p style="text-align:justify">
-                            The NIST Implementation Guide Authoring and Management Tool (IGAMT) is part of the NIST HL7 v2 Standards Development and Testing Platform. IGAMT is a tool used to create HL7 v2.x implementation guides that contain one or more conformance profiles. The tool provides capabilities to create both narrative text (similar to a word processing program) and messaging requirements in a structured environment. IGAMT contains a model of all the message events for every version of the HL7 v2 standard. Users begin by selecting the version of the HL7 v2 standard and the message events they want to include and refine (constrain) in their implementation guide.
+
+                            <span style="font-weight: bold; color:red;">Important Notice:</span> This is the original version of IGAMT, this version has been superseded by IGAMT-2. All new projects should be created in IGAMT-2. Use this original version of the tool for updating existing IGAMT implementation guides only. This version of IGAMT is no longer being updated.
+                            <br/><br/>The NIST Implementation Guide Authoring and Management Tool (IGAMT) is part of the NIST HL7 v2 Standards Development and Testing Platform. IGAMT is a tool used to create HL7 v2.x implementation guides that contain one or more conformance profiles. The tool provides capabilities to create both narrative text (similar to a word processing program) and messaging requirements in a structured environment. IGAMT contains a model of all the message events for every version of the HL7 v2 standard. Users begin by selecting the version of the HL7 v2 standard and the message events they want to include and refine (constrain) in their implementation guide.
                         </p>
 <!--                        <p style="color:red; font-weight: bold;text-align:justify">-->
 <!--                            IGAMT is a work-in-progress and is in a constant state of change. Many core features exist and IGAMT has been used to create complete Implementation Guides in pilot projects. However, be aware that new features may not be completely functionality and some existing features will change. Also, we are currently working on integration with the NIST validation tool. If you have issues, please contact us or join the IGAMT Google Group to post questions.-->
