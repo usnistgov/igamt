@@ -18,6 +18,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Code;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Component;
@@ -42,6 +43,7 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.SegmentRef;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.SegmentRefOrGroup;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Stability;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Table;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.TableLink;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.Usage;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ValueSetBinding;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.ValueSetOrSingleCodeBinding;
@@ -69,6 +71,8 @@ import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exceptio
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.SegmentSerializationException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.SerializationException;
 import gov.nist.healthcare.tools.hl7.v2.igamt.lite.domain.serialization.exception.TableSerializationException;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.DatatypeService;
+import gov.nist.healthcare.tools.hl7.v2.igamt.lite.service.TableService;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -78,10 +82,12 @@ import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
+
 public class XMLExportTool {
+	
   public InputStream exportXMLAsValidationFormatForSelectedMessages(Profile profile,
       DocumentMetaData metadata, Map<String, Segment> segmentsMap,
-      Map<String, Datatype> datatypesMap, Map<String, Table> tablesMap)
+      Map<String, Datatype> datatypesMap, Map<String, Table> tablesMap, DatatypeService datatypeService, TableService tableService)
       throws CloneNotSupportedException, IOException, ProfileSerializationException,
       TableSerializationException, ConstraintSerializationException {
     this.normalizeProfile(profile, segmentsMap, datatypesMap);
@@ -92,7 +98,7 @@ public class XMLExportTool {
     ZipOutputStream out = new ZipOutputStream(outputStream);
 
     String profileXMLStr =
-        this.serializeProfileToDoc(profile, metadata, segmentsMap, datatypesMap, tablesMap).toXML();
+        this.serializeProfileToDoc(profile, metadata, segmentsMap, datatypesMap, tablesMap, datatypeService, tableService).toXML();
     String valueSetXMLStr = this.serializeTableXML(profile, metadata, tablesMap).toXML();
     String constraintXMLStr = this.serializeConstraintsXML(profile, metadata, segmentsMap, datatypesMap, tablesMap).toXML();
 
@@ -366,7 +372,7 @@ public class XMLExportTool {
 
   public Document serializeProfileToDoc(Profile profile, DocumentMetaData metadata,
       Map<String, Segment> segmentsMap, Map<String, Datatype> datatypesMap,
-      Map<String, Table> tablesMap) throws ProfileSerializationException {
+      Map<String, Table> tablesMap, DatatypeService datatypeService, TableService tableService) throws ProfileSerializationException {
 
     try {
       Element e = new Element("ConformanceProfile");
@@ -381,7 +387,7 @@ public class XMLExportTool {
       Element ss = new Element("Segments");
       for (String key : segmentsMap.keySet()) {
         Segment s = segmentsMap.get(key);
-        ss.appendChild(this.serializeSegment(s, tablesMap, datatypesMap, profile));
+        ss.appendChild(this.serializeSegment(s, tablesMap, datatypesMap, profile, datatypeService, tableService));
       }
       e.appendChild(ss);
 
@@ -2123,7 +2129,7 @@ public class XMLExportTool {
   }
 
   private Element serializeSegment(Segment s, Map<String, Table> tablesMap,
-      Map<String, Datatype> datatypesMap, Profile profile) throws SegmentSerializationException {
+      Map<String, Datatype> datatypesMap, Profile profile, DatatypeService datatypeService, TableService tableService) throws SegmentSerializationException {
     try {
       Element elmSegment = new Element("Segment");
      
@@ -2190,6 +2196,22 @@ public class XMLExportTool {
                     this.findHL7DatatypeByNameAndVesion(datatypesMap, c.getValue(), hl7Version);
                 if (d != null) {
                   dm.put(c.getValue(), d);
+                } else {
+                	System.out.println(c.getValue());
+                	
+                	try {
+                    	d = datatypeService.findByNameAndVesionAndScope(c.getValue(), hl7Version, SCOPE.HL7STANDARD.toString());
+                    	
+                    	if (d != null) {
+                            dm.put(c.getValue(), d);
+                            datatypesMap.put(d.getId(), d);
+                            this.processDatatype(d, datatypesMap, tablesMap, datatypeService, tableService);
+                            
+                        }                 		
+                	} catch (Exception e) {
+                		e.printStackTrace();
+                	}
+
                 }
               }
             }
@@ -2384,7 +2406,25 @@ public class XMLExportTool {
     }
   }
 
-  private Datatype findHL7DatatypeByNameAndVesion(Map<String, Datatype> datatypesMap, String value,
+	private void processDatatype(Datatype d, Map<String, Datatype> datatypesMap, Map<String, Table> tablesMap,
+			DatatypeService datatypeService, TableService tableService) {
+		for (ValueSetOrSingleCodeBinding vsosc : d.getValueSetBindings()) {
+			Table t = tableService.findById(vsosc.getTableId());
+			tablesMap.put(t.getId(), t);
+		}
+
+		for (Component c : d.getComponents()) {
+			Datatype childD = datatypeService.findById(c.getDatatype().getId());
+			if (childD != null) {
+				datatypesMap.put(childD.getId(), childD);
+				this.processDatatype(childD, datatypesMap, tablesMap, datatypeService, tableService);
+			}
+
+		}
+
+	}
+
+private Datatype findHL7DatatypeByNameAndVesion(Map<String, Datatype> datatypesMap, String value,
       String hl7Version) {
     for (String key : datatypesMap.keySet()) {
       Datatype d = datatypesMap.get(key);

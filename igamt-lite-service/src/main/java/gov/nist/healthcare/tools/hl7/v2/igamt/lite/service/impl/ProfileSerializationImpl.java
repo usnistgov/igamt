@@ -1102,7 +1102,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     filteredProfile.setTableLibrary(tables);
 
     return new XMLExportTool().exportXMLAsValidationFormatForSelectedMessages(filteredProfile,
-        metadata, segmentsMap, datatypesMap, tablesMap);
+        metadata, segmentsMap, datatypesMap, tablesMap, datatypeService, tableService);
   }
 
   @Override
@@ -1461,7 +1461,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     filteredProfile.setTableLibrary(tables);
 
     return new XMLExportTool().exportXMLAsValidationFormatForSelectedMessages(filteredProfile,
-        doc.getMetaData(), segmentsMap, datatypesMap, tablesMap);
+        doc.getMetaData(), segmentsMap, datatypesMap, tablesMap, datatypeService, tableService);
   }
 
   @Override
@@ -1570,7 +1570,7 @@ public class ProfileSerializationImpl implements ProfileSerialization {
     filteredProfile.setTableLibrary(tables);
 
     return new XMLExportTool().exportXMLAsValidationFormatForSelectedMessages(filteredProfile,
-        doc.getMetaData(), segmentsMap, datatypesMap, tablesMap);
+        doc.getMetaData(), segmentsMap, datatypesMap, tablesMap, this.datatypeService, this.tableService);
   }
 
   @Override
