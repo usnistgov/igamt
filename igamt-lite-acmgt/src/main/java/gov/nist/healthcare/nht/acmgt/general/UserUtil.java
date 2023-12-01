@@ -12,6 +12,7 @@ package gov.nist.healthcare.nht.acmgt.general;
 
 import java.util.Calendar;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author fdevaulx
@@ -25,11 +26,13 @@ public class UserUtil {
 		  "supervisor", "admin" };
 
 	public static String generateRandom() {
-		int mon = Calendar.getInstance().get(Calendar.MONTH);
-		int yea = Calendar.getInstance().get(Calendar.YEAR);
-		int secs = Calendar.getInstance().get(Calendar.SECOND);
-		Random rmd = new Random(System.currentTimeMillis());
-		int rmdFile = rmd.nextInt(1000);
-		return "" + yea + mon + rmdFile + secs;
+//		int mon = Calendar.getInstance().get(Calendar.MONTH);
+//		int yea = Calendar.getInstance().get(Calendar.YEAR);
+//		int secs = Calendar.getInstance().get(Calendar.SECOND);
+//		Random rmd = new Random(System.currentTimeMillis());
+//		int rmdFile = rmd.nextInt(1000);
+//		return "" + yea + mon + rmdFile + secs;
+		
+		return UUID.randomUUID().toString();
 	}
 }
